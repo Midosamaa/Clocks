@@ -3,8 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 #include "Hand.h"
-#include "../transitions/Transition.h"  // Correct the path to the transitions folder
-
 
 class Clock {
 private:

@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include "../features/Clock.h"  // Inclure Clock.h uniquement ici, pas dans Transition.h
 
 /**
  * @class Transition
@@ -10,17 +11,28 @@
  */
 class Transition {
 private:
-    float startAngle;  // Starting angle of the hand
-    float targetAngle;  // Target angle to reach
-    float currentAngle;  // Current angle during transition
-    float speed;  // Speed of transition (degrees per frame)
+    float currentHourAngle;
+    float currentMinuteAngle;
+    float targetHourAngle;
+    float targetMinuteAngle;
+    float startHourAngle;  // Stores the initial hour angle
+    float startMinuteAngle; // Stores the initial minute angle
+    float duration;
 
 public:
-    Transition();  // Default constructor
-    void start(float startAngle, float targetAngle, float speed);  // Initialize transition
-    bool update();  // Update the angle and return true when finished
-    float getAngle() const;  // Get the current angle
-    bool isTransitionComplete() const;  // Vérifie si la transition est terminée
+    Transition();
+    void startTransition(float currentH, float currentM, float targetH, float targetM, float duration);
+
+    void update(float);
+
+    float getHourAngle();
+    float getMinuteAngle();
+
+    bool isComplete();
 };
+
+void transitionToState(Clock& clock, float currentHourAngle, float currentMinuteAngle, 
+                       float targetHourAngle, float targetMinuteAngle, float speed, sf::RenderWindow& window);
+
 
 #endif // TRANSITION_H

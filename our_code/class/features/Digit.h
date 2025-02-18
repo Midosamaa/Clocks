@@ -6,7 +6,7 @@
 
 class Digit {
 private:
-    std::vector<Clock> clocks;  // ✅ Use dynamic vector instead of fixed array
+    std::vector<Clock> clocks;  // Use dynamic vector instead of fixed array
 
 public:
     Digit(float x, float y);  // Constructs a digit at the given position
