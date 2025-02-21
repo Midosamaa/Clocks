@@ -2,8 +2,9 @@
 #include <ctime>
 #include <vector>
 #include <map>
+#include <thread>
+#include <chrono>
 
-// Classe représentant une horloge analogique
 // Classe représentant une horloge analogique
 class Clock {
 public:
@@ -47,14 +48,8 @@ public:
     }
 };
 
-
 // Configuration des chiffres avec les horloges
 std::map<int, std::vector<std::pair<float, float>>> digitConfigurations = {
-    /*
-    1 4
-    2 5
-    3 6
-    */
     {0, {{90, 180}, {0, 180}, {90, 0}, {270, 180}, {0, 180}, {270, 0}}},
     {1, {{315, 315}, {45, 45}, {315, 315}, {180, 225}, {180, 0}, {0, 0}}},
     {2, {{90, 90}, {180, 90}, {0, 90}, {180, 270}, {0, 270}, {270, 270}}},
@@ -67,55 +62,36 @@ std::map<int, std::vector<std::pair<float, float>>> digitConfigurations = {
     {9, {{180, 90}, {0, 90}, {90, 90}, {180, 270}, {0, 270}, {0, 270}}}
 };
 
-
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 400), "Clock Digits", sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(1000, 400), "Clock Digits", sf::Style::Close);
     window.clear(sf::Color::White);
     
     std::vector<Clock> clocks;
     float startX = 100, startY = 50;
-    float spacingX = 90, spacingY = 90; // Espacement ajusté pour aligner les horloges
+    float spacingX = 90, spacingY = 90;
+
+    int transition_time = 25;
+    int transition_step = 10;
     
-    // Création des horloges (3 lignes x 8 colonnes)
-    for (int i = 0; i < 8; ++i) { // 8 colonnes (2 colonnes par chiffre)
-        for (int j = 0; j < 3; ++j) { // 3 lignes par colonne
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 3; ++j) {
             clocks.emplace_back(startX + i * spacingX, startY + j * spacingY);
         }
     }
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            clocks.emplace_back(440 + startX + i * spacingX, startY + j * spacingY);
+        }
+    }
 
-    std::array<int, 4> currentDigits = {1, 2, 3, 4};
+    // Ajouter les horloges des secondes
+    Clock topSecondClock(455, 90); // Position ajustée
+    Clock bottomSecondClock(455, 195); // Position ajustée
+
     
-    // while (window.isOpen()) {
-    //     sf::Event event;
-    //     while (window.pollEvent(event)) {
-    //         if (event.type == sf::Event::Closed)
-    //             window.close();
-    //     }
-        
-    //     window.clear(sf::Color::White);
-        
-    //     // Affichage des chiffres sous forme 3x8
-    //     for (int d = 0; d < 4; ++d) { 
-    //         for (int i = 0; i < 3; ++i) { // 3 horloges de la première colonne du chiffre
-    //             int leftIndex = (d * 2) * 3 + i;  // Index dans clocks pour la première colonne
-    //             int rightIndex = leftIndex + 3;   // Index pour la deuxième colonne du chiffre
-
-    //             float hourAngle = digitConfigurations[currentDigits[d]][i].first;
-    //             float minuteAngle = digitConfigurations[currentDigits[d]][i].second;
-
-    //             if (hourAngle != -1 && minuteAngle != -1) {
-    //                 clocks[leftIndex].setTime(hourAngle, minuteAngle);
-    //                 clocks[rightIndex].setTime(digitConfigurations[currentDigits[d]][i + 3].first, 
-    //                                            digitConfigurations[currentDigits[d]][i + 3].second);
-    //             }
-
-    //             clocks[leftIndex].draw(window);
-    //             clocks[rightIndex].draw(window);
-    //         }
-    //     }
-        
-    //     window.display();
-    // }
+    int lastMinute = -1;
+    int secondPhase = 0;
+    sf::Clock secondTimer;
     
     while (window.isOpen()) {
         sf::Event event;
@@ -124,40 +100,62 @@ int main() {
                 window.close();
         }
 
-        // Récupérer l'heure actuelle
+        std::this_thread::sleep_for(std::chrono::milliseconds(transition_time));
         std::time_t now = std::time(nullptr);
         std::tm* localTime = std::localtime(&now);
         
         int hours = localTime->tm_hour;
         int minutes = localTime->tm_min;
+        int seconds = localTime->tm_sec;
         
-        // Extraire les chiffres des heures et minutes
-        std::array<int, 4> currentDigits = {
-            hours / 10, hours % 10, 
-            minutes / 10, minutes % 10
-        };
 
+
+        if (minutes != lastMinute) {
+            lastMinute = minutes;
+            
+            for (int step = 0; step <= 360; step += transition_step) {
+                window.clear(sf::Color::White);
+                for (auto& clock : clocks) {
+                    clock.setTime(step, step);
+                    clock.draw(window);
+                }
+                window.display();
+                std::this_thread::sleep_for(std::chrono::milliseconds(transition_time));
+            }
+        }
+        
+        std::array<int, 4> currentDigits = {hours / 10, hours % 10, minutes / 10, minutes % 10};
+        
         window.clear(sf::Color::White);
         
-        // Affichage des chiffres sous forme 3x8
         for (int d = 0; d < 4; ++d) { 
             for (int i = 0; i < 3; ++i) { 
                 int leftIndex = (d * 2) * 3 + i;
                 int rightIndex = leftIndex + 3;
-
+                
                 float hourAngle = digitConfigurations[currentDigits[d]][i].first;
                 float minuteAngle = digitConfigurations[currentDigits[d]][i].second;
-
-                if (hourAngle != -1 && minuteAngle != -1) {
-                    clocks[leftIndex].setTime(hourAngle, minuteAngle);
-                    clocks[rightIndex].setTime(digitConfigurations[currentDigits[d]][i + 3].first, 
+                
+                clocks[leftIndex].setTime(hourAngle, minuteAngle);
+                clocks[rightIndex].setTime(digitConfigurations[currentDigits[d]][i + 3].first, 
                                             digitConfigurations[currentDigits[d]][i + 3].second);
-                }
-
+                
                 clocks[leftIndex].draw(window);
                 clocks[rightIndex].draw(window);
             }
         }
+        
+        if (secondTimer.getElapsedTime().asSeconds() >= 0.5f) {
+            secondPhase = (secondPhase + 1) % 4;
+            secondTimer.restart();
+        }
+        
+        float secondAngles[4] = {0, 180, 180, 0};
+        topSecondClock.setTime(secondAngles[secondPhase], secondAngles[secondPhase]);
+        bottomSecondClock.setTime(secondAngles[(secondPhase + 2) % 4], secondAngles[(secondPhase + 2) % 4]);
+        
+        topSecondClock.draw(window);
+        bottomSecondClock.draw(window);
         
         window.display();
     }

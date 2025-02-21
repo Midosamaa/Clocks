@@ -12,8 +12,8 @@ int main() {
     float currentHourAngle = ((2 % 12) * 30 + (15 * 0.5f)) - 90;
     float currentMinuteAngle = (15 * 6) - 90;
 
-    float targetHourAngle = ((5 % 12) * 30 + (45 * 0.5f)) - 90;
-    float targetMinuteAngle = (45 * 6) - 90;
+    float targetHourAngle = ((2 % 12) * 30 + (45 * 0.5f)) - 90;
+    float targetMinuteAngle = (16 * 6) - 90;
 
     float transitionDuration = 1.5f;  // controls how long the entire transition takes in seconds.
 
