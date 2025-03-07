@@ -77,7 +77,21 @@ std::map<int, std::vector<std::pair<float, float>>> digitConfigurations = {
     {6, {{180, 90}, {0, 180}, {0, 90}, {270, 270}, {180, 270}, {0, 270}}},
     {7, {{180, 90}, {315, 315}, {315, 315}, {180, 270}, {180, 0}, {0, 0}}},
     {8, {{180, 90}, {0, 90}, {90, 0}, {180, 270}, {0, 270}, {270, 0}}},
+<<<<<<< HEAD
     {9, {{180, 90}, {0, 90}, {90, 90}, {180, 270}, {0, 270}, {0, 270}}}
+=======
+    {9, {{180, 90}, {0, 90}, {90, 90}, {180, 270}, {0, 270}, {0, 270}}},
+    {10, {{180, 90}, {0, 90}, {0, 0}, {180, 270}, {0, 270}, {315, 315}}}, // P
+    {11, {{180, 180}, {180, 0}, {90, 0}, {315, 315}, {315, 315}, {270, 270}}}, // L
+    {12, {{180, 180}, {90, 0}, {90, 90}, {180, 180}, {270, 0}, {270, 0}}}, // y
+    {13, {{180, 180}, {90, 0}, {90, 0}, {315, 315}, {270, 270}, {270, 270}}}, // t
+    {14, {{90, 180}, {90, 0}, {90, 0}, {270, 270}, {270, 270}, {270, 270}}}, // E
+    {15, {{90, 180}, {180, 0}, {90, 0}, {270, 270}, {315, 315}, {270, 270}}}, //C
+    {16, {{180, 180}, {90, 0}, {0, 0}, {180, 180}, {270, 0}, {0, 0}}}, //H
+    {17, {{315, 315}, {45, 135}, {315, 315}, {135, 225}, {315, 315}, {135, 315}}}, // left half heart
+    {18, {{225, 135}, {315, 315}, {225,45}, {315, 315}, {315, 225}, {315, 315}}}, //right half heart
+    {19, {{}}}
+>>>>>>> 7c3ddaf (modification before pull)
 };
 
 int main() {
@@ -127,6 +141,22 @@ int main() {
                 }
             }
         }
+<<<<<<< HEAD
+=======
+        #else
+        std::array<int, 4> currentDigits = {13, 14, 15, 16};
+        for (int d = 0; d < 4; ++d) {
+            for (int i = 0; i < 3; ++i) {
+                int leftIndex = (d * 2) * 3 + i;
+                int rightIndex = leftIndex + 3;
+                clocks[leftIndex].setTargetTime(digitConfigurations[currentDigits[d]][i].first,
+                                                digitConfigurations[currentDigits[d]][i].second, false);
+                clocks[rightIndex].setTargetTime(digitConfigurations[currentDigits[d]][i + 3].first,
+                                                    digitConfigurations[currentDigits[d]][i + 3].second, false);
+            }
+        }   
+        #endif
+>>>>>>> 7c3ddaf (modification before pull)
         
         window.clear(sf::Color::White);
         for (auto& clock : clocks) {
