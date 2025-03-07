@@ -15,7 +15,7 @@ void Transition::startTransition(float currentH, float currentM, float targetH, 
 
 //Elapsed time: how much time has passed since the transition started.
 void Transition::update(float elapsedTime) {
-    // Normalize elapsed time
+    // Normalize elapsed time, Increase it ot make it faster 
     float t = elapsedTime / duration;
     if (t > 1.0f) t = 1.0f;  // Ensure t never exceeds 1
 
