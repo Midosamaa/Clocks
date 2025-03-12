@@ -2,6 +2,8 @@
 #include <ctime>
 #include "Clock.h"
 
+//ONlY USED TO TEST OUR CLASS
+
 int main() {
     // Create an SFML window with dimensions 400x400 and title "Single Clock Display"
     sf::RenderWindow window(sf::VideoMode(400, 400), "Single Clock Display");
