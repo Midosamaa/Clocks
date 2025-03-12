@@ -1,5 +1,6 @@
 #include "DigitConfiguration.h"
 #include <iostream>
+// #define DEBUG_DIGIT
 
 // Defines the hand angles for each digit (0-9)
 const std::map<std::string, std::vector<std::pair<float, float>>> digitConfigurations = {
