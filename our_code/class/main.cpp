@@ -15,12 +15,16 @@ int main() {
     }
 
     // Start Hour
-    std::string startText = "SUVW";  
+    std::string startText = "1200";  
     auto startAngles = getTextAngles(startText);
 
     // Target Hour
-    std::string targetWord = "XZND";  
+    std::string targetWord = "1300";  
     auto targetAngles = getTextAngles(targetWord);
+
+    //WORDS
+    std::string word = "POLY";
+    auto wordAngles = getTextAngles(word);
 
     // Show Start Hour
     for (size_t col = 0; col < 8; col++) {  
@@ -59,7 +63,10 @@ int main() {
     } 
     
     // Pacman
-    pacman(window, clocks, targetAngles);
+    //pacman(window, clocks, targetAngles);
+
+    //slide
+    slideTransition(window, clocks, startAngles, wordAngles, targetAngles);
 
     // For the program not to finish quick
     while (window.isOpen()) {
