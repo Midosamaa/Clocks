@@ -15,11 +15,11 @@ int main() {
     }
 
     // Start Hour
-    std::string startText = "POLY";  
+    std::string startText = "SUVW";  
     auto startAngles = getTextAngles(startText);
 
     // Target Hour
-    std::string targetWord = "TECH";  
+    std::string targetWord = "XZND";  
     auto targetAngles = getTextAngles(targetWord);
 
     // Show Start Hour

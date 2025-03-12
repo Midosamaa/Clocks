@@ -30,7 +30,7 @@ void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks,
                 }
             }
             window.display();
-            std::this_thread::sleep_for(std::chrono::milliseconds((int)(pacmanDelay * 500)));
+            std::this_thread::sleep_for(std::chrono::milliseconds((int)(pacmanDelay * 100)));
 
             // **Step 2: Close Mouth (3:15)**
             currentClock.update(pacmanClosedHour, pacmanClosedMinute);
@@ -41,7 +41,7 @@ void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks,
                 }
             }
             window.display();
-            std::this_thread::sleep_for(std::chrono::milliseconds((int)(animationDuration * 500)));
+            std::this_thread::sleep_for(std::chrono::milliseconds((int)(animationDuration * 100)));
             //Direct Display to TargetHour
             clocks[row][col].update(targetAngles[col][row].first,  targetAngles[col][row].second);
         }
@@ -62,7 +62,7 @@ void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks,
                 }
             }
             window.display();
-            std::this_thread::sleep_for(std::chrono::milliseconds((int)(pacmanDelay * 500)));
+            std::this_thread::sleep_for(std::chrono::milliseconds((int)(pacmanDelay * 100)));
 
             // **Step 2: Close Mouth (3:15)**
             currentClock.update(pacmanClosedHour, pacmanClosedMinute);
@@ -73,7 +73,7 @@ void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks,
                 }
             }
             window.display();
-            std::this_thread::sleep_for(std::chrono::milliseconds((int)(animationDuration * 500)));
+            std::this_thread::sleep_for(std::chrono::milliseconds((int)(animationDuration * 100)));
             clocks[row][col].update(targetAngles[col][row].first,  targetAngles[col][row].second);
         }
     }
