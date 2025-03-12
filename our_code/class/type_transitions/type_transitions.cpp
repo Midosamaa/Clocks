@@ -85,7 +85,11 @@ void slideTransition(sf::RenderWindow& window, std::vector<std::vector<Clock>>& 
                      const std::vector<std::vector<std::pair<float, float>>>& wordAngles,
                      const std::vector<std::vector<std::pair<float, float>>>& targetAngles) {
     
+<<<<<<< HEAD
     float slideDelay = 0.3f; // Delay per step
+=======
+    float slideDelay = 0.5f; // Temps entre chaque déplacement
+>>>>>>> 59d5793 (added a few digitconfigurations for new shapes)
 
     // Compute total columns required for transition
     size_t timeCols = currentAngles.size();
@@ -159,3 +163,6 @@ void slideTransition(sf::RenderWindow& window, std::vector<std::vector<Clock>>& 
     }
     window.display();
 }
+
+
+void wave(){}

@@ -15,15 +15,19 @@ int main() {
     }
 
     // Start Hour
-    std::string startText = "1200";  
+    std::string startText = "----";  
     auto startAngles = getTextAngles(startText);
 
     // Target Hour
-    std::string targetWord = "1300";  
+    std::string targetWord = "----";  
     auto targetAngles = getTextAngles(targetWord);
 
     //WORDS
+<<<<<<< HEAD
     std::string word = "POLYTECHSORBONNE";
+=======
+    std::string word = "<><>";
+>>>>>>> 59d5793 (added a few digitconfigurations for new shapes)
     auto wordAngles = getTextAngles(word);
 
     // Show Start Hour
