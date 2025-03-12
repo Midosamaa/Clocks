@@ -13,7 +13,7 @@ void WholeSystem::updateSystem(int hour, int minute) {
 
 // Draws the full clock system on the SFML window
 void WholeSystem::draw(sf::RenderWindow& window) const{
-    for (const auto& digit : digits) {  // Loop through each digit
+    for (const auto& digit : digits) {  
         digit.draw(window);  // Draw the digit on the window
     }
 }

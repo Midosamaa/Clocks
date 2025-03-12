@@ -29,7 +29,7 @@ bool Transition::isComplete() {
     return std::abs(currentHourAngle - targetHourAngle) < 0.1f && std::abs(currentMinuteAngle - targetMinuteAngle) < 0.1f;
 }
 
-// Récupérer l'angle actuel
+
 float Transition::getHourAngle() { return currentHourAngle; }
 float Transition::getMinuteAngle() { return currentMinuteAngle; }
 

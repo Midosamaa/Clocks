@@ -6,12 +6,11 @@
 
 class Digit {
 private:
-    std::vector<Clock> clocks;  // Use dynamic vector instead of fixed array
+    std::vector<Clock> clocks; 
 
 public:
-    Digit(float x, float y);  // Constructs a digit at the given position
-    void changeDigit(int number);  // Updates the digit by adjusting the clocks' hands
-    void draw(sf::RenderWindow& window) const;  // Draws the digit on the SFML window
+    Digit(float x, float y); 
+    void draw(sf::RenderWindow& window) const; 
 };
 
 #endif // DIGIT_H

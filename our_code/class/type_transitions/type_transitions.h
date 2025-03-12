@@ -8,7 +8,6 @@
 #include <thread>
 #include <chrono>
 
-// Fonction qui applique l'animation Pac-Man et transitionne vers POLY
 void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks, 
             const std::vector<std::vector<std::pair<float, float>>>& targetAngles);
 

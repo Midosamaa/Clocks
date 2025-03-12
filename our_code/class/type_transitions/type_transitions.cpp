@@ -42,6 +42,7 @@ void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks,
             }
             window.display();
             std::this_thread::sleep_for(std::chrono::milliseconds((int)(animationDuration * 500)));
+            //Direct Display to TargetHour
             clocks[row][col].update(targetAngles[col][row].first,  targetAngles[col][row].second);
         }
     } else {  // **Right to Left**

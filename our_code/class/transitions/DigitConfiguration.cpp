@@ -27,15 +27,6 @@ const std::map<std::string, std::vector<std::pair<float, float>>> digitConfigura
 };
 
 
-
-vector<pair<float, float>> getDigitAngles(const string& key) {
-    if (digitConfigurations.find(key) == digitConfigurations.end()) {
-        throw out_of_range("Invalid character: " + key);
-    }
-    return digitConfigurations.at(key);
-}
-
-
 vector<vector<pair<float, float>>> getTextAngles(const std::string& text) {
     vector<vector<pair<float, float>>> angles;
 

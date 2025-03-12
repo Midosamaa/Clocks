@@ -5,10 +5,6 @@
 #include <cmath>
 #include "../features/Clock.h"  // Inclure Clock.h uniquement ici, pas dans Transition.h
 
-/**
- * @class Transition
- * @brief Handles smooth transitions of clock hands using interpolation.
- */
 class Transition {
 private:
     float currentHourAngle;
