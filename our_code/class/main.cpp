@@ -23,7 +23,7 @@ int main() {
     auto targetAngles = getTextAngles(targetWord);
 
     //WORDS
-    std::string word = "POLY";
+    std::string word = "POLYTECHSORBONNE";
     auto wordAngles = getTextAngles(word);
 
     // Show Start Hour

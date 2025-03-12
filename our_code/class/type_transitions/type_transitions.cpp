@@ -80,91 +80,76 @@ void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks,
     }
 }
 
-
 void slideTransition(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks, 
                      const std::vector<std::vector<std::pair<float, float>>>& currentAngles,
                      const std::vector<std::vector<std::pair<float, float>>>& wordAngles,
                      const std::vector<std::vector<std::pair<float, float>>>& targetAngles) {
     
-    float slideDelay = 0.3f; // Temps entre chaque déplacement
+    float slideDelay = 0.3f; // Delay per step
 
-    size_t totalCols = 8;
-    size_t wordCols = wordAngles.size();
+    // Compute total columns required for transition
     size_t timeCols = currentAngles.size();
+    size_t wordCols = wordAngles.size();
+    size_t targetCols = targetAngles.size();
+    size_t totalCols = timeCols + wordCols + targetCols;
 
-    // **Étape 2: Décaler l'heure vers la gauche et introduire POLY**
-    for (size_t step = 0; step <= wordCols; step++) {
-        window.clear(sf::Color::White);
+    // **Step 1: Create a transition buffer for all animations**
+    std::vector<std::vector<std::pair<float, float>>> displayAngles(3, 
+        std::vector<std::pair<float, float>>(totalCols, {-1, -1}));  // Initialize empty clocks
 
-        // Décaler l'heure vers la gauche
-        for (size_t col = 0; col < timeCols; col++) {
-            if (col >= step) {
-                for (size_t row = 0; row < 3; row++) {
-                    clocks[row][col - step].update(currentAngles[col][row].first, 
-                                                   currentAngles[col][row].second);
-                }
-            }
-        }
-
-        // Afficher POLY à droite
-        for (size_t col = 0; col < step && col < wordCols; col++) {
-            if (totalCols - step + col < totalCols) {
-                for (size_t row = 0; row < 3; row++) {
-                    clocks[row][totalCols - step + col].update(wordAngles[col][row].first, 
-                                                               wordAngles[col][row].second);
-                }
-            }
-        }
-
-        // Dessiner l'animation
-        for (const auto& rowVec : clocks) {
-            for (const auto& clock : rowVec) {
-                clock.draw(window);
-            }
-        }
-        window.display();
-        std::this_thread::sleep_for(std::chrono::milliseconds((int)(slideDelay * 500)));
-    }
-
-
-    // **Étape 3: Décaler POLY vers la gauche et introduire la nouvelle heure**
-    for (size_t step = 0; step <= timeCols; step++) {
-        window.clear(sf::Color::White);
-
-        // Décaler POLY vers la gauche
-        for (size_t col = 0; col < wordCols; col++) {
-            if (col >= step) {
-                for (size_t row = 0; row < 3; row++) {
-                    clocks[row][col - step].update(wordAngles[col][row].first, 
-                                                   wordAngles[col][row].second);
-                }
-            }
-        }
-
-        // Introduce the New Time from the Right
-        for (size_t col = 0; col < step && col < timeCols; col++) {
-            for (size_t row = 0; row < 3; row++) {
-                clocks[row][totalCols - step + col].update(targetAngles[col][row].first, 
-                                                           targetAngles[col][row].second);
-            }
-        }
-
-        // Dessiner l'animation
-        for (const auto& rowVec : clocks) {
-            for (const auto& clock : rowVec) {
-                clock.draw(window);
-            }
-        }
-        window.display();
-        std::this_thread::sleep_for(std::chrono::milliseconds((int)(slideDelay * 500)));
-    }
-
-    // **Affichage final avec la nouvelle heure**
-    window.clear(sf::Color::White);
+    // **Step 2: Fill `displayAngles` with Current Hour, Word, and Target Hour**
+    
+    // Fill the current hour into `displayAngles`
     for (size_t col = 0; col < timeCols; col++) {
         for (size_t row = 0; row < 3; row++) {
-            clocks[row][col].update(targetAngles[col][row].first, 
-                                    targetAngles[col][row].second);
+            displayAngles[row][col] = currentAngles[col][row];
+        }
+    }
+
+    // Fill the word (POLYTECH) after the current hour
+    for (size_t col = 0; col < wordCols; col++) {
+        for (size_t row = 0; row < 3; row++) {
+            displayAngles[row][timeCols + col] = wordAngles[col][row];
+        }
+    }
+
+    // Fill the target hour after the word
+    for (size_t col = 0; col < targetCols; col++) {
+        for (size_t row = 0; row < 3; row++) {
+            displayAngles[row][timeCols + wordCols + col] = targetAngles[col][row];
+        }
+    }
+
+    // **Step 3: Animate the Transition Using `displayAngles`**
+    for (size_t step = 0; step <= totalCols - 8; step++) {
+        window.clear(sf::Color::White);
+
+        for (size_t col = 0; col < totalCols; col++) {
+            if (col >= step && col - step < 8) {  // Ensure within visible area
+                for (size_t row = 0; row < 3; row++) {
+                    if (displayAngles[row][col].first != -1) { // Ensure valid clock angles
+                        clocks[row][col - step].update(displayAngles[row][col].first, 
+                                                       displayAngles[row][col].second);
+                    }
+            }
+        }
+        }
+        // **Draw Everything**
+        for (const auto& rowVec : clocks) {
+            for (const auto& clock : rowVec) {
+                clock.draw(window);
+            }
+        }
+        window.display();
+        std::this_thread::sleep_for(std::chrono::milliseconds((int)(slideDelay * 500)));
+    }
+
+    // **Step 4: Display Final Target Hour (Ensures Last Step is Stable)**
+    window.clear(sf::Color::White);
+    for (size_t col = 0; col < 8; col++) {  // Ensure only final 8 columns are drawn
+        for (size_t row = 0; row < 3; row++) {
+            clocks[row][col].update(displayAngles[row][col + totalCols - 8].first, 
+                                    displayAngles[row][col + totalCols - 8].second);
         }
     }
     for (const auto& rowVec : clocks) {
