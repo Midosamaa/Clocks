@@ -11,6 +11,9 @@ SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 SRC = main.cpp features/Hand.cpp features/Clock.cpp features/Digit.cpp features/WholeSystem.cpp
 SRC_TRANSITIONS = $(wildcard transitions/*.cpp)  # Compiles all .cpp files in transitions folder
 
+# Ajout explicite de TypeTransitions.cpp
+SRC_TRANSITIONS += type_transitions/type_transitions.cpp
+
 # Combine all source files
 SRC += $(SRC_TRANSITIONS)
 

@@ -1,7 +1,7 @@
 #include "Clock.h"
 
 // Constructs a clock with a given position
-Clock::Clock(float x, float y) : hand_1(35, sf::Color::Black), hand_2(55, sf::Color::Red) {
+Clock::Clock(float x, float y) : hand_1(45, sf::Color::Black), hand_2(50, sf::Color::Black) {
     dial.setRadius(60);  // Set the radius of the clock face
     dial.setFillColor(sf::Color::White);  // Set the clock face color
     dial.setOutlineThickness(2);  // Define the thickness of the clock border
