@@ -84,8 +84,6 @@ void slideTransition_from_left(sf::RenderWindow& window, std::vector<std::vector
                      const std::vector<std::vector<std::pair<float, float>>>& currentAngles,
                      const std::vector<std::vector<std::pair<float, float>>>& wordAngles,
                      const std::vector<std::vector<std::pair<float, float>>>& targetAngles) {
-    
-<<<<<<< HEAD
     float slideDelay = 0.3f; // Delay per step
 
     // Compute total columns required for transition

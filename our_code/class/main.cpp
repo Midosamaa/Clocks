@@ -15,19 +15,15 @@ int main() {
     }
 
     // Start Hour
-    std::string startText = "----";  
+    std::string startText = "1255";  
     auto startAngles = getTextAngles(startText);
 
     // Target Hour
-    std::string targetWord = "----";  
+    std::string targetWord = "1350";  
     auto targetAngles = getTextAngles(targetWord);
 
     //WORDS
-<<<<<<< HEAD
-    std::string word = "POLYTECHSORBONNE";
-=======
     std::string word = "<><>";
->>>>>>> 59d5793 (added a few digitconfigurations for new shapes)
     auto wordAngles = getTextAngles(word);
 
     // Show Start Hour
@@ -68,9 +64,9 @@ int main() {
     
     // Pacman
     //pacman(window, clocks, targetAngles);
-    //slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
+    slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
     //slide
-    slideTransition_from_right(window, clocks, startAngles, wordAngles, targetAngles);
+    slideTransition_from_right(window, clocks,targetAngles , wordAngles,startAngles );
 
     // For the program not to finish quick
     while (window.isOpen()) {
