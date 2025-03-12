@@ -68,9 +68,9 @@ int main() {
     
     // Pacman
     //pacman(window, clocks, targetAngles);
-
+    //slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
     //slide
-    slideTransition(window, clocks, startAngles, wordAngles, targetAngles);
+    slideTransition_from_right(window, clocks, startAngles, wordAngles, targetAngles);
 
     // For the program not to finish quick
     while (window.isOpen()) {
