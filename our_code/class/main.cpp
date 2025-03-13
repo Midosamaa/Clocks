@@ -1,10 +1,10 @@
 #include "type_transitions/type_transitions.h"  // Inclure le fichier d'animation Pac-Man
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1000, 400), "Pac-Man Clock Transition", sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(1000, 400), "Clock Transition", sf::Style::Close);
 
     // Create Clocks
-    std::vector<std::vector<Clock>> clocks(3, std::vector<Clock>(8, Clock(0, 0))); 
+    vector<vector<Clock>> clocks(3, vector<Clock>(8, Clock(0, 0))); 
     float startX = 100, startY = 50;
     float spacingX = 120, spacingY = 120;
 
@@ -15,15 +15,15 @@ int main() {
     }
 
     // Start Hour
-    std::string startText = "1255";  
+    string startText = "0844";  
     auto startAngles = getTextAngles(startText);
 
     // Target Hour
-    std::string targetWord = "1350";  
+    string targetWord = "1245";  
     auto targetAngles = getTextAngles(targetWord);
 
     //WORDS
-    std::string word = "<><>";
+    string word = "POLYTECH";
     auto wordAngles = getTextAngles(word);
 
     // Show Start Hour
@@ -48,7 +48,7 @@ int main() {
     }
 
     window.display();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    this_thread::sleep_for(chrono::seconds(1));
 
 
     //For Timeout
@@ -64,9 +64,11 @@ int main() {
     
     // Pacman
     //pacman(window, clocks, targetAngles);
-    slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
+
     //slide
-    slideTransition_from_right(window, clocks,targetAngles , wordAngles,startAngles );
+    slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
+    slideTransition_from_right(window, clocks, targetAngles , wordAngles, startAngles);
+    slideTransition_from_bottom(window, clocks, startAngles , wordAngles, targetAngles);
 
     // For the program not to finish quick
     while (window.isOpen()) {

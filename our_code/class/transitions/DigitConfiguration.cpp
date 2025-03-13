@@ -3,7 +3,7 @@
 
 #define BIG 17.5
 // Defines the hand angles for each digit (0-9)
-const std::map<std::string, std::vector<std::pair<float, float>>> digitConfigurations = {
+const map<string, vector<pair<float, float>>> digitConfigurations = {
     // **Numbers (0-9)**
     { "0L", {{0, 90}, {270, 90}, {0, 270}} }, { "0R", {{180, 90}, {270, 90}, {180, 270}} },
     { "1L", {{225, 225}, {315, 315}, {225, 225}} }, { "1R", {{90, 135}, {90, 270}, {270, 270}} },
@@ -71,12 +71,12 @@ const std::map<std::string, std::vector<std::pair<float, float>>> digitConfigura
 };
 
 
-vector<vector<pair<float, float>>> getTextAngles(const std::string& text) {
+vector<vector<pair<float, float>>> getTextAngles(const string& text) {
     vector<vector<pair<float, float>>> angles;
 
     for (size_t i = 0; i < text.size(); i++) {
-        std::string leftKey = text[i] + std::string("L");  // Ex: "1L", "2L"
-        std::string rightKey = text[i] + std::string("R"); // Ex: "1R", "2R"
+        string leftKey = text[i] + string("L");  // Ex: "1L", "2L"
+        string rightKey = text[i] + string("R"); // Ex: "1R", "2R"
 
         if (digitConfigurations.find(leftKey) == digitConfigurations.end() ||
             digitConfigurations.find(rightKey) == digitConfigurations.end()) {

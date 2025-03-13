@@ -1,8 +1,8 @@
 #include "type_transitions.h"
+#include <iostream>
 
-
-void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks, 
-            const std::vector<std::vector<std::pair<float, float>>>& targetAngles) {
+void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+            const vector<vector<pair<float, float>>>& targetAngles) {
     float pacmanOpenHour;  // 2:20 -> Open mouth
     float pacmanOpenMinute = 45;
 
@@ -30,7 +30,7 @@ void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks,
                 }
             }
             window.display();
-            std::this_thread::sleep_for(std::chrono::milliseconds((int)(pacmanDelay * 100)));
+            this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * 100)));
 
             // **Step 2: Close Mouth (3:15)**
             currentClock.update(pacmanClosedHour, pacmanClosedMinute);
@@ -41,7 +41,7 @@ void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks,
                 }
             }
             window.display();
-            std::this_thread::sleep_for(std::chrono::milliseconds((int)(animationDuration * 100)));
+            this_thread::sleep_for(chrono::milliseconds((int)(animationDuration * 100)));
             //Direct Display to TargetHour
             clocks[row][col].update(targetAngles[col][row].first,  targetAngles[col][row].second);
         }
@@ -62,7 +62,7 @@ void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks,
                 }
             }
             window.display();
-            std::this_thread::sleep_for(std::chrono::milliseconds((int)(pacmanDelay * 100)));
+            this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * 100)));
 
             // **Step 2: Close Mouth (3:15)**
             currentClock.update(pacmanClosedHour, pacmanClosedMinute);
@@ -73,17 +73,17 @@ void pacman(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks,
                 }
             }
             window.display();
-            std::this_thread::sleep_for(std::chrono::milliseconds((int)(animationDuration * 100)));
+            this_thread::sleep_for(chrono::milliseconds((int)(animationDuration * 100)));
             clocks[row][col].update(targetAngles[col][row].first,  targetAngles[col][row].second);
         }
     }
     }
 }
 
-void slideTransition_from_left(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks, 
-                     const std::vector<std::vector<std::pair<float, float>>>& currentAngles,
-                     const std::vector<std::vector<std::pair<float, float>>>& wordAngles,
-                     const std::vector<std::vector<std::pair<float, float>>>& targetAngles) {
+void slideTransition_from_left(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+                     const vector<vector<pair<float, float>>>& currentAngles,
+                     const vector<vector<pair<float, float>>>& wordAngles,
+                     const vector<vector<pair<float, float>>>& targetAngles) {
     float slideDelay = 0.3f; // Delay per step
 
     // Compute total columns required for transition
@@ -93,11 +93,11 @@ void slideTransition_from_left(sf::RenderWindow& window, std::vector<std::vector
     size_t totalCols = timeCols + wordCols + targetCols;
 
     // **Step 1: Create a transition buffer for all animations**
-    std::vector<std::vector<std::pair<float, float>>> displayAngles(3, 
-        std::vector<std::pair<float, float>>(totalCols, {-1, -1}));  // Initialize empty clocks
+    vector<vector<pair<float, float>>> displayAngles(3, 
+        vector<pair<float, float>>(totalCols, {-1, -1}));  // Initialize empty clocks
 
     // **Step 2: Fill `displayAngles` with Current Hour, Word, and Target Hour**
-    // Fill the current hour first
+    // Fill the current hour first donc il ecrase pas 
     for (size_t col = 0; col < timeCols; col++) {
         for (size_t row = 0; row < 3; row++) {
             displayAngles[row][col] = currentAngles[col][row];
@@ -138,15 +138,15 @@ void slideTransition_from_left(sf::RenderWindow& window, std::vector<std::vector
             }
         }
         window.display();
-        std::this_thread::sleep_for(std::chrono::milliseconds((int)(slideDelay * 500)));
+        this_thread::sleep_for(chrono::milliseconds((int)(slideDelay * 500)));
     }
 }
 
 
-void slideTransition_from_right(sf::RenderWindow& window, std::vector<std::vector<Clock>>& clocks, 
-                     const std::vector<std::vector<std::pair<float, float>>>& currentAngles,
-                     const std::vector<std::vector<std::pair<float, float>>>& wordAngles,
-                     const std::vector<std::vector<std::pair<float, float>>>& targetAngles) {
+void slideTransition_from_right(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+                     const vector<vector<pair<float, float>>>& currentAngles,
+                     const vector<vector<pair<float, float>>>& wordAngles,
+                     const vector<vector<pair<float, float>>>& targetAngles) {
     
     float slideDelay = 0.3f; // Delay per step
     size_t timeCols = currentAngles.size();
@@ -155,10 +155,9 @@ void slideTransition_from_right(sf::RenderWindow& window, std::vector<std::vecto
     size_t totalCols = timeCols + wordCols + targetCols;
 
     // **Step 1: Create a transition buffer for all animations**
-    std::vector<std::vector<std::pair<float, float>>> displayAngles(3,std::vector<std::pair<float, float>>(totalCols, {-1, -1}));  // Initialize empty clocks
+    vector<vector<pair<float, float>>> displayAngles(3,vector<pair<float, float>>(totalCols, {-1, -1}));  // Initialize empty clocks
 
     // **Step 2: Fill `displayAngles` with Current Hour, Word, and Target Hour**
-    
     // Fill the target hour at first
     for (size_t col = 0; col < targetCols; col++) {
         for (size_t row = 0; row < 3; row++) {
@@ -204,6 +203,92 @@ void slideTransition_from_right(sf::RenderWindow& window, std::vector<std::vecto
         }
 
         window.display();
-        std::this_thread::sleep_for(std::chrono::milliseconds((int)(slideDelay * 500)));
+        this_thread::sleep_for(chrono::milliseconds((int)(slideDelay * 500)));
+    }
+}
+
+
+void slideTransition_from_bottom(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+                     const vector<vector<pair<float, float>>>& currentAngles,
+                     const vector<vector<pair<float, float>>>& wordAngles,
+                     const vector<vector<pair<float, float>>>& targetAngles) {
+    
+    float slideDelay = 0.3f; // Delay per step
+    size_t timeCols = currentAngles.size();
+    size_t wordCols = wordAngles.size();
+    size_t targetCols = targetAngles.size();
+    size_t totalRows = 3;  // Always 3 rows for the clock grid
+    
+    vector<vector<pair<float, float>>> displayAngles;
+    
+    // **Step 2: Fill Display Buffer (Target Hour, Word Chunks, Current Hour)**
+
+    // Fill Target Hour at TOP 
+    vector<vector<pair<float, float>>> targetBuffer(totalRows);
+    for (size_t col = 0; col < targetCols; col++) {
+        for (size_t row = 0; row < totalRows; row++) {
+            targetBuffer[row].push_back(targetAngles[col][row]);
+        }
+    }
+
+    displayAngles.insert(displayAngles.end(), targetBuffer.begin(), targetBuffer.end());
+
+    // Fill Words in the middle 
+    vector<vector<pair<float, float>>> wordBuffer;
+    size_t chunkSize = 4;  // Each chunk is 4 letters
+    size_t wordChunks = ((wordCols / 2) + chunkSize - 1) / chunkSize; 
+    size_t wordRows = wordChunks *3;
+
+    for (size_t chunk = 0; chunk < wordChunks; chunk++) {
+        size_t startCol = chunk * chunkSize*2;
+        for (size_t row = 0; row < totalRows; row++) {
+            vector<pair<float, float>> rowData;
+            for (size_t col = startCol; col < startCol + (chunkSize*2) && col < wordCols; col++) {
+                rowData.push_back(wordAngles[col][row]);
+            }
+            if (wordBuffer.size() < wordRows) {
+                wordBuffer.push_back(rowData);
+            }
+        }
+    }
+
+    // **Insert into Display Buffer**
+    displayAngles.insert(displayAngles.end(), wordBuffer.begin(), wordBuffer.end());
+
+    // **(3) Fill Current Hour at the BOTTOM**
+    vector<vector<pair<float, float>>> currentBuffer(totalRows);
+    for (size_t col = 0; col < timeCols; col++) {
+        for (size_t row = 0; row < totalRows; row++) {
+            currentBuffer[row].push_back(currentAngles[col][row]);
+        }
+    }
+
+    displayAngles.insert(displayAngles.end(), currentBuffer.begin(), currentBuffer.end());
+
+
+    // Animate the Transition
+    size_t totalSteps = displayAngles.size() - totalRows;
+    for (size_t step = 0; step <= totalSteps; step++) {  // Moves rows up
+        window.clear(sf::Color::White);
+        
+        // **Move visible rows upwards**
+        for (size_t row = 0; row < totalRows; row++) {  // Only shift visible rows
+            if (row + step < displayAngles.size()) {  // Ensure within bounds
+                for (size_t col = 0; col < min(displayAngles[row + step].size(), (size_t)8); col++) {
+                    clocks[row][col].update(displayAngles[row + step][col].first, 
+                                            displayAngles[row + step][col].second);
+                }
+            }
+        }
+
+        // **Draw Everything**
+        for (const auto& rowVec : clocks) {
+            for (const auto& clock : rowVec) {
+                clock.draw(window);
+            }
+        }
+
+        window.display();
+        this_thread::sleep_for(chrono::milliseconds((int)(slideDelay * 500)));
     }
 }
