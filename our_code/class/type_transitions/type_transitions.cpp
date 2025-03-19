@@ -521,3 +521,12 @@ void words(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector
     }
     
 }
+
+void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& targetAngles, int direction){
+    if (direction == 1){
+        pacman_horizontal(window, clocks, targetAngles);
+    }
+    if (direction == 2){
+        pacman_vertical(window, clocks, targetAngles);
+    }
+}
