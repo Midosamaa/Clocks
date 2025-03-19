@@ -82,7 +82,7 @@ int main() {
         currentMinute = localTime->tm_min;
 
         // **When Minute Changes, Perform Transition**
-        if (currentMinute == previousMinute) {
+        if (currentMinute != previousMinute) {
             previousMinute = currentMinute;
 
             // **Set New Target Hour**
