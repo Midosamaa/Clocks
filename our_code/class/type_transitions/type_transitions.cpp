@@ -1,7 +1,7 @@
 #include "type_transitions.h"
 #include <iostream>
 
-void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+void pacman_vertical(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
             const vector<vector<pair<float, float>>>& targetAngles) {
     float pacmanOpenHour;  // 2:20 -> Open mouth
     float pacmanOpenMinute = 45;
@@ -80,7 +80,93 @@ void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
     }
 }
 
-void slideTransition_from_left(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+
+void pacman_horizontal(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+            const vector<vector<pair<float, float>>>& targetAngles) {
+    
+    float pacmanOpenHour, pacmanOpenMinute;
+    float pacmanClosedHour, pacmanClosedMinute;
+    
+    float pacmanDelay = 0.5f;
+    int animationspeed = 150;
+
+    // **Single Loop for All Columns**
+    for (int col = 0; col < 8; col++) {  
+        if (col % 2 == 0) {  // **Even column (Bottom to Top)**
+            pacmanOpenHour = 225;
+            pacmanOpenMinute = 315;
+            pacmanClosedHour = 270;
+            pacmanClosedMinute = 270;
+
+            for (int row = 2; row >= 0; row--) {  // Move Bottom to Top
+                Clock& currentClock = clocks[row][col];
+
+                // **Step 1: Open Mouth**
+                currentClock.update(pacmanOpenHour, pacmanOpenMinute);
+                window.clear(sf::Color::White);
+                for (const auto& rowVec : clocks) {
+                    for (const auto& clock : rowVec) {
+                        clock.draw(window);
+                    }
+                }
+                window.display();
+                this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * animationspeed)));
+
+                // **Step 2: Close Mouth**
+                currentClock.update(pacmanClosedHour, pacmanClosedMinute);
+                window.clear(sf::Color::White);
+                for (const auto& rowVec : clocks) {
+                    for (const auto& clock : rowVec) {
+                        clock.draw(window);
+                    }
+                }
+                window.display();
+                this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * animationspeed)));
+
+                // **Step 3: Show Target Hour**
+                clocks[row][col].update(targetAngles[col][row].first, targetAngles[col][row].second);
+            }
+
+        } else {  // **Odd column (Top to Bottom)**
+            pacmanOpenHour = 45;
+            pacmanOpenMinute = 135;
+            pacmanClosedHour = 90;
+            pacmanClosedMinute = 90;
+
+            for (int row = 0; row < 3; row++) {  // Move Top to Bottom
+                Clock& currentClock = clocks[row][col];
+
+                // **Step 1: Open Mouth**
+                currentClock.update(pacmanOpenHour, pacmanOpenMinute);
+                window.clear(sf::Color::White);
+                for (const auto& rowVec : clocks) {
+                    for (const auto& clock : rowVec) {
+                        clock.draw(window);
+                    }
+                }
+                window.display();
+                this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * animationspeed)));
+
+                // **Step 2: Close Mouth**
+                currentClock.update(pacmanClosedHour, pacmanClosedMinute);
+                window.clear(sf::Color::White);
+                for (const auto& rowVec : clocks) {
+                    for (const auto& clock : rowVec) {
+                        clock.draw(window);
+                    }
+                }
+                window.display();
+                this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * animationspeed)));
+
+                // **Step 3: Show Target Hour**
+                clocks[row][col].update(targetAngles[col][row].first, targetAngles[col][row].second);
+            }
+        }
+    }
+}
+
+
+void slideTransition_to_left(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
                      const vector<vector<pair<float, float>>>& currentAngles,
                      const vector<vector<pair<float, float>>>& wordAngles,
                      const vector<vector<pair<float, float>>>& targetAngles) {
@@ -143,7 +229,7 @@ void slideTransition_from_left(sf::RenderWindow& window, vector<vector<Clock>>& 
 }
 
 
-void slideTransition_from_right(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+void slideTransition_to_right(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
                      const vector<vector<pair<float, float>>>& currentAngles,
                      const vector<vector<pair<float, float>>>& wordAngles,
                      const vector<vector<pair<float, float>>>& targetAngles) {
@@ -208,7 +294,7 @@ void slideTransition_from_right(sf::RenderWindow& window, vector<vector<Clock>>&
 }
 
 
-void slideTransition_from_bottom(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+void slideTransition_to_top(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
                      const vector<vector<pair<float, float>>>& currentAngles,
                      const vector<vector<pair<float, float>>>& wordAngles,
                      const vector<vector<pair<float, float>>>& targetAngles) {
@@ -222,7 +308,7 @@ void slideTransition_from_bottom(sf::RenderWindow& window, vector<vector<Clock>>
     vector<vector<pair<float, float>>> displayAngles;
 
 
-    // **Fill Current Hour at the TOPs
+    // **Fill Current Hour 
     vector<vector<pair<float, float>>> currentBuffer(totalRows);
     for (size_t col = 0; col < timeCols; col++) {
         for (size_t row = 0; row < totalRows; row++) {
@@ -297,18 +383,107 @@ void wave(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<
         waves+="^&^&";
     }
         if (direction==1){
-            slideTransition_from_left(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
+            slideTransition_to_left(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
         }
 
         if (direction==2){
-            slideTransition_from_right(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
+            slideTransition_to_right(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
         }
         if (direction==3){
-            slideTransition_from_bottom(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
+            slideTransition_to_bottom(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
         }
+}
+
+void slideTransition_to_bottom(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+                                const vector<vector<pair<float, float>>>& currentAngles,
+                                const vector<vector<pair<float, float>>>& wordAngles,
+                                const vector<vector<pair<float, float>>>& targetAngles) {
     
-            
+    float slideDelay = 0.3f; // Delay per step
+    size_t timeCols = currentAngles.size();
+    size_t wordCols = wordAngles.size();
+    size_t targetCols = targetAngles.size();
+    size_t totalRows = 3;  // Always 3 rows for the clock grid
+    
+    vector<vector<pair<float, float>>> displayAngles;
+
+
+
+    // Fill Target Hour
+    vector<vector<pair<float, float>>> targetBuffer(totalRows);
+    for (size_t col = 0; col < targetCols; col++) {
+        for (size_t row = 0; row < totalRows; row++) {
+            targetBuffer[row].push_back(targetAngles[col][row]);
+        }
     }
+
+    displayAngles.insert(displayAngles.end(), targetBuffer.begin(), targetBuffer.end());
+
+    // Fill Words in the middle 
+    vector<vector<pair<float, float>>> wordBuffer;
+    size_t chunkSize = 4;  // Each chunk is 4 letters
+    size_t wordChunks = ((wordCols / 2) + chunkSize - 1) / chunkSize; 
+    size_t wordRows = wordChunks * 3;
+
+    for (size_t chunk = 0; chunk < wordChunks; chunk++) {
+        size_t startCol = chunk * chunkSize * 2;
+        for (size_t row = 0; row < totalRows; row++) {
+            vector<pair<float, float>> rowData;
+            for (size_t col = startCol; col < startCol + (chunkSize * 2) && col < wordCols; col++) {
+                rowData.push_back(wordAngles[col][row]);
+            }
+            if (wordBuffer.size() < wordRows) {
+                wordBuffer.push_back(rowData);
+            }
+        }
+    }
+
+    // **Insert into Display Buffer**
+    displayAngles.insert(displayAngles.end(), wordBuffer.begin(), wordBuffer.end());
+
+
+    // **Fill Current Hour 
+    vector<vector<pair<float, float>>> currentBuffer(totalRows);
+    for (size_t col = 0; col < timeCols; col++) {
+        for (size_t row = 0; row < totalRows; row++) {
+            currentBuffer[row].push_back(currentAngles[col][row]);
+        }
+    }
+
+    displayAngles.insert(displayAngles.end(), currentBuffer.begin(), currentBuffer.end());
+
+
+
+    // Animate the Transition (Reverse: From Bottom to Top)
+    size_t totalSteps = displayAngles.size() - totalRows;
+
+    for (size_t step = totalSteps; step >= 0; step--) {  // Ensure smooth transition and stop correctly
+        window.clear(sf::Color::White);
+        // **Move visible rows downwards**
+        for (size_t row = 0; row < totalRows; row++) {  
+            if (step + row < displayAngles.size()) {  // Ensure within bounds
+                for (size_t col = 0; col < min(displayAngles[row + step].size(), (size_t)8); col++) {
+                    clocks[row][col].update(displayAngles[row + step][col].first, 
+                                            displayAngles[row + step][col].second);
+                }
+            }
+        }
+
+        // **Draw Everything**
+        for (const auto& rowVec : clocks) {
+            for (const auto& clock : rowVec) {
+                clock.draw(window);
+            }
+        }
+
+        window.display();
+        this_thread::sleep_for(chrono::milliseconds((int)(slideDelay * 1000)));
+
+        // Stop exactly when the last three rows are visible at the bottom and it goes 18446744073709551615 max value
+        if (step == 0) break; 
+    }
+}
+
 
 void stars(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& currentAngles, const vector<vector<pair<float, float>>>& targetAngles, int direction, int number_stars){
         
@@ -318,33 +493,31 @@ void stars(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector
         stars+="<>";
     }
         if (direction==1){
-            slideTransition_from_left(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
+            slideTransition_to_left(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
         }
 
         if (direction==2){
-            slideTransition_from_right(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
+            slideTransition_to_right(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
         }
 
         if (direction==3){
-            slideTransition_from_bottom(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
+            slideTransition_to_top(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
         }
-
-    
-            
+         
 }
 
 void words(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& currentAngles, const vector<vector<pair<float, float>>>& targetAngles, int direction, string word){
 
     if (direction==1){
-        slideTransition_from_left(window, clocks, currentAngles, getTextAngles(word), targetAngles);
+        slideTransition_to_left(window, clocks, currentAngles, getTextAngles(word), targetAngles);
     }
 
     if (direction==2){
-        slideTransition_from_right(window, clocks, currentAngles, getTextAngles(word), targetAngles);
+        slideTransition_to_right(window, clocks, currentAngles, getTextAngles(word), targetAngles);
     }
 
     if (direction==3){
-        slideTransition_from_bottom(window, clocks, currentAngles, getTextAngles(word), targetAngles);
+        slideTransition_to_top(window, clocks, currentAngles, getTextAngles(word), targetAngles);
     }
     
 }

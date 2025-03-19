@@ -91,13 +91,14 @@ int main() {
             auto targetAngles = getTextAngles(targetText);
 
             // Transition
-            //pacman(window, clocks, targetAngles);
-            //slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
-            //slideTransition_from_right(window, clocks, targetAngles , wordAngles, startAngles);
-            //slideTransition_from_bottom(window, clocks, startAngles , wordAngles, targetAngles);
-            words(window, clocks, startAngles ,targetAngles, 1, "YEDAMntm");
-
-
+            pacman_vertical(window, clocks, targetAngles);
+            pacman_horizontal(window, clocks, targetAngles);
+            //slideTransition_to_left(window, clocks, startAngles, wordAngles, targetAngles);
+            //slideTransition_to_right(window, clocks, targetAngles , wordAngles, startAngles);
+            //slideTransition_to_top(window, clocks, startAngles , wordAngles, targetAngles);
+            //slideTransition_to_bottom(window, clocks, startAngles , wordAngles, targetAngles);
+            //wave(window, clocks, startAngles ,targetAngles, 2);
+            //words(window, clocks, startAngles ,targetAngles, 1, "YEDAMntm");
 
             // **Update Start Hour for Next Transition**
             startText = targetText;
