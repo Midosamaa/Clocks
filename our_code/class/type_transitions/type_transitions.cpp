@@ -291,7 +291,6 @@ void slideTransition_from_bottom(sf::RenderWindow& window, vector<vector<Clock>>
     }
 }
 
-
 void wave(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
     const vector<vector<pair<float, float>>>& currentAngles,
     const vector<vector<pair<float, float>>>& targetAngles,
