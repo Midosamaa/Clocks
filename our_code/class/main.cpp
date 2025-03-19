@@ -26,13 +26,10 @@ int main() {
     string startText = (currentHour < 10 ? "0" : "") + to_string(currentHour) + (currentMinute < 10 ? "0" : "") + to_string(currentMinute);
     auto startAngles = getTextAngles(startText);
 
-    // Target Hour
-    string targetWord = "1245";  
-    auto targetAngles = getTextAngles(targetWord);
-
     //WORDS
     string word = "POLYTECH";
     auto wordAngles = getTextAngles(word);
+
 
     // Show Start Hour
     for (size_t col = 0; col < 8; col++) {  
@@ -58,7 +55,6 @@ int main() {
     window.display();
     this_thread::sleep_for(chrono::seconds(1));
 
-
     //For Timeout
     window.display();
     sf::Clock delayTimer;
@@ -69,16 +65,9 @@ int main() {
                 window.close();
         }
     } 
-    
-    // Pacman
-    //pacman(window, clocks, targetAngles);
 
-    //slide
-    //slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
-    //slideTransition_from_right(window, clocks, targetAngles , wordAngles, startAngles);
-    slideTransition_from_bottom(window, clocks, startAngles , wordAngles, targetAngles);
+    int previousMinute = currentMinute;
 
-    // For the program not to finish quick
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -86,6 +75,36 @@ int main() {
                 window.close();
         }
 
+        // Check Real-Time Clock
+        now = time(0);
+        localTime = localtime(&now);
+        currentHour = localTime->tm_hour;
+        currentMinute = localTime->tm_min;
+
+        // **When Minute Changes, Perform Transition**
+        if (currentMinute != previousMinute) {
+            previousMinute = currentMinute;
+
+            // **Set New Target Hour**
+            string targetText = (currentHour < 10 ? "0" : "") + to_string(currentHour) + 
+                                (currentMinute < 10 ? "0" : "") + to_string(currentMinute);
+            auto targetAngles = getTextAngles(targetText);
+
+            // Transition
+            //pacman(window, clocks, targetAngles);
+            //slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
+            //slideTransition_from_right(window, clocks, targetAngles , wordAngles, startAngles);
+            //slideTransition_from_bottom(window, clocks, startAngles , wordAngles, targetAngles);
+            wave(window, clocks, startAngles ,targetAngles, 2);
+
+
+
+            // **Update Start Hour for Next Transition**
+            startText = targetText;
+            startAngles = targetAngles;
+        }
+
+        // **Keep Displaying Current Time**
         window.clear(sf::Color::White);
         for (const auto& rowVec : clocks) {
             for (const auto& clock : rowVec) {

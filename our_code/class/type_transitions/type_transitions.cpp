@@ -9,8 +9,8 @@ void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
     float pacmanClosedHour = 0;  // 3:15 -> Closed mouth
     float pacmanClosedMinute = 0; 
 
-    float pacmanDelay = 0.3f;
-    float animationDuration = 0.5f;
+    float pacmanDelay = 0.5f;
+    int animationspeed = 150;
 
     for (int row = 0; row < 3; row++) {  
     if (row % 2 == 0) {  // **Left to Right**
@@ -30,7 +30,7 @@ void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
                 }
             }
             window.display();
-            this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * 100)));
+            this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * animationspeed)));
 
             // **Step 2: Close Mouth (3:15)**
             currentClock.update(pacmanClosedHour, pacmanClosedMinute);
@@ -41,7 +41,7 @@ void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
                 }
             }
             window.display();
-            this_thread::sleep_for(chrono::milliseconds((int)(animationDuration * 100)));
+            this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * animationspeed)));
             //Direct Display to TargetHour
             clocks[row][col].update(targetAngles[col][row].first,  targetAngles[col][row].second);
         }
@@ -62,7 +62,7 @@ void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
                 }
             }
             window.display();
-            this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * 100)));
+            this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * animationspeed)));
 
             // **Step 2: Close Mouth (3:15)**
             currentClock.update(pacmanClosedHour, pacmanClosedMinute);
@@ -73,7 +73,7 @@ void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
                 }
             }
             window.display();
-            this_thread::sleep_for(chrono::milliseconds((int)(animationDuration * 100)));
+            this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * animationspeed)));
             clocks[row][col].update(targetAngles[col][row].first,  targetAngles[col][row].second);
         }
     }
@@ -290,3 +290,20 @@ void slideTransition_from_bottom(sf::RenderWindow& window, vector<vector<Clock>>
         this_thread::sleep_for(chrono::milliseconds((int)(slideDelay * 500)));
     }
 }
+
+
+void wave(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
+    const vector<vector<pair<float, float>>>& currentAngles,
+    const vector<vector<pair<float, float>>>& targetAngles,
+    int direction){
+
+        if (direction==1){
+            slideTransition_from_left(window, clocks, currentAngles, getTextAngles("^&^&"), targetAngles);
+        }
+
+            if (direction==2){
+                slideTransition_from_right(window, clocks, currentAngles, getTextAngles("^&^&"), targetAngles);
+            }
+    
+            
+    }
