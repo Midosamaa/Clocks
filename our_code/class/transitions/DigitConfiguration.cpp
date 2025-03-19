@@ -81,7 +81,6 @@ vector<vector<pair<float, float>>> getTextAngles(const string& text) {
         // Vérifier si les clés existent, sinon utiliser "-"
         if (digitConfigurations.find(leftKey) == digitConfigurations.end() ||
             digitConfigurations.find(rightKey) == digitConfigurations.end()) {
-            std::cerr << " Caractère inconnu remplacé par '-': " << text[i] << std::endl;
             leftKey = "-L";
             rightKey = "-R";
         }

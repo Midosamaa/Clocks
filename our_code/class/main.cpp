@@ -1,8 +1,18 @@
 #include "type_transitions/type_transitions.h"  // Inclure le fichier d'animation Pac-Man
 #include <ctime>
+#include <iostream>
 
 
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc < 4) {
+        std::cerr << "Usage: " << argv[0] << " <direction (1-3)> <transitionType> <transitionDetail>" << endl;
+        return 1;
+    }
+
+    // Récupération des arguments
+    int direction = stoi(argv[1]);  // Convertir en int
+    string transitionType = argv[2];  // Type de transition
+    string transitionDetail = argv[3];  // Détails supplémentaires
     sf::RenderWindow window(sf::VideoMode(1000, 400), "Clock Transition", sf::Style::Close);
 
     // Create Clocks
@@ -26,9 +36,14 @@ int main() {
     string startText = (currentHour < 10 ? "0" : "") + to_string(currentHour) + (currentMinute < 10 ? "0" : "") + to_string(currentMinute);
     auto startAngles = getTextAngles(startText);
 
-    //WORDS
-    string word = "POLYTECH";
-    auto wordAngles = getTextAngles(word);
+    
+    if (transitionType=="waves" || transitionType=="stars"){
+        
+    }
+
+
+
+
 
 
     // Show Start Hour
@@ -100,6 +115,28 @@ int main() {
             //wave(window, clocks, startAngles ,targetAngles, 2);
             //words(window, clocks, startAngles ,targetAngles, 1, "YEDAMntm");
 
+
+    if (transitionType=="words"){
+        std::string trans_word = transitionDetail;
+        auto wordAngles = getTextAngles(trans_word);
+        words(window, clocks, startAngles ,targetAngles,direction, trans_word);
+    }
+
+    if (transitionType=="pacman"){
+        pacman_vertical(window, clocks, targetAngles);
+    }
+
+    if (transitionType=="wave"){
+        int pattern_number = stoi(transitionDetail);
+        wave(window, clocks, startAngles ,targetAngles, direction, pattern_number);
+    }
+
+    if (transitionType=="stars"){
+        int pattern_number = stoi(transitionDetail);
+        stars(window, clocks, startAngles ,targetAngles, direction, pattern_number);
+    }
+    
+
             // **Update Start Hour for Next Transition**
             startText = targetText;
             startAngles = targetAngles;
@@ -116,4 +153,4 @@ int main() {
     }
 
     return 0;
-}
+}   
