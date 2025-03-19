@@ -82,7 +82,7 @@ int main() {
         currentMinute = localTime->tm_min;
 
         // **When Minute Changes, Perform Transition**
-        if (currentMinute != previousMinute) {
+        if (currentMinute == previousMinute) {
             previousMinute = currentMinute;
 
             // **Set New Target Hour**
@@ -95,7 +95,7 @@ int main() {
             //slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
             //slideTransition_from_right(window, clocks, targetAngles , wordAngles, startAngles);
             //slideTransition_from_bottom(window, clocks, startAngles , wordAngles, targetAngles);
-            wave(window, clocks, startAngles ,targetAngles, 2);
+            words(window, clocks, startAngles ,targetAngles, 1, "YEDAMntm");
 
 
 

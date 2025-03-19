@@ -78,9 +78,12 @@ vector<vector<pair<float, float>>> getTextAngles(const string& text) {
         string leftKey = text[i] + string("L");  // Ex: "1L", "2L"
         string rightKey = text[i] + string("R"); // Ex: "1R", "2R"
 
+        // Vérifier si les clés existent, sinon utiliser "-"
         if (digitConfigurations.find(leftKey) == digitConfigurations.end() ||
             digitConfigurations.find(rightKey) == digitConfigurations.end()) {
-            throw out_of_range("Invalid character: " + text[i]);
+            std::cerr << " Caractère inconnu remplacé par '-': " << text[i] << std::endl;
+            leftKey = "-L";
+            rightKey = "-R";
         }
 
         // Ajouter la colonne gauche et droite
@@ -90,4 +93,5 @@ vector<vector<pair<float, float>>> getTextAngles(const string& text) {
 
     return angles;
 }
+
 

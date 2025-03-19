@@ -291,18 +291,60 @@ void slideTransition_from_bottom(sf::RenderWindow& window, vector<vector<Clock>>
     }
 }
 
-void wave(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
-    const vector<vector<pair<float, float>>>& currentAngles,
-    const vector<vector<pair<float, float>>>& targetAngles,
-    int direction){
-
+void wave(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& currentAngles, const vector<vector<pair<float, float>>>& targetAngles, int direction, int number_waves){
+    std::string waves="";
+    for (int i=0; i< number_waves; i++){
+        waves+="^&^&";
+    }
         if (direction==1){
-            slideTransition_from_left(window, clocks, currentAngles, getTextAngles("^&^&"), targetAngles);
+            slideTransition_from_left(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
         }
 
-            if (direction==2){
-                slideTransition_from_right(window, clocks, currentAngles, getTextAngles("^&^&"), targetAngles);
-            }
+        if (direction==2){
+            slideTransition_from_right(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
+        }
+        if (direction==3){
+            slideTransition_from_bottom(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
+        }
     
             
     }
+
+void stars(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& currentAngles, const vector<vector<pair<float, float>>>& targetAngles, int direction, int number_stars){
+        
+    std::string stars="";
+
+    for (int i=0; i< number_stars; i++){
+        stars+="<>";
+    }
+        if (direction==1){
+            slideTransition_from_left(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
+        }
+
+        if (direction==2){
+            slideTransition_from_right(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
+        }
+
+        if (direction==3){
+            slideTransition_from_bottom(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
+        }
+
+    
+            
+}
+
+void words(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& currentAngles, const vector<vector<pair<float, float>>>& targetAngles, int direction, string word){
+
+    if (direction==1){
+        slideTransition_from_left(window, clocks, currentAngles, getTextAngles(word), targetAngles);
+    }
+
+    if (direction==2){
+        slideTransition_from_right(window, clocks, currentAngles, getTextAngles(word), targetAngles);
+    }
+
+    if (direction==3){
+        slideTransition_from_bottom(window, clocks, currentAngles, getTextAngles(word), targetAngles);
+    }
+    
+}
