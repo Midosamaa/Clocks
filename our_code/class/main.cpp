@@ -1,4 +1,6 @@
 #include "type_transitions/type_transitions.h"  // Inclure le fichier d'animation Pac-Man
+#include <ctime>
+
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(1000, 400), "Clock Transition", sf::Style::Close);
@@ -15,7 +17,13 @@ int main() {
     }
 
     // Start Hour
-    string startText = "0844";  
+    time_t now = time(0);
+    struct tm *localTime = localtime(&now);
+
+    int currentHour = localTime->tm_hour;  
+    int currentMinute = localTime->tm_min; 
+
+    string startText = (currentHour < 10 ? "0" : "") + to_string(currentHour) + (currentMinute < 10 ? "0" : "") + to_string(currentMinute);
     auto startAngles = getTextAngles(startText);
 
     // Target Hour
@@ -66,8 +74,8 @@ int main() {
     //pacman(window, clocks, targetAngles);
 
     //slide
-    slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
-    slideTransition_from_right(window, clocks, targetAngles , wordAngles, startAngles);
+    //slideTransition_from_left(window, clocks, startAngles, wordAngles, targetAngles);
+    //slideTransition_from_right(window, clocks, targetAngles , wordAngles, startAngles);
     slideTransition_from_bottom(window, clocks, startAngles , wordAngles, targetAngles);
 
     // For the program not to finish quick

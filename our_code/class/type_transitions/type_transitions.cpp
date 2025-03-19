@@ -220,18 +220,17 @@ void slideTransition_from_bottom(sf::RenderWindow& window, vector<vector<Clock>>
     size_t totalRows = 3;  // Always 3 rows for the clock grid
     
     vector<vector<pair<float, float>>> displayAngles;
-    
-    // **Step 2: Fill Display Buffer (Target Hour, Word Chunks, Current Hour)**
 
-    // Fill Target Hour at TOP 
-    vector<vector<pair<float, float>>> targetBuffer(totalRows);
-    for (size_t col = 0; col < targetCols; col++) {
+
+    // **Fill Current Hour at the TOPs
+    vector<vector<pair<float, float>>> currentBuffer(totalRows);
+    for (size_t col = 0; col < timeCols; col++) {
         for (size_t row = 0; row < totalRows; row++) {
-            targetBuffer[row].push_back(targetAngles[col][row]);
+            currentBuffer[row].push_back(currentAngles[col][row]);
         }
     }
 
-    displayAngles.insert(displayAngles.end(), targetBuffer.begin(), targetBuffer.end());
+    displayAngles.insert(displayAngles.end(), currentBuffer.begin(), currentBuffer.end());
 
     // Fill Words in the middle 
     vector<vector<pair<float, float>>> wordBuffer;
@@ -255,16 +254,15 @@ void slideTransition_from_bottom(sf::RenderWindow& window, vector<vector<Clock>>
     // **Insert into Display Buffer**
     displayAngles.insert(displayAngles.end(), wordBuffer.begin(), wordBuffer.end());
 
-    // **(3) Fill Current Hour at the BOTTOM**
-    vector<vector<pair<float, float>>> currentBuffer(totalRows);
-    for (size_t col = 0; col < timeCols; col++) {
+    //Fill Target Hour at BOTTOM
+    vector<vector<pair<float, float>>> targetBuffer(totalRows);
+    for (size_t col = 0; col < targetCols; col++) {
         for (size_t row = 0; row < totalRows; row++) {
-            currentBuffer[row].push_back(currentAngles[col][row]);
+            targetBuffer[row].push_back(targetAngles[col][row]);
         }
     }
 
-    displayAngles.insert(displayAngles.end(), currentBuffer.begin(), currentBuffer.end());
-
+    displayAngles.insert(displayAngles.end(), targetBuffer.begin(), targetBuffer.end());
 
     // Animate the Transition
     size_t totalSteps = displayAngles.size() - totalRows;
