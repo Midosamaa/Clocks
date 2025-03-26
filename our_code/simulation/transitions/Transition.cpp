@@ -33,6 +33,7 @@ bool Transition::isComplete() {
 float Transition::getHourAngle() { return currentHourAngle; }
 float Transition::getMinuteAngle() { return currentMinuteAngle; }
 
+
 void transitionToState(Clock& clock, float currentHourAngle, float currentMinuteAngle, 
                        float targetHourAngle, float targetMinuteAngle, float duration, sf::RenderWindow& window) {
     
@@ -45,31 +46,31 @@ void transitionToState(Clock& clock, float currentHourAngle, float currentMinute
     bool animationComplete = false;
     float elapsedTime = 0.0f;
 
-    while (!animationComplete) {
+    // NEW: define number of steps
+    const int steps = 20;
+    const float stepDelay = duration / steps;
+
+    for (int i = 0; i <= steps; ++i) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
 
-        hourTransition.update(elapsedTime);
-        minuteTransition.update(elapsedTime);
+        float t = static_cast<float>(i) / steps;
+        float interpolatedHour = (1 - t) * currentHourAngle + t * targetHourAngle;
+        float interpolatedMinute = (1 - t) * currentMinuteAngle + t * targetMinuteAngle;
 
-        if (hourTransition.isComplete() && minuteTransition.isComplete()) {
-            animationComplete = true;
-        }
+        // Update the clock with intermediate angles
+        clock.update(interpolatedHour, interpolatedMinute);
 
-        // **Update the clock angles**
-        clock.update(hourTransition.getHourAngle(), minuteTransition.getMinuteAngle());
-
-        // **Clear and redraw the window while transitioning**
+        // Redraw
         window.clear(sf::Color::White);
         clock.draw(window);
         window.display();
 
-        // **Wait a small time for smooth animation (~60 FPS)**
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));  
-        elapsedTime += 0.016f;  // Simulate time passing in seconds
+        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(stepDelay * 1000)));
     }
 }
+
 

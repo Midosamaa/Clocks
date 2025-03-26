@@ -10,7 +10,7 @@ void pacman_vertical(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
     float pacmanClosedMinute = 0; 
 
     float pacmanDelay = 0.5f;
-    int animationspeed = 150;
+    int animationspeed = 500;
 
     for (int row = 0; row < 3; row++) {  
     if (row % 2 == 0) {  // **Left to Right**
@@ -23,6 +23,13 @@ void pacman_vertical(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
 
             // **Step 1: Open Mouth (2:20)**
             currentClock.update(pacmanOpenHour, pacmanOpenMinute);
+            if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = pacmanOpenHour;
+                motion.minuteAngle = pacmanOpenMinute;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+            }
             window.clear(sf::Color::White);
             for (const auto& rowVec : clocks) {
                 for (const auto& clock : rowVec) {
@@ -34,6 +41,13 @@ void pacman_vertical(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
 
             // **Step 2: Close Mouth (3:15)**
             currentClock.update(pacmanClosedHour, pacmanClosedMinute);
+            if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = pacmanClosedHour;
+                motion.minuteAngle = pacmanClosedMinute;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+            }
             window.clear(sf::Color::White);
             for (const auto& rowVec : clocks) {
                 for (const auto& clock : rowVec) {
@@ -44,6 +58,13 @@ void pacman_vertical(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
             this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * animationspeed)));
             //Direct Display to TargetHour
             clocks[row][col].update(targetAngles[col][row].first,  targetAngles[col][row].second);
+            if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = targetAngles[col][row].first;
+                motion.minuteAngle = targetAngles[col][row].second;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+            }
         }
     } else {  // **Right to Left**
         pacmanOpenHour = 225;
@@ -55,6 +76,13 @@ void pacman_vertical(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
 
             // **Step 1: Open Mouth (2:20)**
             currentClock.update(pacmanOpenHour, pacmanOpenMinute);
+            if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = pacmanOpenHour;
+                motion.minuteAngle = pacmanOpenMinute;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+            }
             window.clear(sf::Color::White);
             for (const auto& rowVec : clocks) {
                 for (const auto& clock : rowVec) {
@@ -66,6 +94,13 @@ void pacman_vertical(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
 
             // **Step 2: Close Mouth (3:15)**
             currentClock.update(pacmanClosedHour, pacmanClosedMinute);
+            if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = pacmanClosedHour;
+                motion.minuteAngle = pacmanClosedMinute;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+            }
             window.clear(sf::Color::White);
             for (const auto& rowVec : clocks) {
                 for (const auto& clock : rowVec) {
@@ -75,6 +110,13 @@ void pacman_vertical(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
             window.display();
             this_thread::sleep_for(chrono::milliseconds((int)(pacmanDelay * animationspeed)));
             clocks[row][col].update(targetAngles[col][row].first,  targetAngles[col][row].second);
+            if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = targetAngles[col][row].first;
+                motion.minuteAngle = targetAngles[col][row].second;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+            }
         }
     }
     }
@@ -88,7 +130,7 @@ void pacman_horizontal(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
     float pacmanClosedHour, pacmanClosedMinute;
     
     float pacmanDelay = 0.5f;
-    int animationspeed = 150;
+    int animationspeed = 500;
 
     // **Single Loop for All Columns**
     for (int col = 0; col < 8; col++) {  
@@ -103,6 +145,14 @@ void pacman_horizontal(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
 
                 // **Step 1: Open Mouth**
                 currentClock.update(pacmanOpenHour, pacmanOpenMinute);
+                if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = pacmanOpenHour;
+                motion.minuteAngle = pacmanOpenMinute;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+                }
+            
                 window.clear(sf::Color::White);
                 for (const auto& rowVec : clocks) {
                     for (const auto& clock : rowVec) {
@@ -114,6 +164,13 @@ void pacman_horizontal(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
 
                 // **Step 2: Close Mouth**
                 currentClock.update(pacmanClosedHour, pacmanClosedMinute);
+                if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = pacmanClosedHour;
+                motion.minuteAngle = pacmanClosedMinute;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+                }
                 window.clear(sf::Color::White);
                 for (const auto& rowVec : clocks) {
                     for (const auto& clock : rowVec) {
@@ -125,6 +182,13 @@ void pacman_horizontal(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
 
                 // **Step 3: Show Target Hour**
                 clocks[row][col].update(targetAngles[col][row].first, targetAngles[col][row].second);
+                if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = targetAngles[col][row].first;
+                motion.minuteAngle = targetAngles[col][row].second;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+            }
             }
 
         } else {  // **Odd column (Top to Bottom)**
@@ -138,6 +202,13 @@ void pacman_horizontal(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
 
                 // **Step 1: Open Mouth**
                 currentClock.update(pacmanOpenHour, pacmanOpenMinute);
+                if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = pacmanOpenHour;
+                motion.minuteAngle = pacmanOpenMinute;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+                }
                 window.clear(sf::Color::White);
                 for (const auto& rowVec : clocks) {
                     for (const auto& clock : rowVec) {
@@ -149,6 +220,13 @@ void pacman_horizontal(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
 
                 // **Step 2: Close Mouth**
                 currentClock.update(pacmanClosedHour, pacmanClosedMinute);
+                if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = pacmanClosedHour;
+                motion.minuteAngle = pacmanClosedMinute;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+                }
                 window.clear(sf::Color::White);
                 for (const auto& rowVec : clocks) {
                     for (const auto& clock : rowVec) {
@@ -160,6 +238,13 @@ void pacman_horizontal(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
 
                 // **Step 3: Show Target Hour**
                 clocks[row][col].update(targetAngles[col][row].first, targetAngles[col][row].second);
+                if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = targetAngles[col][row].first;
+                motion.minuteAngle = targetAngles[col][row].second;
+                motion.speed = pacmanDelay*animationspeed; // You decide how
+                sendClockMotionToSupervisor(motion);
+            }
             }
         }
     }
@@ -213,6 +298,13 @@ void slideTransition_to_left(sf::RenderWindow& window, vector<vector<Clock>>& cl
                     if (displayAngles[row][col].first != -1) { 
                         clocks[row][col - step].update(displayAngles[row][col].first, 
                                                        displayAngles[row][col].second);
+                        if (row == targetRow && col == targetCol) {
+                            ClockMotion motion;
+                            motion.hourAngle = displayAngles[row][col].first;
+                            motion.minuteAngle = displayAngles[row][col].second;
+                            motion.speed = slideDelay*500; // You decide how
+                            sendClockMotionToSupervisor(motion);
+                        }
                     }
             }
         }
@@ -276,6 +368,13 @@ void slideTransition_to_right(sf::RenderWindow& window, vector<vector<Clock>>& c
                     if (displayAngles[row][sourceCol].first != -1) {  
                         clocks[row][col].update(displayAngles[row][sourceCol].first, 
                                                 displayAngles[row][sourceCol].second);
+                        if (row == targetRow && col == targetCol) {
+                            ClockMotion motion;
+                            motion.hourAngle = displayAngles[row][sourceCol].first;
+                            motion.minuteAngle = displayAngles[row][sourceCol].second;
+                            motion.speed = slideDelay*500; // You decide how
+                            sendClockMotionToSupervisor(motion);
+                        }
                     }
                 }
             }
@@ -361,6 +460,13 @@ void slideTransition_to_top(sf::RenderWindow& window, vector<vector<Clock>>& clo
                 for (size_t col = 0; col < min(displayAngles[row + step].size(), (size_t)8); col++) {
                     clocks[row][col].update(displayAngles[row + step][col].first, 
                                             displayAngles[row + step][col].second);
+                    if (row == targetRow && col == targetCol) {
+                            ClockMotion motion;
+                            motion.hourAngle = displayAngles[row + step][col].first;
+                            motion.minuteAngle = displayAngles[row + step][col].first;
+                            motion.speed = slideDelay*500; // You decide how
+                            sendClockMotionToSupervisor(motion);
+                        }
                 }
             }
         }
@@ -465,6 +571,13 @@ void slideTransition_to_bottom(sf::RenderWindow& window, vector<vector<Clock>>& 
                 for (size_t col = 0; col < min(displayAngles[row + step].size(), (size_t)8); col++) {
                     clocks[row][col].update(displayAngles[row + step][col].first, 
                                             displayAngles[row + step][col].second);
+                    if (row == targetRow && col == targetCol) {
+                            ClockMotion motion;
+                            motion.hourAngle = displayAngles[row + step][col].first;
+                            motion.minuteAngle = displayAngles[row + step][col].first;
+                            motion.speed = slideDelay*500; // You decide how
+                            sendClockMotionToSupervisor(motion);
+                    }
                 }
             }
         }

@@ -3,10 +3,14 @@
 
 #include "../features/Clock.h"
 #include "../transitions/DigitConfiguration.h"
+#include "../communication/communication.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <thread>
 #include <chrono>
+
+const int targetRow = 1;
+const int targetCol = 1;
 
 //transitions
 void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& targetAngles, int direction);
