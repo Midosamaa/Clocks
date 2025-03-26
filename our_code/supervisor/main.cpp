@@ -5,7 +5,7 @@
 #include <cstring>
 
 int main() {
-    int server_fd, client_fd;
+    int server_fd;
     sockaddr_in server_addr{}, client_addr{};
     socklen_t client_len = sizeof(client_addr);
     const int PORT = 5000;
@@ -35,28 +35,30 @@ int main() {
         return 1;
     }
 
-    std::cout << "[SUPERVISOR] Waiting for data on port " << PORT << "...\n";
+    std::cout << "[SUPERVISOR] Server listening on port " << PORT << "...\n";
 
-    // Accept connection
-    client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &client_len);
-    if (client_fd < 0) {
-        std::cerr << "Accept failed\n";
-        close(server_fd);
-        return 1;
+    while (true) {
+        // Accept a new connection
+        int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &client_len);
+        if (client_fd < 0) {
+            std::cerr << "[SUPERVISOR] Accept failed\n";
+            continue;
+        }
+
+        // Receive data
+        char buffer[1024] = {0};
+        int bytesRead = read(client_fd, buffer, sizeof(buffer) - 1);
+        if (bytesRead > 0) {
+            buffer[bytesRead] = '\0';
+            std::cout << "[SUPERVISOR] Received: " << buffer << "\n";
+        } else {
+            std::cerr << "[SUPERVISOR] No data received or error occurred\n";
+        }
+
+        close(client_fd);  // Close current client, then wait for next
     }
 
-    // Receive data
-    char buffer[1024] = {0};
-    int bytesRead = read(client_fd, buffer, sizeof(buffer) - 1);
-    if (bytesRead > 0) {
-        buffer[bytesRead] = '\0';
-        std::cout << "[SUPERVISOR] Received: " << buffer << "\n";
-    } else {
-        std::cerr << "[SUPERVISOR] No data received or error occurred\n";
-    }
-
-    // Cleanup
-    close(client_fd);
+    // Should never reach here
     close(server_fd);
     return 0;
 }

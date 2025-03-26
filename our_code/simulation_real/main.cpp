@@ -69,11 +69,15 @@ int main(int argc, char* argv[]) {
                             (currentMinute < 10 ? "0" : "") + std::to_string(currentMinute);
     auto startAngles = getTextAngles(startText);
 
-    // Affichage initial de l'heure
-    for (size_t col = 0; col < 8; col++) {  
-        for (size_t row = 0; row < 3; row++) {  
-            if (col < startAngles.size() && row < startAngles[col].size()) {
-                clocks[row][col].update(startAngles[col][row].first, startAngles[col][row].second);
+    for (int row = 0; row < 3; row++) {
+        for (int col = 0; col < 8; col++) {
+            clocks[row][col].setInstant(270, 270);  // define this to set angles without animating
+            if (row == targetRow && col == targetCol) {
+                ClockMotion motion;
+                motion.hourAngle = 270;
+                motion.minuteAngle = 270;
+                motion.speed = speed; // You decide how
+                sendClockMotionToSupervisor(motion);
             }
         }
     }
@@ -81,11 +85,25 @@ int main(int argc, char* argv[]) {
     window.clear(sf::Color::White);
     for (const auto& rowVec : clocks) {
         for (const auto& clock : rowVec) {
-            clock.draw(window);
+            clock.draw(window);  // full dial + hands
         }
     }
+
     window.display();
     std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // Animate to current time (only hands move)
+    for (size_t col = 0; col < 8; col++) {  
+        for (size_t row = 0; row < 3; row++) {  
+            if (col < startAngles.size() && row < startAngles[col].size()) {
+                if (row == targetRow && col == targetCol) {
+                    clocks[row][col].update_with_send(startAngles[col][row].first, startAngles[col][row].second, window,speed);
+                }else{
+                    clocks[row][col].update(startAngles[col][row].first, startAngles[col][row].second, window);
+                }
+            }
+        }
+    }
 
     int previousMinute = currentMinute;
 
@@ -135,13 +153,13 @@ int main(int argc, char* argv[]) {
             startAngles = targetAngles;
         }
 
-        window.clear(sf::Color::White);
-        for (const auto& rowVec : clocks) {
-            for (const auto& clock : rowVec) {
-                clock.draw(window);
-            }
-        }
-        window.display();
+        // window.clear(sf::Color::White);
+        // for (const auto& rowVec : clocks) {
+        //     for (const auto& clock : rowVec) {
+        //         clock.draw(window);
+        //     }
+        // }
+        // window.display();
     }
 
     return 0;

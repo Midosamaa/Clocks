@@ -27,7 +27,5 @@ public:
     bool isComplete();
 };
 
-void transitionToState(Clock& clock, float currentHourAngle, float currentMinuteAngle, float targetHourAngle, float targetMinuteAngle, float speed, sf::RenderWindow& window);
-
 
 #endif // TRANSITION_H

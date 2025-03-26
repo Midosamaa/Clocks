@@ -9,8 +9,10 @@
 #include <thread>
 #include <chrono>
 
-const int targetRow = 1;
-const int targetCol = 1;
+const int targetRow = 2;
+const int targetCol = 3;
+
+const int speed = 50;
 
 //transitions
 void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& targetAngles, int direction);
