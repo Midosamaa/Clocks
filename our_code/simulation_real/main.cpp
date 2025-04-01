@@ -7,9 +7,10 @@ void printHelp() {
     std::cout << "Usage: ./clock_project <direction (1-3)> <transitionType> <transitionDetail>\n\n";
     std::cout << "Arguments:\n";
     std::cout << "  <direction>: Indique la direction de la transition\n";
-    std::cout << "    - 1 : De gauche à droite \n";
-    std::cout << "    - 2 : De droite à gauche \n";
-    std::cout << "    - 3 : De haut en bas\n\n";
+    std::cout << "    - 1 : De droite à gauche \n";
+    std::cout << "    - 2 : De gauche à droite \n";
+    std::cout << "    - 3 : De bas vers haut\n\n";
+    std::cout << "    - 4 : De haut en bas\n\n";
     
     std::cout << "  <transitionType>: Type d'effet appliqué lors du changement de minute\n";
     std::cout << "    - 'pacman'  : Animation Pac-Man mangeant l'ancien affichage (transitionDetail = NULL)\n";
@@ -50,7 +51,7 @@ int main(int argc, char* argv[]) {
 
     // Création des horloges
     std::vector<std::vector<Clock>> clocks(3, std::vector<Clock>(8, Clock(0, 0))); 
-    float startX = 100, startY = 50;
+    float startX = 100, startY = 100;
     float spacingX = 120, spacingY = 120;
 
     for (int row = 0; row < 3; row++) {  
@@ -72,13 +73,6 @@ int main(int argc, char* argv[]) {
     for (int row = 0; row < 3; row++) {
         for (int col = 0; col < 8; col++) {
             clocks[row][col].setInstant(270, 270);  // define this to set angles without animating
-            if (row == targetRow && col == targetCol) {
-                ClockMotion motion;
-                motion.hourAngle = 270;
-                motion.minuteAngle = 270;
-                motion.speed = speed; // You decide how
-                sendClockMotionToSupervisor(motion);
-            }
         }
     }
 

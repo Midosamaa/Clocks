@@ -210,12 +210,11 @@ void slideTransition_to_left(sf::RenderWindow& window, vector<vector<Clock>>& cl
 
     // **Step 3: Animate the Transition Using `displayAngles`**    
     for (size_t step = 0; step <= totalCols - 8; step++) {
-        window.clear(sf::Color::White);
         for (size_t col = 0; col < totalCols; col++) {
             if (col >= step && col - step < 8) { 
                 for (size_t row = 0; row < 3; row++) {
-                    if (displayAngles[row][col].first != -1) { 
-                        if (row == targetRow && col == targetCol) {
+                    if (displayAngles[row][col].first != -1) {
+                        if (row == targetRow && col-step == targetCol) {
                             clocks[row][col - step].update_with_send(displayAngles[row][col].first, displayAngles[row][col].second, window, speed);
                         } else {
                             clocks[row][col - step].update(displayAngles[row][col].first, displayAngles[row][col].second, window);
@@ -264,11 +263,8 @@ void slideTransition_to_right(sf::RenderWindow& window, vector<vector<Clock>>& c
     }
 
     for (int step = totalCols - 8; step >= 0; step--) {  // Moves Left to Right
-        window.clear(sf::Color::White);
-
         for (int col = 0; col < 8; col++) { // Iterate over only the visible area
             size_t sourceCol = col + step;  // Get the source column
-
             if (sourceCol < totalCols) {  // Ensure it's within bounds
                 for (size_t row = 0; row < 3; row++) {
                     if (displayAngles[row][sourceCol].first != -1) {  
@@ -281,18 +277,8 @@ void slideTransition_to_right(sf::RenderWindow& window, vector<vector<Clock>>& c
                 }
             }
         }
-
-        // **Draw Everything**
-        for (const auto& rowVec : clocks) {
-            for (const auto& clock : rowVec) {
-                clock.draw(window);
-            }
-        }
-
-        window.display();
-        this_thread::sleep_for(chrono::milliseconds((int)(150)));
-    }
 }
+                     }
 
 
 void slideTransition_to_top(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
@@ -306,7 +292,6 @@ void slideTransition_to_top(sf::RenderWindow& window, vector<vector<Clock>>& clo
     size_t totalRows = 3;  // Always 3 rows for the clock grid
     
     vector<vector<pair<float, float>>> displayAngles;
-
 
     // **Fill Current Hour 
     vector<vector<pair<float, float>>> currentBuffer(totalRows);
@@ -352,9 +337,7 @@ void slideTransition_to_top(sf::RenderWindow& window, vector<vector<Clock>>& clo
 
     // Animate the Transition
     size_t totalSteps = displayAngles.size() - totalRows;
-    for (size_t step = 0; step <= totalSteps; step++) {  // Moves rows up
-        window.clear(sf::Color::White);
-        
+    for (size_t step = 0; step <= totalSteps; step++) {  // Moves rows up        
         // **Move visible rows upwards**
         for (size_t row = 0; row < totalRows; row++) {  // Only shift visible rows
             if (row + step < displayAngles.size()) {  // Ensure within bounds
@@ -367,16 +350,7 @@ void slideTransition_to_top(sf::RenderWindow& window, vector<vector<Clock>>& clo
                 }
             }
         }
-
-        // **Draw Everything**
-        for (const auto& rowVec : clocks) {
-            for (const auto& clock : rowVec) {
-                clock.draw(window);
-            }
-        }
-
-        window.display();
-        this_thread::sleep_for(chrono::milliseconds((int)(150)));
+        if (step == totalSteps) break; 
     }
 }
 
@@ -393,6 +367,9 @@ void wave(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<
             slideTransition_to_right(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
         }
         if (direction==3){
+            slideTransition_to_top(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
+        }
+        if (direction==4){
             slideTransition_to_bottom(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
         }
 }
@@ -407,8 +384,6 @@ void slideTransition_to_bottom(sf::RenderWindow& window, vector<vector<Clock>>& 
     size_t totalRows = 3;  // Always 3 rows for the clock grid
     
     vector<vector<pair<float, float>>> displayAngles;
-
-
 
     // Fill Target Hour
     vector<vector<pair<float, float>>> targetBuffer(totalRows);
@@ -459,7 +434,6 @@ void slideTransition_to_bottom(sf::RenderWindow& window, vector<vector<Clock>>& 
     size_t totalSteps = displayAngles.size() - totalRows;
 
     for (size_t step = totalSteps; step >= 0; step--) {  // Ensure smooth transition and stop correctly
-        window.clear(sf::Color::White);
         // **Move visible rows downwards**
         for (size_t row = 0; row < totalRows; row++) {  
             if (step + row < displayAngles.size()) {  // Ensure within bounds
@@ -472,17 +446,6 @@ void slideTransition_to_bottom(sf::RenderWindow& window, vector<vector<Clock>>& 
                 }
             }
         }
-
-        // **Draw Everything**
-        for (const auto& rowVec : clocks) {
-            for (const auto& clock : rowVec) {
-                clock.draw(window);
-            }
-        }
-
-        window.display();
-        this_thread::sleep_for(chrono::milliseconds((300)));
-
         // Stop exactly when the last three rows are visible at the bottom and it goes 18446744073709551615 max value
         if (step == 0) break; 
     }
@@ -507,6 +470,10 @@ void stars(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector
         if (direction==3){
             slideTransition_to_top(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
         }
+
+        if (direction==4){
+            slideTransition_to_bottom(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
+        }
          
 }
 
@@ -523,7 +490,10 @@ void words(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector
     if (direction==3){
         slideTransition_to_top(window, clocks, currentAngles, getTextAngles(word), targetAngles);
     }
-    
+
+    if (direction==4){
+        slideTransition_to_bottom(window, clocks, currentAngles, getTextAngles(word), targetAngles);
+    }
 }
 
 void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& targetAngles, int direction){

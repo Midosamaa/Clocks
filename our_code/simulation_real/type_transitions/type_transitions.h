@@ -9,9 +9,6 @@
 #include <thread>
 #include <chrono>
 
-const int targetRow = 2;
-const int targetCol = 3;
-
 const int speed = 50;
 
 //transitions

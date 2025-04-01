@@ -29,15 +29,12 @@ void Clock::update(float targetAngle1, float targetAngle2, sf::RenderWindow& win
         std::swap(targetAngle1, targetAngle2);
     }
 
-    // Determine how many steps based on movement distance
-    // float diff1 = std::abs(targetAngle1 - startAngle1);
-    // float diff2 = std::abs(targetAngle2 - startAngle2);
-    // float maxDiff = std::max(diff1, diff2);
+    float diff1 = std::abs(targetAngle1 - startAngle1);
+    float diff2 = std::abs(targetAngle2 - startAngle2);
+    float maxDiff = std::max(diff1, diff2);
 
-    // int steps = static_cast<int>(maxDiff * 1.0f);  // 2 steps per degree difference
-    // steps = std::max(steps, 1); // Ensure at least 1 step
-
-    int steps = 150;
+    int steps = static_cast<int>(maxDiff * 1.0f);  // 2 steps per degree difference
+    steps = std::max(steps, 1); // Ensure at least 1 step
 
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
@@ -64,6 +61,12 @@ void Clock::update(float targetAngle1, float targetAngle2, sf::RenderWindow& win
     }
 }
 
+auto normalize = [](float angle) {
+    while (angle < 0) angle += 360;
+    while (angle >= 360) angle -= 360;
+    return angle;
+};
+
 
 void Clock::update_with_send(float targetAngle1, float targetAngle2, sf::RenderWindow& window, float speed) {
     float startAngle1 = hand_1.getAngle();
@@ -77,14 +80,12 @@ void Clock::update_with_send(float targetAngle1, float targetAngle2, sf::RenderW
         std::swap(targetAngle1, targetAngle2);
     }
 
-    // float diff1 = std::abs(targetAngle1 - startAngle1);
-    // float diff2 = std::abs(targetAngle2 - startAngle2);
-    // float maxDiff = std::max(diff1, diff2);
+    float diff1 = std::abs(targetAngle1 - startAngle1);
+    float diff2 = std::abs(targetAngle2 - startAngle2);
+    float maxDiff = std::max(diff1, diff2);
 
-    // int steps = static_cast<int>(maxDiff * 1.0f);  // 2 steps per degree difference
-    // steps = std::max(steps, 1); // Ensure at least 1 step
-
-    int steps = 150;
+    int steps = static_cast<int>(maxDiff * 1.0f);  // 2 steps per degree difference
+    steps = std::max(steps, 1); // Ensure at least 1 step
 
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
@@ -93,9 +94,9 @@ void Clock::update_with_send(float targetAngle1, float targetAngle2, sf::RenderW
         float interpolated2 = interpolateAngle(startAngle2, targetAngle2, t);
 
         // Send to supervisor
-        ClockMotion motion;
-        motion.hourAngle = interpolated1;
-        motion.minuteAngle = interpolated2;
+        ClockMotion motion;    
+        motion.hourAngle = normalize(interpolated1);
+        motion.minuteAngle = normalize(interpolated2);
         motion.speed = speed;
         sendClockMotionToSupervisor(motion);
 
