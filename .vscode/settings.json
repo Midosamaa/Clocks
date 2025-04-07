@@ -52,6 +52,13 @@
         "thread": "cpp",
         "typeinfo": "cpp",
         "cstring": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "forward_list": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "optional": "cpp",
+        "ranges": "cpp",
+        "cinttypes": "cpp",
+        "typeindex": "cpp"
     }
 }
