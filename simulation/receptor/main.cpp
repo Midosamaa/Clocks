@@ -1,29 +1,4 @@
-#include <iostream>
-#include <string>
-#include <unistd.h>
-#include <netinet/in.h>
-#include <cstring>
-
-// Struct to hold angles
-struct ClockMotion {
-    float hourAngle;
-    float minuteAngle;
-};
-
-// Simple parser for: {"hourAngle":270,"minuteAngle":90}
-ClockMotion parseClockMotion(const std::string& json) {
-    ClockMotion motion{};
-
-    size_t hPos = json.find("\"hourAngle\":");
-    size_t mPos = json.find("\"minuteAngle\":");
-
-    if (hPos != std::string::npos && mPos != std::string::npos) {
-        motion.hourAngle = std::stof(json.substr(hPos + 12, json.find(",", hPos) - (hPos + 12)));
-        motion.minuteAngle = std::stof(json.substr(mPos + 14, json.find("}", mPos) - (mPos + 14)));
-    }
-
-    return motion;
-}
+#include "communication.h"
 
 int main() {
     int server_fd;
@@ -58,11 +33,8 @@ int main() {
     while (true) {
         int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &client_len);
         if (client_fd < 0) {
-            std::cerr << "[RECEPTOR] Accept failed\n";
             continue;
         }
-
-        std::cout << "[RECEPTOR] Connected to sender.\n";
 
         // Now loop and wait for multiple messages on the same connection
         while (true) {
@@ -70,7 +42,6 @@ int main() {
             int bytesRead = read(client_fd, buffer, sizeof(buffer) - 1);
 
             if (bytesRead <= 0) {
-                std::cout << "[RECEPTOR] Client disconnected.\n";
                 break; // Exit inner loop and wait for new client
             }
 

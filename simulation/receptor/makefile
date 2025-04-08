@@ -3,10 +3,9 @@ TARGET = receptor
 
 # Répertoires
 SRC_DIR = .
-COMM_DIR = ../simulator/communication
 
 # Fichiers source
-SRCS = $(SRC_DIR)/main.cpp $(COMM_DIR)/communication.cpp
+SRCS = $(SRC_DIR)/main.cpp communication.cpp
 
 # Compilateur
 CXX = g++
