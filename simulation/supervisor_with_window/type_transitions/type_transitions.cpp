@@ -22,12 +22,6 @@ void pacman_vertical(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
     float pacmanClosedHour = 0;  // 3:15 -> Closed mouth
     float pacmanClosedMinute = 0; 
 
-<<<<<<< HEAD:simulation/supervisor_with_window/type_transitions/type_transitions.cpp
-=======
-    float pacmanDelay = 1.2f;
-    int animationspeed = 150;
-
->>>>>>> e8fa33f (to pull):our_code/simulation/type_transitions/type_transitions.cpp
     for (int row = 0; row < 3; row++) {  
     if (row % 2 == 0) {  // Left to Right
         pacmanOpenHour = 315;
@@ -109,12 +103,6 @@ void pacman_horizontal(sf::RenderWindow& window, vector<vector<Clock>>& clocks,
     
     float pacmanOpenHour, pacmanOpenMinute;
     float pacmanClosedHour, pacmanClosedMinute;
-<<<<<<< HEAD:simulation/supervisor_with_window/type_transitions/type_transitions.cpp
-=======
-    
-    float pacmanDelay = 1.2f;
-    int animationspeed = 150;
->>>>>>> e8fa33f (to pull):our_code/simulation/type_transitions/type_transitions.cpp
 
     // Single Loop for All Columns
     for (int col = 0; col < 8; col++) {  
@@ -271,10 +259,6 @@ void slideTransition_to_left(sf::RenderWindow& window, vector<vector<Clock>>& cl
                      const vector<vector<pair<float, float>>>& currentAngles,
                      const vector<vector<pair<float, float>>>& wordAngles,
                      const vector<vector<pair<float, float>>>& targetAngles) {
-<<<<<<< HEAD:simulation/supervisor_with_window/type_transitions/type_transitions.cpp
-=======
-    float slideDelay = 0.5f; // Delay per step
->>>>>>> e8fa33f (to pull):our_code/simulation/type_transitions/type_transitions.cpp
 
     // Compute total columns required for transition
     size_t timeCols = currentAngles.size();
@@ -331,10 +315,6 @@ void slideTransition_to_right(sf::RenderWindow& window, vector<vector<Clock>>& c
                      const vector<vector<pair<float, float>>>& wordAngles,
                      const vector<vector<pair<float, float>>>& targetAngles) {
     
-<<<<<<< HEAD:simulation/supervisor_with_window/type_transitions/type_transitions.cpp
-=======
-    float slideDelay = 0.5f; // Delay per step
->>>>>>> e8fa33f (to pull):our_code/simulation/type_transitions/type_transitions.cpp
     size_t timeCols = currentAngles.size();
     size_t wordCols = wordAngles.size();
     size_t targetCols = targetAngles.size();
@@ -389,10 +369,6 @@ void slideTransition_to_top(sf::RenderWindow& window, vector<vector<Clock>>& clo
                      const vector<vector<pair<float, float>>>& wordAngles,
                      const vector<vector<pair<float, float>>>& targetAngles) {
     
-<<<<<<< HEAD:simulation/supervisor_with_window/type_transitions/type_transitions.cpp
-=======
-    float slideDelay = 0.5f; // Delay per step
->>>>>>> e8fa33f (to pull):our_code/simulation/type_transitions/type_transitions.cpp
     size_t timeCols = currentAngles.size();
     size_t wordCols = wordAngles.size();
     size_t targetCols = targetAngles.size();
@@ -467,11 +443,6 @@ void slideTransition_to_bottom(sf::RenderWindow& window, vector<vector<Clock>>& 
                                 const vector<vector<pair<float, float>>>& currentAngles,
                                 const vector<vector<pair<float, float>>>& wordAngles,
                                 const vector<vector<pair<float, float>>>& targetAngles) {
-<<<<<<< HEAD:simulation/supervisor_with_window/type_transitions/type_transitions.cpp
-=======
-    
-    float slideDelay = 0.5f; // Delay per step
->>>>>>> e8fa33f (to pull):our_code/simulation/type_transitions/type_transitions.cpp
     size_t timeCols = currentAngles.size();
     size_t wordCols = wordAngles.size();
     size_t targetCols = targetAngles.size();

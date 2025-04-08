@@ -11,7 +11,7 @@ void printHelp() {
     std::cout << "    - 4 : Top to Bottom\n\n";
 
     std::cout << "  <transitionType>: Effect type applied during minute change\n";
-    std::cout << "    - 'pacman'  : Pac-Man animation eating the old time (transitionDetail = NULL) and Direction is either vertical (2) or horizontal (1)\n";
+    std::cout << "    - 'pacman'  : Pac-Man animation eating the old time (transitionDetail = NULL)\n";
     std::cout << "    - 'wave'    : Wave animation (transitionDetail = number of waves)\n";
     std::cout << "    - 'stars'   : Star animation (transitionDetail = number of stars)\n";
     std::cout << "    - 'words'   : Temporary word display before showing time (transitionDetail = word to display)\n\n";
@@ -127,6 +127,8 @@ int main(int argc, char* argv[]) {
                 words(window, clocks, startAngles, targetAngles, direction, trans_word);
             } 
             else if (transitionType == "pacman") {
+                if (direction == 3) direction =1;
+                if (direction == 4) direction =2;
                 pacman(window, clocks, targetAngles, direction);
             } 
             else if (transitionType == "wave") {
