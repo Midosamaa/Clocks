@@ -19,5 +19,4 @@ vector<vector<pair<float, float>>> getTextAngles(const std::string& text);
 
 
 
-
 #endif // DIGITCONFIGURATION_H

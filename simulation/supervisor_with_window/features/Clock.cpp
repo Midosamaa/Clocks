@@ -61,6 +61,11 @@ auto normalize = [](float angle) {
     return angle;
 };
 
+auto angularDistance = [](float a, float b) {
+    float diff = std::fmod(std::abs(a - b), 360.f);
+    return (diff > 180.f) ? 360.f - diff : diff;
+};
+
 void Clock::update_with_send(float targetAngle1, float targetAngle2, sf::RenderWindow& window) {
     float startAngle1 = hand_1.getAngle();
     float startAngle2 = hand_2.getAngle();
@@ -73,11 +78,12 @@ void Clock::update_with_send(float targetAngle1, float targetAngle2, sf::RenderW
         std::swap(targetAngle1, targetAngle2);
     }
 
-    float diff1 = std::abs(targetAngle1 - startAngle1);
-    float diff2 = std::abs(targetAngle2 - startAngle2);
+    float diff1 = angularDistance(targetAngle1, startAngle1);
+    float diff2 = angularDistance(targetAngle2, startAngle2);
     float maxDiff = std::max(diff1, diff2);
-
-    int steps = static_cast<int>(maxDiff * MAXSTEP);
+    int steps = std::max(1, static_cast<int>(maxDiff * MAXSTEP));
+    
+    cout << "maxDiff = " << maxDiff << endl;
 
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
@@ -100,7 +106,7 @@ void Clock::update_with_send(float targetAngle1, float targetAngle2, sf::RenderW
 
         // Keep UI responsive during animation
         sf::Clock delayTimer;
-        while (delayTimer.getElapsedTime().asMilliseconds() < 2) {
+        while (delayTimer.getElapsedTime().asMilliseconds() < 8) {
             sf::Event event;
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed)

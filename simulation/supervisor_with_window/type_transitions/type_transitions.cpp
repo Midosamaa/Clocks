@@ -6,10 +6,10 @@
 //
 
 void pacman(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& targetAngles, int direction){
-    if (direction == 2){
+    if (direction == 1){
         pacman_horizontal(window, clocks, targetAngles);
     }
-    if (direction == 1){
+    if (direction == 2){
         pacman_vertical(window, clocks, targetAngles);
     }
 }
@@ -302,10 +302,10 @@ void slideTransition_to_left(sf::RenderWindow& window, vector<vector<Clock>>& cl
                         } else {
                             clocks[row][col - step].update(displayAngles[row][col].first, displayAngles[row][col].second, window);
                         }
-                    }
             }
+                }
         }
-        }
+        }   
     }
 }
 

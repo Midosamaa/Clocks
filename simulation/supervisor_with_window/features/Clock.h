@@ -4,7 +4,7 @@
 #include "Hand.h"
 #include "../../receptor/communication.h"
 
-#define MAXSTEP 12 // Max number of steps for smooth motion interpolation
+#define MAXSTEP 6 // Max number of steps for smooth motion interpolation for motors **Change the steps which depends on your motors**
 
 // Represents a graphical clock with two moving hands
 class Clock {

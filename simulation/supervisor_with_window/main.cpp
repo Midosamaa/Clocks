@@ -2,7 +2,7 @@
 
 // Display help instructions
 void printHelp() {
-    std::cout << "Usage: ./clock_project <direction (1-3)> <transitionType> <transitionDetail>\n\n";
+    std::cout << "Usage: ./clock_project <direction (1-4)> <transitionType> <transitionDetail>\n\n";
     std::cout << "Arguments:\n";
     std::cout << "  <direction>: Specifies the transition direction\n";
     std::cout << "    - 1 : Right to Left\n";
@@ -11,7 +11,7 @@ void printHelp() {
     std::cout << "    - 4 : Top to Bottom\n\n";
 
     std::cout << "  <transitionType>: Effect type applied during minute change\n";
-    std::cout << "    - 'pacman'  : Pac-Man animation eating the old time (transitionDetail = NULL)\n";
+    std::cout << "    - 'pacman'  : Pac-Man animation eating the old time (transitionDetail = NULL) and Direction is either vertical (2) or horizontal (1)\n";
     std::cout << "    - 'wave'    : Wave animation (transitionDetail = number of waves)\n";
     std::cout << "    - 'stars'   : Star animation (transitionDetail = number of stars)\n";
     std::cout << "    - 'words'   : Temporary word display before showing time (transitionDetail = word to display)\n\n";
