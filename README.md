@@ -294,6 +294,10 @@ or
 ```
 
 And if in doubt execute it however you feel and it will tell you where you got it wrong.
+You can also just run the command 
+```bash
+./clocks_display -help
+```
 
 And well, that is basically everything we have to present.
 
