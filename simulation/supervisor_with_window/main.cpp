@@ -124,7 +124,8 @@ int main(int argc, char* argv[]) {
             if (transitionType == "words") {
                 std::string trans_word = transitionDetail;
                 auto wordAngles = getTextAngles(trans_word);
-                words(window, clocks, startAngles, targetAngles, direction, trans_word);
+                //words(window, clocks, startAngles, targetAngles, direction, trans_word);
+                smoothSpinRevealTextThenTime(window, clocks, startAngles, wordAngles, targetAngles);
             } 
             else if (transitionType == "pacman") {
                 if (direction == 3) direction =1;

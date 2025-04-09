@@ -516,3 +516,75 @@ void slideTransition_to_bottom(sf::RenderWindow& window, vector<vector<Clock>>& 
 }
 
 
+void smoothSpinRevealTextThenTime(sf::RenderWindow& window,
+                                  std::vector<std::vector<Clock>>& clocks,
+                                  const std::vector<std::vector<std::pair<float, float>>>& startAngles,
+                                  const std::vector<std::vector<std::pair<float, float>>>& wordAngles,
+                                  const std::vector<std::vector<std::pair<float, float>>>& targetAngles) {
+    
+    const int steps = 150;
+    const float totalSpin = 360.0f;
+
+    // --- Phase 1: Spin to reveal word ---
+    for (int step = 0; step <= steps; ++step) {
+        float t = static_cast<float>(step) / steps;
+
+        window.clear(sf::Color::White);
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 8; ++col) {
+                float hStart = startAngles[col][row].first;
+                float mStart = startAngles[col][row].second;
+
+                float hTarget = wordAngles[col][row].first;
+                float mTarget = wordAngles[col][row].second;
+
+                float h = std::fmod(hStart + totalSpin * t, 360.0f);
+                float m = std::fmod(mStart + totalSpin * t, 360.0f);
+
+                // As we reach the final step, land on the word
+                if (step == steps) {
+                    h = hTarget;
+                    m = mTarget;
+                }
+
+                clocks[row][col].setInstant(h, m);
+                clocks[row][col].draw(window);
+            }
+        }
+
+        window.display();
+        std::this_thread::sleep_for(std::chrono::milliseconds(8));
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    // --- Phase 2: Spin again to target time ---
+    for (int step = 0; step <= steps; ++step) {
+        float t = static_cast<float>(step) / steps;
+
+        window.clear(sf::Color::White);
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 8; ++col) {
+                float hStart = wordAngles[col][row].first;
+                float mStart = wordAngles[col][row].second;
+
+                float hTarget = targetAngles[col][row].first;
+                float mTarget = targetAngles[col][row].second;
+
+                float h = std::fmod(hStart + totalSpin * t, 360.0f);
+                float m = std::fmod(mStart + totalSpin * t, 360.0f);
+
+                if (step == steps) {
+                    h = hTarget;
+                    m = mTarget;
+                }
+
+                clocks[row][col].setInstant(h, m);
+                clocks[row][col].draw(window);
+            }
+        }
+
+        window.display();
+        std::this_thread::sleep_for(std::chrono::milliseconds(8));
+    }
+}

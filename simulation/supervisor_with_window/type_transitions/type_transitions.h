@@ -61,4 +61,11 @@ void slideTransition_to_bottom(sf::RenderWindow& window, vector<vector<Clock>>& 
                                 const vector<vector<pair<float, float>>>& wordAngles,
                                 const vector<vector<pair<float, float>>>& targetAngles);
 
+
+void smoothSpinRevealTextThenTime(sf::RenderWindow& window,
+                                  std::vector<std::vector<Clock>>& clocks,
+                                  const std::vector<std::vector<std::pair<float, float>>>& startAngles,
+                                  const std::vector<std::vector<std::pair<float, float>>>& wordAngles,
+                                  const std::vector<std::vector<std::pair<float, float>>>& targetAngles);
+
 #endif // TYPE_TRANSITIONS_H
