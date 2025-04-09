@@ -15,7 +15,7 @@ void printHelp() {
     std::cout << "    - 'pacman'  : Pac-Man animation eating the old time (transitionDetail = NULL)\n";
     std::cout << "    - 'wave'    : Wave animation (transitionDetail = number of waves)\n";
     std::cout << "    - 'stars'   : Star animation (transitionDetail = number of stars)\n";
-    std::cout << "    - 'words'   : Temporary word display before showing time (transitionDetail = word to display). If you are using the 5th direction, you will be limited to 4 letters per word\n\n";
+    std::cout << "    - 'words'   : Temporary word display before showing time (transitionDetail = word to display). If you are using the 5th direction, you will be limited to 4 letters per word. Make sure to write all in capital.\n\n";
 
     std::cout << "Examples:\n";
     std::cout << "  ./clock_project 1 pacman NULL       # Pac-Man transition right to left\n";
@@ -128,6 +128,8 @@ int main(int argc, char* argv[]) {
         window.display();
         std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
     }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 
     int previousMinute = currentMinute;

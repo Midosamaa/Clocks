@@ -6,7 +6,7 @@
 #include "../../receptor/communication.h"
 
 
-const int speed = 50;  // Default transition speed for animations
+const int speed = 1;  // Default transition speed for animations
 
 // ----- Main transition effects -----
 

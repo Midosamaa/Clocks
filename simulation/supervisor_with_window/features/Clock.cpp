@@ -32,7 +32,7 @@ void Clock::update(float targetAngle1, float targetAngle2, sf::RenderWindow& win
     float diff1 = angularDistance(targetAngle1, startAngle1);
     float diff2 = angularDistance(targetAngle2, startAngle2);
     float maxDiff = std::max(diff1, diff2);
-    int steps = std::max(1, static_cast<int>(maxDiff * MAXSTEP));
+    int steps = std::max(1, static_cast<int>(maxDiff * (MAXSTEP-1.5)));
 
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
@@ -85,7 +85,7 @@ void Clock::update_with_send(float targetAngle1, float targetAngle2, sf::RenderW
     float diff1 = angularDistance(targetAngle1, startAngle1);
     float diff2 = angularDistance(targetAngle2, startAngle2);
     float maxDiff = std::max(diff1, diff2);
-    int steps = std::max(1, static_cast<int>(maxDiff * MAXSTEP));
+    int steps = std::max(1, static_cast<int>(maxDiff * (MAXSTEP-1.5)));
     
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;

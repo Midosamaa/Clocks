@@ -256,6 +256,9 @@ void words(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector
         slideTransition_to_bottom(window, clocks, currentAngles, getTextAngles(word), targetAngles);
     }
     if (direction==5){
+        while(word.length()<4){
+            word+=" ";
+        }
             smoothSpinRevealTextThenTime(window, clocks, currentAngles, getTextAngles(word), targetAngles);
     }
 }
