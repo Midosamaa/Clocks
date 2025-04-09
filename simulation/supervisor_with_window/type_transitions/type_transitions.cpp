@@ -206,6 +206,9 @@ void wave(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<
         if (direction==4){
             slideTransition_to_bottom(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
         }
+        if (direction==5){
+            smoothSpinRevealTextThenTime(window, clocks, currentAngles, getTextAngles(waves), targetAngles);
+        }
 }
 
 void stars(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector<vector<pair<float, float>>>& currentAngles, const vector<vector<pair<float, float>>>& targetAngles, int direction, int number_stars){
@@ -229,6 +232,9 @@ void stars(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector
         if (direction==4){
             slideTransition_to_bottom(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
         }
+        if (direction==5){
+            smoothSpinRevealTextThenTime(window, clocks, currentAngles, getTextAngles(stars), targetAngles);
+        }
          
 }
 
@@ -248,6 +254,9 @@ void words(sf::RenderWindow& window, vector<vector<Clock>>& clocks, const vector
 
     if (direction==4){
         slideTransition_to_bottom(window, clocks, currentAngles, getTextAngles(word), targetAngles);
+    }
+    if (direction==5){
+            smoothSpinRevealTextThenTime(window, clocks, currentAngles, getTextAngles(word), targetAngles);
     }
 }
 
@@ -290,24 +299,80 @@ void slideTransition_to_left(sf::RenderWindow& window, vector<vector<Clock>>& cl
             displayAngles[row][timeCols + wordCols + col] = targetAngles[col][row];
         }
     }
-
     // Animate the Transition Using displayAngles 
-    for (size_t step = 0; step <= totalCols - 8; step++) {
-        for (size_t col = 0; col < totalCols; col++) {
-            if (col >= step && col - step < 8) { 
-                for (size_t row = 0; row < 3; row++) {
-                    if (displayAngles[row][col].first != -1) {
-                        if (row == targetRow && col-step == targetCol) {
-                            clocks[row][col - step].update_with_send(displayAngles[row][col].first, displayAngles[row][col].second, window);
-                        } else {
-                            clocks[row][col - step].update(displayAngles[row][col].first, displayAngles[row][col].second, window);
-                        }
-            }
-                }
+    // Initialize lastShownAngles with the first visible frame (columns 0 to 7)
+    std::vector<std::vector<std::pair<float, float>>> lastShownAngles(3, std::vector<std::pair<float, float>>(8));
+    for (int row = 0; row < 3; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            lastShownAngles[row][col] = displayAngles[row][col];
         }
-        }   
+    }
+
+    // Loop through each horizontal scroll step (like a sliding window)
+    for (size_t step = 1; step <= totalCols - 8; ++step) {
+        // Extract the next visible frame from displayAngles
+        std::vector<std::vector<std::pair<float, float>>> currentView(3, std::vector<std::pair<float, float>>(8));
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 8; ++col) {
+                size_t srcCol = step + col;
+                currentView[row][col] = displayAngles[row][srcCol];
+            }
+        }
+
+        // Compute max angular difference between current and previous state
+        float globalMaxDiff = 0.0f;
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 8; ++col) {
+                const auto& from = lastShownAngles[row][col];
+                const auto& to = currentView[row][col];
+
+                if (to.first != -1 && to.second != -1) {
+                    float diffH = angularDistance(from.first, to.first);
+                    float diffM = angularDistance(from.second, to.second);
+                    globalMaxDiff = std::max(globalMaxDiff, std::max(diffH, diffM));
+                }
+            }
+        }
+
+        int steps = std::max(1, static_cast<int>(globalMaxDiff * MAXSTEP));
+        const int delayMs = 5;
+
+        // Interpolate all clocks from lastShownAngles → currentView
+        for (int s = 0; s <= steps; ++s) {
+            float t = static_cast<float>(s) / steps;
+            window.clear(sf::Color::White);
+
+            for (int row = 0; row < 3; ++row) {
+                for (int col = 0; col < 8; ++col) {
+                    const auto& from = lastShownAngles[row][col];
+                    const auto& to = currentView[row][col];
+
+                    if (to.first != -1 && to.second != -1) {
+                        float h = interpolateAngle(from.first, to.first, t);
+                        float m = interpolateAngle(from.second, to.second, t);
+                        clocks[row][col].setInstant(h, m);
+
+                        if (row == targetRow && col == targetCol) {
+                            ClockMotion motion;
+                            motion.hourAngle = normalize(h);
+                            motion.minuteAngle = normalize(m);
+                            sendClockMotionToReceptor(motion);
+                        }
+                        clocks[row][col].draw(window);
+                    }
+                }
+            }
+
+            window.display();
+            std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
+        }
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+        // Update lastShownAngles for next step
+        lastShownAngles = currentView;
     }
 }
+
 
 
 void slideTransition_to_right(sf::RenderWindow& window, vector<vector<Clock>>& clocks, 
@@ -345,22 +410,77 @@ void slideTransition_to_right(sf::RenderWindow& window, vector<vector<Clock>>& c
         }
     }
 
-    for (int step = totalCols - 8; step >= 0; step--) {  // Moves Left to Right
-        for (int col = 0; col < 8; col++) { // Iterate over only the visible area
-            size_t sourceCol = col + step;  // Get the source column
-            if (sourceCol < totalCols) {  // Ensure it's within bounds
-                for (size_t row = 0; row < 3; row++) {
-                    if (displayAngles[row][sourceCol].first != -1) {  
-                        if (row == targetRow && col == targetCol) {
-                            clocks[row][col].update_with_send(displayAngles[row][sourceCol].first, displayAngles[row][sourceCol].second, window);
-                        } else {
-                            clocks[row][col].update(displayAngles[row][sourceCol].first, displayAngles[row][sourceCol].second, window);
-                        }
-                    }
+    // Animate the Transition Using displayAngles (right to left scroll)
+    std::vector<std::vector<std::pair<float, float>>> lastShownAngles(3, std::vector<std::pair<float, float>>(8));
+    for (int row = 0; row < 3; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            size_t srcCol = totalCols - 8 + col;
+            lastShownAngles[row][col] = displayAngles[row][srcCol];
+        }
+    }
+
+    for (int step = totalCols - 9; step >= 0; --step) {
+        // Prepare current 8-column view
+        std::vector<std::vector<std::pair<float, float>>> currentView(3, std::vector<std::pair<float, float>>(8));
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 8; ++col) {
+                size_t srcCol = step + col;
+                currentView[row][col] = displayAngles[row][srcCol];
+            }
+        }
+
+        // Compute max angular difference for dynamic step count
+        float globalMaxDiff = 0.0f;
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 8; ++col) {
+                const auto& from = lastShownAngles[row][col];
+                const auto& to = currentView[row][col];
+
+                if (to.first != -1 && to.second != -1) {
+                    float diffH = angularDistance(from.first, to.first);
+                    float diffM = angularDistance(from.second, to.second);
+                    globalMaxDiff = std::max(globalMaxDiff, std::max(diffH, diffM));
                 }
             }
         }
-}
+
+        int steps = std::max(1, static_cast<int>(globalMaxDiff * MAXSTEP));
+        const int delayMs = 5;
+
+        // Interpolate all clocks from lastShownAngles → currentView
+        for (int s = 0; s <= steps; ++s) {
+            float t = static_cast<float>(s) / steps;
+            window.clear(sf::Color::White);
+
+            for (int row = 0; row < 3; ++row) {
+                for (int col = 0; col < 8; ++col) {
+                    const auto& from = lastShownAngles[row][col];
+                    const auto& to = currentView[row][col];
+
+                    if (to.first != -1 && to.second != -1) {
+                        float h = interpolateAngle(from.first, to.first, t);
+                        float m = interpolateAngle(from.second, to.second, t);
+                        clocks[row][col].setInstant(h, m);
+                        if (row == targetRow && col == targetCol) {
+                            ClockMotion motion;
+                            motion.hourAngle = normalize(h);
+                            motion.minuteAngle = normalize(m);
+                            sendClockMotionToReceptor(motion);
+                        }
+                        clocks[row][col].draw(window);
+                    }
+                }
+            }
+
+            window.display();
+            std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+        // Update for next round
+        lastShownAngles = currentView;
+    }
 }
 
 
@@ -419,21 +539,77 @@ void slideTransition_to_top(sf::RenderWindow& window, vector<vector<Clock>>& clo
     displayAngles.insert(displayAngles.end(), targetBuffer.begin(), targetBuffer.end());
 
     // Animate the Transition
+    std::vector<std::vector<std::pair<float, float>>> lastShownAngles = {
+        displayAngles[0],
+        displayAngles[1],
+        displayAngles[2]
+    };
+
     size_t totalSteps = displayAngles.size() - totalRows;
-    for (size_t step = 0; step <= totalSteps; step++) {  // Moves rows up        
-        // Move visible rows upwards
-        for (size_t row = 0; row < totalRows; row++) {  // Only shift visible rows
-            if (row + step < displayAngles.size()) {  // Ensure within bounds
-                for (size_t col = 0; col < min(displayAngles[row + step].size(), (size_t)8); col++) {
-                    if (row == targetRow && col == targetCol) {
-                            clocks[row][col].update_with_send(displayAngles[row + step][col].first, displayAngles[row + step][col].second, window);
-                        } else {
-                            clocks[row][col].update(displayAngles[row + step][col].first, displayAngles[row + step][col].second, window);
-                    }
+    const int delayMs = 5;
+
+    for (size_t step = 1; step <= totalSteps; ++step) {
+        // Build currentView from the next visible 3 rows
+        std::vector<std::vector<std::pair<float, float>>> currentView(3);
+        for (size_t row = 0; row < totalRows; ++row) {
+            if (step + row < displayAngles.size()) {
+                currentView[row] = displayAngles[step + row];
+            }
+        }
+
+        // Compute globalMaxDiff for dynamic step sizing
+        float globalMaxDiff = 0.0f;
+        for (size_t row = 0; row < 3; ++row) {
+            for (size_t col = 0; col < currentView[row].size(); ++col) {
+                if (col < lastShownAngles[row].size()) {
+                    float diffH = angularDistance(lastShownAngles[row][col].first, currentView[row][col].first);
+                    float diffM = angularDistance(lastShownAngles[row][col].second, currentView[row][col].second);
+                    globalMaxDiff = std::max(globalMaxDiff, std::max(diffH, diffM));
                 }
             }
         }
-        if (step == totalSteps) break; 
+
+        int steps = std::max(1, static_cast<int>(globalMaxDiff * MAXSTEP));
+
+        // Interpolate from lastShownAngles → currentView
+        for (int s = 0; s <= steps; ++s) {
+            float t = static_cast<float>(s) / steps;
+            window.clear(sf::Color::White);
+
+            for (size_t row = 0; row < 3; ++row) {
+                for (size_t col = 0; col < std::min((size_t)8, currentView[row].size()); ++col) {
+                    if (col < lastShownAngles[row].size()) {
+                        float fromH = lastShownAngles[row][col].first;
+                        float fromM = lastShownAngles[row][col].second;
+                        float toH = currentView[row][col].first;
+                        float toM = currentView[row][col].second;
+
+                        float h = interpolateAngle(fromH, toH, t);
+                        float m = interpolateAngle(fromM, toM, t);
+
+                        clocks[row][col].setInstant(h, m);
+                        if (row == targetRow && col == targetCol) {
+                            ClockMotion motion;
+                            motion.hourAngle = normalize(h);
+                            motion.minuteAngle = normalize(m);
+                            sendClockMotionToReceptor(motion);
+                        }
+                        clocks[row][col].draw(window);
+                    }
+                }
+            }
+
+            window.display();
+            std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+        // Update lastShownAngles for the next step
+        lastShownAngles = currentView;
+
+        // Prevent overshoot (important!)
+        if (step == totalSteps) break;
     }
 }
 
@@ -493,26 +669,80 @@ void slideTransition_to_bottom(sf::RenderWindow& window, vector<vector<Clock>>& 
 
     displayAngles.insert(displayAngles.end(), currentBuffer.begin(), currentBuffer.end());
 
+    // Animate the Transition
+    std::vector<std::vector<std::pair<float, float>>> lastShownAngles = {
+        displayAngles[displayAngles.size() - 3],
+        displayAngles[displayAngles.size() - 2],
+        displayAngles[displayAngles.size() - 1]
+    };
 
-    // Animate the Transition 
     size_t totalSteps = displayAngles.size() - totalRows;
+    const int delayMs = 5;
 
-    for (size_t step = totalSteps; step >= 0; step--) {  // Ensure smooth transition and stop correctly
-        // Move visible rows downwards
-        for (size_t row = 0; row < totalRows; row++) {  
-            if (step + row < displayAngles.size()) {  // Ensure within bounds
-                for (size_t col = 0; col < min(displayAngles[row + step].size(), (size_t)8); col++) {
-                    if (row == targetRow && col == targetCol) {
-                            clocks[row][col].update_with_send(displayAngles[row + step][col].first, displayAngles[row + step][col].second, window);
-                        } else {
-                            clocks[row][col].update(displayAngles[row + step][col].first, displayAngles[row + step][col].second, window);
-                    }
+    for (size_t step = totalSteps; step <= totalSteps; --step) {
+        // Build currentView from the next visible 3 rows (moving downward)
+        std::vector<std::vector<std::pair<float, float>>> currentView(3);
+        for (size_t row = 0; row < 3; ++row) {
+            if (step + row < displayAngles.size()) {
+                currentView[row] = displayAngles[step + row];
+            }
+        }
+
+        // Compute globalMaxDiff for dynamic step sizing
+        float globalMaxDiff = 0.0f;
+        for (size_t row = 0; row < 3; ++row) {
+            for (size_t col = 0; col < currentView[row].size(); ++col) {
+                if (col < lastShownAngles[row].size()) {
+                    float diffH = angularDistance(lastShownAngles[row][col].first, currentView[row][col].first);
+                    float diffM = angularDistance(lastShownAngles[row][col].second, currentView[row][col].second);
+                    globalMaxDiff = std::max(globalMaxDiff, std::max(diffH, diffM));
                 }
             }
         }
-        // Stop exactly when the last three rows are visible at the bottom and it goes 18446744073709551615 max value
-        if (step == 0) break; 
+
+        int steps = std::max(1, static_cast<int>(globalMaxDiff * MAXSTEP));
+
+        // Interpolate from lastShownAngles → currentView
+        for (int s = 0; s <= steps; ++s) {
+            float t = static_cast<float>(s) / steps;
+            window.clear(sf::Color::White);
+
+            for (size_t row = 0; row < 3; ++row) {
+                for (size_t col = 0; col < std::min((size_t)8, currentView[row].size()); ++col) {
+                    if (col < lastShownAngles[row].size()) {
+                        float fromH = lastShownAngles[row][col].first;
+                        float fromM = lastShownAngles[row][col].second;
+                        float toH = currentView[row][col].first;
+                        float toM = currentView[row][col].second;
+
+                        float h = interpolateAngle(fromH, toH, t);
+                        float m = interpolateAngle(fromM, toM, t);
+
+                        clocks[row][col].setInstant(h, m);
+                        if (row == targetRow && col == targetCol) {
+                            ClockMotion motion;
+                            motion.hourAngle = normalize(h);
+                            motion.minuteAngle = normalize(m);
+                            sendClockMotionToReceptor(motion);
+                        }
+                        clocks[row][col].draw(window);
+                    }
+                }
+            }
+
+            window.display();
+            std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+        // Update lastShownAngles
+        lastShownAngles = currentView;
+
+        // Important: Stop when step reaches 0 (avoid underflow)
+        if (step == 0) break;
     }
+
 }
 
 
@@ -521,13 +751,24 @@ void smoothSpinRevealTextThenTime(sf::RenderWindow& window,
                                   const std::vector<std::vector<std::pair<float, float>>>& startAngles,
                                   const std::vector<std::vector<std::pair<float, float>>>& wordAngles,
                                   const std::vector<std::vector<std::pair<float, float>>>& targetAngles) {
-    
-    const int steps = 150;
+
+    float globalMaxDiff = 0.0f;
+    for (int row = 0; row < 3; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            float diff1 = angularDistance(startAngles[col][row].first, 270.0f);
+            float diff2 = angularDistance(startAngles[col][row].second, 270.0f);
+            globalMaxDiff = std::max(globalMaxDiff, std::max(diff1, diff2));
+        }
+    }
+
+    int spinSteps = std::max(1, static_cast<int>(globalMaxDiff * MAXSTEP));
+    int moveSteps = std::max(1, static_cast<int>(MAXSTEP * 90));  // reasonable value
     const float totalSpin = 360.0f;
 
-    // --- Phase 1: Spin to reveal word ---
-    for (int step = 0; step <= steps; ++step) {
-        float t = static_cast<float>(step) / steps;
+    // Spin while interpolating toward (270°, 270°)
+    for (int step = 0; step <= spinSteps; ++step) {
+        float t = static_cast<float>(step) / spinSteps;
+        float spin = totalSpin * t;
 
         window.clear(sf::Color::White);
         for (int row = 0; row < 3; ++row) {
@@ -535,19 +776,10 @@ void smoothSpinRevealTextThenTime(sf::RenderWindow& window,
                 float hStart = startAngles[col][row].first;
                 float mStart = startAngles[col][row].second;
 
-                float hTarget = wordAngles[col][row].first;
-                float mTarget = wordAngles[col][row].second;
+                float h = interpolateAngle(hStart, 270.0f, t);
+                float m = interpolateAngle(mStart, 270.0f, t);
 
-                float h = std::fmod(hStart + totalSpin * t, 360.0f);
-                float m = std::fmod(mStart + totalSpin * t, 360.0f);
-
-                // As we reach the final step, land on the word
-                if (step == steps) {
-                    h = hTarget;
-                    m = mTarget;
-                }
-
-                clocks[row][col].setInstant(h, m);
+                clocks[row][col].setInstant(fmod(h + spin, 360.f), fmod(m + spin, 360.f));
                 clocks[row][col].draw(window);
             }
         }
@@ -556,11 +788,36 @@ void smoothSpinRevealTextThenTime(sf::RenderWindow& window,
         std::this_thread::sleep_for(std::chrono::milliseconds(8));
     }
 
+    // Move from (270°, 270°) → wordAngles
+    for (int step = 0; step <= moveSteps; ++step) {
+        float t = static_cast<float>(step) / moveSteps;
+
+        window.clear(sf::Color::White);
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 8; ++col) {
+                float h = interpolateAngle(270.0f, wordAngles[col][row].first, t);
+                float m = interpolateAngle(270.0f, wordAngles[col][row].second, t);
+
+                clocks[row][col].setInstant(h, m);
+                if (row == targetRow && col == targetCol) {
+                    ClockMotion motion;
+                    motion.hourAngle = normalize(h);
+                    motion.minuteAngle = normalize(m);
+                    sendClockMotionToReceptor(motion);
+                }
+                clocks[row][col].draw(window);
+            }
+        }
+        window.display();
+        std::this_thread::sleep_for(std::chrono::milliseconds(8));
+    }
+
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-    // --- Phase 2: Spin again to target time ---
-    for (int step = 0; step <= steps; ++step) {
-        float t = static_cast<float>(step) / steps;
+    // Spin while interpolating toward (270°, 270°) again
+    for (int step = 0; step <= spinSteps; ++step) {
+        float t = static_cast<float>(step) / spinSteps;
+        float spin = totalSpin * t;
 
         window.clear(sf::Color::White);
         for (int row = 0; row < 3; ++row) {
@@ -568,18 +825,35 @@ void smoothSpinRevealTextThenTime(sf::RenderWindow& window,
                 float hStart = wordAngles[col][row].first;
                 float mStart = wordAngles[col][row].second;
 
-                float hTarget = targetAngles[col][row].first;
-                float mTarget = targetAngles[col][row].second;
+                float h = interpolateAngle(hStart, 270.0f, t);
+                float m = interpolateAngle(mStart, 270.0f, t);
 
-                float h = std::fmod(hStart + totalSpin * t, 360.0f);
-                float m = std::fmod(mStart + totalSpin * t, 360.0f);
+                clocks[row][col].setInstant(fmod(h + spin, 360.f), fmod(m + spin, 360.f));
+                clocks[row][col].draw(window);
+            }
+        }
 
-                if (step == steps) {
-                    h = hTarget;
-                    m = mTarget;
-                }
+        window.display();
+        std::this_thread::sleep_for(std::chrono::milliseconds(8));
+    }
+
+    // Move from (270°, 270°) → targetAngles
+    for (int step = 0; step <= moveSteps; ++step) {
+        float t = static_cast<float>(step) / moveSteps;
+
+        window.clear(sf::Color::White);
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 8; ++col) {
+                float h = interpolateAngle(270.0f, targetAngles[col][row].first, t);
+                float m = interpolateAngle(270.0f, targetAngles[col][row].second, t);
 
                 clocks[row][col].setInstant(h, m);
+                if (row == targetRow && col == targetCol) {
+                        ClockMotion motion;
+                        motion.hourAngle = normalize(h);
+                        motion.minuteAngle = normalize(m);
+                        sendClockMotionToReceptor(motion);
+                }
                 clocks[row][col].draw(window);
             }
         }

@@ -20,7 +20,8 @@ void Clock::update(float targetAngle1, float targetAngle2, sf::RenderWindow& win
     float startAngle1 = hand_1.getAngle();
     float startAngle2 = hand_2.getAngle();
 
-    // Swap targets if it reduces movement cost
+
+    // Same smart angle swap as in update()
     float originalCost = std::abs(targetAngle1 - startAngle1) + std::abs(targetAngle2 - startAngle2);
     float swappedCost = std::abs(targetAngle2 - startAngle1) + std::abs(targetAngle1 - startAngle2);
 
@@ -28,7 +29,10 @@ void Clock::update(float targetAngle1, float targetAngle2, sf::RenderWindow& win
         std::swap(targetAngle1, targetAngle2);
     }
 
-    int steps = 50; // Fixed smooth steps for animation
+    float diff1 = angularDistance(targetAngle1, startAngle1);
+    float diff2 = angularDistance(targetAngle2, startAngle2);
+    float maxDiff = std::max(diff1, diff2);
+    int steps = std::max(1, static_cast<int>(maxDiff * MAXSTEP));
 
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
@@ -55,16 +59,16 @@ void Clock::update(float targetAngle1, float targetAngle2, sf::RenderWindow& win
 }
 
 // Lambda to wrap angles between 0 and 359
-auto normalize = [](float angle) {
+float normalize (float angle) {
     while (angle < 0) angle += 360;
     while (angle >= 360) angle -= 360;
     return angle;
-};
+}
 
-auto angularDistance = [](float a, float b) {
+float angularDistance(float a, float b) {
     float diff = std::fmod(std::abs(a - b), 360.f);
     return (diff > 180.f) ? 360.f - diff : diff;
-};
+}
 
 void Clock::update_with_send(float targetAngle1, float targetAngle2, sf::RenderWindow& window) {
     float startAngle1 = hand_1.getAngle();
@@ -83,8 +87,6 @@ void Clock::update_with_send(float targetAngle1, float targetAngle2, sf::RenderW
     float maxDiff = std::max(diff1, diff2);
     int steps = std::max(1, static_cast<int>(maxDiff * MAXSTEP));
     
-    cout << "maxDiff = " << maxDiff << endl;
-
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
 

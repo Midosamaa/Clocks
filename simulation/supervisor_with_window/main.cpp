@@ -9,18 +9,20 @@ void printHelp() {
     std::cout << "    - 2 : Left to Right\n";
     std::cout << "    - 3 : Bottom to Top\n";
     std::cout << "    - 4 : Top to Bottom\n\n";
+    std::cout << "    - 5 : All at once (But limited to 4 letters)\n\n";
 
     std::cout << "  <transitionType>: Effect type applied during minute change\n";
     std::cout << "    - 'pacman'  : Pac-Man animation eating the old time (transitionDetail = NULL)\n";
     std::cout << "    - 'wave'    : Wave animation (transitionDetail = number of waves)\n";
     std::cout << "    - 'stars'   : Star animation (transitionDetail = number of stars)\n";
-    std::cout << "    - 'words'   : Temporary word display before showing time (transitionDetail = word to display)\n\n";
+    std::cout << "    - 'words'   : Temporary word display before showing time (transitionDetail = word to display). If you are using the 5th direction, you will be limited to 4 letters per word\n\n";
 
     std::cout << "Examples:\n";
     std::cout << "  ./clock_project 1 pacman NULL       # Pac-Man transition right to left\n";
     std::cout << "  ./clock_project 2 wave 5            # Wave effect with 5 waves left to right\n";
     std::cout << "  ./clock_project 3 stars 10          # Display 10 stars from bottom to top\n";
     std::cout << "  ./clock_project 1 words HELLO       # Show 'HELLO' before displaying time\n";
+    std::cout << "  ./clock_project 5 words YOYO       # Show 'YOYO' after displaying time at once\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -86,17 +88,47 @@ int main(int argc, char* argv[]) {
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     // Animate to the current time (clock hands move to position)
-    for (size_t col = 0; col < 8; col++) {
-        for (size_t row = 0; row < 3; row++) {
-            if (col < startAngles.size() && row < startAngles[col].size()) {
-                if (row == targetRow && col == targetCol) {
-                    clocks[row][col].update_with_send(startAngles[col][row].first, startAngles[col][row].second, window);
-                } else {
-                    clocks[row][col].update(startAngles[col][row].first, startAngles[col][row].second, window);
-                }
+    float globalMaxDiff = 0.0f;
+    for (int row = 0; row < 3; ++row) {
+        for (int col = 0; col < 8; ++col) {
+        if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
+                float diffH = angularDistance(270.0f, startAngles[col][row].first);
+                float diffM = angularDistance(270.0f, startAngles[col][row].second);
+                globalMaxDiff = std::max(globalMaxDiff, std::max(diffH, diffM));
             }
         }
     }
+
+    int steps = std::max(1, static_cast<int>(globalMaxDiff * MAXSTEP));
+    const int delayMs = 5;
+
+    for (int s = 0; s <= steps; ++s) {
+        float t = static_cast<float>(s) / steps;
+
+        window.clear(sf::Color::White);
+
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 8; ++col) {
+                if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
+                    float h = interpolateAngle(270.0f, startAngles[col][row].first, t);
+                    float m = interpolateAngle(270.0f, startAngles[col][row].second, t);
+
+                    clocks[row][col].setInstant(h, m);
+                    if (row == targetRow && col == targetCol) {
+                            ClockMotion motion;
+                            motion.hourAngle = normalize(h);
+                            motion.minuteAngle = normalize(m);
+                            sendClockMotionToReceptor(motion);
+                    }
+                    clocks[row][col].draw(window);
+                }
+            }
+        }
+
+        window.display();
+        std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
+    }
+
 
     int previousMinute = currentMinute;
 
@@ -113,7 +145,7 @@ int main(int argc, char* argv[]) {
         currentHour = localTime->tm_hour;
         currentMinute = localTime->tm_min;
 
-        if (currentMinute != previousMinute) {
+        if (currentMinute == previousMinute) {
             previousMinute = currentMinute;
 
             std::string targetText = (currentHour < 10 ? "0" : "") + std::to_string(currentHour) +
@@ -124,8 +156,7 @@ int main(int argc, char* argv[]) {
             if (transitionType == "words") {
                 std::string trans_word = transitionDetail;
                 auto wordAngles = getTextAngles(trans_word);
-                //words(window, clocks, startAngles, targetAngles, direction, trans_word);
-                smoothSpinRevealTextThenTime(window, clocks, startAngles, wordAngles, targetAngles);
+                words(window, clocks, startAngles, targetAngles, direction, trans_word);
             } 
             else if (transitionType == "pacman") {
                 if (direction == 3) direction =1;
@@ -134,10 +165,16 @@ int main(int argc, char* argv[]) {
             } 
             else if (transitionType == "wave") {
                 int pattern_number = std::stoi(transitionDetail);
+                if (direction == 5) {
+                    pattern_number = 2;
+                }
                 wave(window, clocks, startAngles, targetAngles, direction, pattern_number);
             } 
             else if (transitionType == "stars") {
                 int pattern_number = std::stoi(transitionDetail);
+                if (direction == 5) {
+                    pattern_number = 2;
+                }
                 stars(window, clocks, startAngles, targetAngles, direction, pattern_number);
             } 
             else {
