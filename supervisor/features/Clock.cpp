@@ -54,38 +54,50 @@ float angularDistance(float a, float b) {
 
 // GRAPHIC sends it by socket
 void Clock::update_with_send(float targetAngle1, float targetAngle2) {
-    float startAngle1 = hand_1.getAngle();
-    float startAngle2 = hand_2.getAngle();
+    // float startAngle1 = hand_1.getAngle();
+    // float startAngle2 = hand_2.getAngle();
 
     // Same smart angle swap as in update()
-    float originalCost = std::abs(targetAngle1 - startAngle1) + std::abs(targetAngle2 - startAngle2);
-    float swappedCost = std::abs(targetAngle2 - startAngle1) + std::abs(targetAngle1 - startAngle2);
+    // float originalCost = std::abs(targetAngle1 - startAngle1) + std::abs(targetAngle2 - startAngle2);
+    // float swappedCost = std::abs(targetAngle2 - startAngle1) + std::abs(targetAngle1 - startAngle2);
 
-    if (swappedCost < originalCost) {
-        std::swap(targetAngle1, targetAngle2);
-    }
+    // if (swappedCost < originalCost) {
+    //     std::swap(targetAngle1, targetAngle2);
+    // }
 
-    float diff1 = angularDistance(targetAngle1, startAngle1);
-    float diff2 = angularDistance(targetAngle2, startAngle2);
-    float maxDiff = std::max(diff1, diff2);
-    int steps = std::max(1, static_cast<int>(maxDiff * (MAXSTEP-1.5)));
+    // float diff1 = angularDistance(targetAngle1, startAngle1);
+    // float diff2 = angularDistance(targetAngle2, startAngle2);
+    // float maxDiff = std::max(diff1, diff2);
+    //int steps = std::max(1, static_cast<int>(maxDiff * (MAXSTEP-1.5)));
     
-    for (int i = 0; i <= steps; ++i) {
-        float t = static_cast<float>(i) / steps;
+    // for (int i = 0; i <= steps; ++i) {
+    //     float t = static_cast<float>(i) / steps;
 
-        float interpolated1 = interpolateAngle(startAngle1, targetAngle1, t);
-        float interpolated2 = interpolateAngle(startAngle2, targetAngle2, t);
+    //     float interpolated1 = interpolateAngle(startAngle1, targetAngle1, t);
+    //     float interpolated2 = interpolateAngle(startAngle2, targetAngle2, t);
 
-        // Send current interpolated angles to receptor
-        ClockMotion motion;
-        motion.hourAngle = normalize(interpolated1);
-        motion.minuteAngle = normalize(interpolated2);
-        sendClockMotionToReceptor(motion);
+    //     // Send current interpolated angles to receptor
+    //     ClockMotion motion;
+    //     motion.hourAngle = normalize(interpolated1);
+    //     motion.minuteAngle = normalize(interpolated2);
+    //     sendClockMotionToReceptor(motion);
 
-        // Animate hand movement
-        hand_1.setAngle(interpolated1);
-        hand_2.setAngle(interpolated2);
-    }
+    //     // Animate hand movement
+    //     hand_1.setAngle(interpolated1);
+    //     hand_2.setAngle(interpolated2);
+    // }
+
+    ClockMotion motion;
+    motion.hourAngle = normalize(targetAngle1);
+    motion.minuteAngle = normalize(targetAngle2);
+    motion.row=1;
+    motion.col=1;
+    motion.dir=1;
+    sendClockMotionToReceptor(motion);
+
+    // Animate hand movement
+    hand_1.setAngle(targetAngle1);
+    hand_2.setAngle(targetAngle2);
 }
 
 //interesting
