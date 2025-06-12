@@ -77,47 +77,49 @@ int main(int argc, char* argv[]) {
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    // Animate to the current time (clock hands move to position)
-    // float globalMaxDiff = 0.0f;
-    // for (int row = 0; row < 3; ++row) {
-    //     for (int col = 0; col < 8; ++col) {
-    //     if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
-    //             float diffH = angularDistance(270.0f, startAngles[col][row].first);
-    //             float diffM = angularDistance(270.0f, startAngles[col][row].second);
-    //             globalMaxDiff = std::max(globalMaxDiff, std::max(diffH, diffM));
-    //         }
-    //     }
-    // }
-
-    // int steps = std::max(1, static_cast<int>(globalMaxDiff * MAXSTEP));
-    // const int delayMs = 5;
-
-    // for (int s = 0; s <= steps; ++s) {
-    //     float t = static_cast<float>(s) / steps;
-
-
-    //     for (int row = 0; row < 3; ++row) {
-    //         for (int col = 0; col < 8; ++col) {
-    //             if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
-    //                 float h = interpolateAngle(270.0f, startAngles[col][row].first, t);
-    //                 float m = interpolateAngle(270.0f, startAngles[col][row].second, t);
-
-    //                 clocks[row][col].setInstant(h, m);
-    //                 if (row == targetRow && col == targetCol) {
-    //                         ClockMotion motion;
-    //                         motion.hourAngle = normalize(h);
-    //                         motion.minuteAngle = normalize(m);
-    //                         sendClockMotionToReceptor(motion);
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
-    // }
-
+    //Animate to the current time (clock hands move to position)
+    float globalMaxDiff = 0.0f;
     for (int row = 0; row < 3; ++row) {
         for (int col = 0; col < 8; ++col) {
+        if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
+                float diffH = angularDistance(270.0f, startAngles[col][row].first);
+                float diffM = angularDistance(270.0f, startAngles[col][row].second);
+                globalMaxDiff = std::max(globalMaxDiff, std::max(diffH, diffM));
+            }
+        }
+    }
+
+    int steps = std::max(1, static_cast<int>(globalMaxDiff * MAXSTEP));
+    const int delayMs = 5;
+
+    for (int s = 0; s <= steps; ++s) {
+        float t = static_cast<float>(s) / steps;
+
+
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 8; ++col) {
+                if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
+                    float h = interpolateAngle(270.0f, startAngles[col][row].first, t);
+                    float m = interpolateAngle(270.0f, startAngles[col][row].second, t);
+
+                    clocks[row][col].setInstant(h, m);
+                    if (row == targetRow && col == targetCol) {
+                            ClockMotion motion;
+                            motion.hourAngle = normalize(h);
+                            motion.minuteAngle = normalize(m);
+                            sendClockMotionToReceptor(motion);
+                    }
+                }
+            }
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
+    }
+
+    int clock_id=0;
+    for (int row = 0; row < 3; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            clock_id++;
             if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
                 float h = 270.0f;
                 float m = 270.0f;
@@ -127,8 +129,7 @@ int main(int argc, char* argv[]) {
                         ClockMotion motion;
                         motion.hourAngle = normalize(h);
                         motion.minuteAngle = normalize(m);
-                        motion.row=row;
-                        motion.col=col;
+                        motion.clock_id=clock_id;
                         motion.dir=1;
                         sendClockMotionToReceptor(motion);
                 }

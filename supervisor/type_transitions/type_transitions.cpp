@@ -22,26 +22,30 @@ void pacman_vertical(vector<vector<Clock>>& clocks,
     float pacmanClosedHour = 0;  // 3:15 -> Closed mouth
     float pacmanClosedMinute = 0; 
 
+    int clock_id=0;
     for (int row = 0; row < 3; row++) {  
     if (row % 2 == 0) {  // Left to Right
         pacmanOpenHour = 315;
         pacmanOpenMinute = 45;
         pacmanClosedHour = 0; 
         pacmanClosedMinute = 0;
+
         for (int col = 0; col < 8; col++) {
+            clock_id++;
+
             Clock& currentClock = clocks[row][col];
             bool isTargetClock = (row == targetRow && col == targetCol);
 
             // Open Mouth (2:20)
             if (isTargetClock) {
-                currentClock.update_with_send(pacmanOpenHour, pacmanOpenMinute);
+                currentClock.update_with_send(pacmanOpenHour, pacmanOpenMinute,clock_id);
             } else {
                 currentClock.update(pacmanOpenHour, pacmanOpenMinute);
             }
 
             // Close Mouth (3:15)
             if (isTargetClock) {
-                currentClock.update_with_send(pacmanClosedHour, pacmanClosedMinute);
+                currentClock.update_with_send(pacmanClosedHour, pacmanClosedMinute,clock_id);
             } else {
                 currentClock.update(pacmanClosedHour, pacmanClosedMinute);
             }
@@ -53,7 +57,7 @@ void pacman_vertical(vector<vector<Clock>>& clocks,
             float targetM = targetAngles[col][row].second;
 
             if (isTargetClock) {
-                currentClock.update_with_send(targetH, targetM);
+                currentClock.update_with_send(targetH, targetM,clock_id);
             } else {
                 currentClock.update(targetH, targetM);
             }
@@ -64,19 +68,21 @@ void pacman_vertical(vector<vector<Clock>>& clocks,
         pacmanClosedHour = 180; 
         pacmanClosedMinute = 180;
         for (int col = 7; col >= 0; col--) { 
+            clock_id++;
+
             Clock& currentClock = clocks[row][col];
             bool isTargetClock = (row == targetRow && col == targetCol);
 
             // Open Mouth (2:20)
             if (isTargetClock) {
-                currentClock.update_with_send(pacmanOpenHour, pacmanOpenMinute);
+                currentClock.update_with_send(pacmanOpenHour, pacmanOpenMinute,clock_id);
             } else {
                 currentClock.update(pacmanOpenHour, pacmanOpenMinute);
             }
 
             // Close Mouth (3:15)
             if (isTargetClock) {
-                currentClock.update_with_send(pacmanClosedHour, pacmanClosedMinute);
+                currentClock.update_with_send(pacmanClosedHour, pacmanClosedMinute,clock_id);
             } else {
                 currentClock.update(pacmanClosedHour, pacmanClosedMinute);
             }
@@ -88,7 +94,7 @@ void pacman_vertical(vector<vector<Clock>>& clocks,
             float targetM = targetAngles[col][row].second;
 
             if (isTargetClock) {
-                currentClock.update_with_send(targetH, targetM);
+                currentClock.update_with_send(targetH, targetM,clock_id);
             } else {
                 currentClock.update(targetH, targetM);
             }
@@ -104,6 +110,8 @@ void pacman_horizontal(vector<vector<Clock>>& clocks,
     float pacmanOpenHour, pacmanOpenMinute;
     float pacmanClosedHour, pacmanClosedMinute;
 
+    int clock_id=0;
+
     // Single Loop for All Columns
     for (int col = 0; col < 8; col++) {  
         if (col % 2 == 0) {  // Even column (Bottom to Top)
@@ -113,19 +121,21 @@ void pacman_horizontal(vector<vector<Clock>>& clocks,
             pacmanClosedMinute = 270;
 
             for (int row = 2; row >= 0; row--) { // Move Bottom to Top
+
+                clock_id++;
                 Clock& currentClock = clocks[row][col];
                 bool isTargetClock = (row == targetRow && col == targetCol);
 
             // Open Mouth (2:20)
             if (isTargetClock) {
-                currentClock.update_with_send(pacmanOpenHour, pacmanOpenMinute);
+                currentClock.update_with_send(pacmanOpenHour, pacmanOpenMinute,clock_id);
             } else {
                 currentClock.update(pacmanOpenHour, pacmanOpenMinute);
             }
 
             // Close Mouth (3:15)
             if (isTargetClock) {
-                currentClock.update_with_send(pacmanClosedHour, pacmanClosedMinute);
+                currentClock.update_with_send(pacmanClosedHour, pacmanClosedMinute,clock_id);
             } else {
                 currentClock.update(pacmanClosedHour, pacmanClosedMinute);
             }
@@ -137,7 +147,7 @@ void pacman_horizontal(vector<vector<Clock>>& clocks,
             float targetM = targetAngles[col][row].second;
 
             if (isTargetClock) {
-                currentClock.update_with_send(targetH, targetM);
+                currentClock.update_with_send(targetH, targetM,clock_id);
             } else {
                 currentClock.update(targetH, targetM);
             }  
@@ -150,19 +160,20 @@ void pacman_horizontal(vector<vector<Clock>>& clocks,
             pacmanClosedMinute = 90;
 
             for (int row = 0; row < 3; row++) {  // Move Top to Bottom
+                clock_id++;
                 Clock& currentClock = clocks[row][col];
                 bool isTargetClock = (row == targetRow && col == targetCol);
 
             // Open Mouth (2:20)
             if (isTargetClock) {
-                currentClock.update_with_send(pacmanOpenHour, pacmanOpenMinute);
+                currentClock.update_with_send(pacmanOpenHour, pacmanOpenMinute,clock_id);
             } else {
                 currentClock.update(pacmanOpenHour, pacmanOpenMinute);
             }
 
             // Close Mouth (3:15)
             if (isTargetClock) {
-                currentClock.update_with_send(pacmanClosedHour, pacmanClosedMinute);
+                currentClock.update_with_send(pacmanClosedHour, pacmanClosedMinute,clock_id);
             } else {
                 currentClock.update(pacmanClosedHour, pacmanClosedMinute);
             }
@@ -174,7 +185,7 @@ void pacman_horizontal(vector<vector<Clock>>& clocks,
             float targetM = targetAngles[col][row].second;
 
             if (isTargetClock) {
-                currentClock.update_with_send(targetH, targetM);
+                currentClock.update_with_send(targetH, targetM,clock_id);
             } else {
                 currentClock.update(targetH, targetM);
             }  
@@ -343,9 +354,12 @@ void slideTransition_to_left(vector<vector<Clock>>& clocks,
         // Interpolate all clocks from lastShownAngles → currentView
         for (int s = 0; s <= steps; ++s) {
             float t = static_cast<float>(s) / steps;
+            
+            int clock_id =0;
 
             for (int row = 0; row < 3; ++row) {
                 for (int col = 0; col < 8; ++col) {
+                    clock_id++;
                     const auto& from = lastShownAngles[row][col];
                     const auto& to = currentView[row][col];
 
@@ -358,6 +372,7 @@ void slideTransition_to_left(vector<vector<Clock>>& clocks,
                             ClockMotion motion;
                             motion.hourAngle = normalize(h);
                             motion.minuteAngle = normalize(m);
+                            motion.clock_id = clock_id;
                             sendClockMotionToReceptor(motion);
                         }
                     }
@@ -451,7 +466,10 @@ void slideTransition_to_right(vector<vector<Clock>>& clocks,
         for (int s = 0; s <= steps; ++s) {
             float t = static_cast<float>(s) / steps;
 
+            int clock_id =0;
+
             for (int row = 0; row < 3; ++row) {
+                clock_id++;
                 for (int col = 0; col < 8; ++col) {
                     const auto& from = lastShownAngles[row][col];
                     const auto& to = currentView[row][col];
@@ -464,6 +482,7 @@ void slideTransition_to_right(vector<vector<Clock>>& clocks,
                             ClockMotion motion;
                             motion.hourAngle = normalize(h);
                             motion.minuteAngle = normalize(m);
+                            motion.clock_id;
                             sendClockMotionToReceptor(motion);
                         }
                     }
@@ -572,7 +591,9 @@ void slideTransition_to_top(vector<vector<Clock>>& clocks,
         for (int s = 0; s <= steps; ++s) {
             float t = static_cast<float>(s) / steps;
 
+            int clock_id =0;
             for (size_t row = 0; row < 3; ++row) {
+                clock_id++;
                 for (size_t col = 0; col < std::min((size_t)8, currentView[row].size()); ++col) {
                     if (col < lastShownAngles[row].size()) {
                         float fromH = lastShownAngles[row][col].first;
@@ -588,6 +609,7 @@ void slideTransition_to_top(vector<vector<Clock>>& clocks,
                             ClockMotion motion;
                             motion.hourAngle = normalize(h);
                             motion.minuteAngle = normalize(m);
+                            motion.clock_id = clock_id;
                             sendClockMotionToReceptor(motion);
                         }
                     }
@@ -700,7 +722,9 @@ void slideTransition_to_bottom(vector<vector<Clock>>& clocks,
         for (int s = 0; s <= steps; ++s) {
             float t = static_cast<float>(s) / steps;
 
+            int clock_id =0;
             for (size_t row = 0; row < 3; ++row) {
+                clock_id++;
                 for (size_t col = 0; col < std::min((size_t)8, currentView[row].size()); ++col) {
                     if (col < lastShownAngles[row].size()) {
                         float fromH = lastShownAngles[row][col].first;
@@ -716,6 +740,7 @@ void slideTransition_to_bottom(vector<vector<Clock>>& clocks,
                             ClockMotion motion;
                             motion.hourAngle = normalize(h);
                             motion.minuteAngle = normalize(m);
+                            motion.clock_id = clock_id;
                             sendClockMotionToReceptor(motion);
                         }
                     }
@@ -780,7 +805,9 @@ void smoothSpinRevealTextThenTime(
     for (int step = 0; step <= moveSteps; ++step) {
         float t = static_cast<float>(step) / moveSteps;
 
+        int clock_id =0;
         for (int row = 0; row < 3; ++row) {
+            clock_id++;
             for (int col = 0; col < 8; ++col) {
                 float h = interpolateAngle(270.0f, wordAngles[col][row].first, t);
                 float m = interpolateAngle(270.0f, wordAngles[col][row].second, t);
@@ -790,6 +817,7 @@ void smoothSpinRevealTextThenTime(
                     ClockMotion motion;
                     motion.hourAngle = normalize(h);
                     motion.minuteAngle = normalize(m);
+                    motion.clock_id=clock_id;
                     sendClockMotionToReceptor(motion);
                 }
             }
@@ -823,7 +851,9 @@ void smoothSpinRevealTextThenTime(
     for (int step = 0; step <= moveSteps; ++step) {
         float t = static_cast<float>(step) / moveSteps;
 
+        int clock_id =0;
         for (int row = 0; row < 3; ++row) {
+            clock_id++;
             for (int col = 0; col < 8; ++col) {
                 float h = interpolateAngle(270.0f, targetAngles[col][row].first, t);
                 float m = interpolateAngle(270.0f, targetAngles[col][row].second, t);
@@ -833,6 +863,7 @@ void smoothSpinRevealTextThenTime(
                         ClockMotion motion;
                         motion.hourAngle = normalize(h);
                         motion.minuteAngle = normalize(m);
+                        motion.clock_id=clock_id;
                         sendClockMotionToReceptor(motion);
                 }
             }

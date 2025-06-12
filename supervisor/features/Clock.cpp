@@ -53,7 +53,7 @@ float angularDistance(float a, float b) {
 
 
 // GRAPHIC sends it by socket
-void Clock::update_with_send(float targetAngle1, float targetAngle2) {
+void Clock::update_with_send(float targetAngle1, float targetAngle2,int clock_id) {
     // float startAngle1 = hand_1.getAngle();
     // float startAngle2 = hand_2.getAngle();
 
@@ -90,8 +90,7 @@ void Clock::update_with_send(float targetAngle1, float targetAngle2) {
     ClockMotion motion;
     motion.hourAngle = normalize(targetAngle1);
     motion.minuteAngle = normalize(targetAngle2);
-    motion.row=1;
-    motion.col=1;
+    motion.clock_id=clock_id;
     motion.dir=1;
     sendClockMotionToReceptor(motion);
 

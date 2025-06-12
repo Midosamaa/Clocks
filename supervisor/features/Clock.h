@@ -18,7 +18,7 @@ public:
 
     void update(float targetAngle1, float targetAngle2);
 
-    void update_with_send(float targetAngle1, float targetAngle2);
+    void update_with_send(float targetAngle1, float targetAngle2,int clock_id);
 
     // Instantly set hand positions without animation
     void setInstant(float angle1, float angle2);
