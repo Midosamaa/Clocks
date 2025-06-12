@@ -9,15 +9,7 @@
 class Hand {
 private:
 
-    //GRAPHIC
-    //mutable sf::RectangleShape shape;  // Graphical shape of the hand (mutable for const draw/erase)  
-
     float angle;                       // Current angle (in degrees)
-
-    //GRAPHIC
-    //sf::Color color;                   // Hand color
-
-
     bool is_visible;                   // Flag to control visibility
 
 public:
@@ -27,14 +19,8 @@ public:
     // Sets the hand's angle (rotation)
     void setAngle(float newAngle);
 
-    // Draws the hand at a specified clock center position
-    //void draw(sf::RenderWindow& window, sf::Vector2f position) const;
-
     // Returns the current angle of the hand
     float getAngle() const;
-
-    // Erases the hand by overdrawing it in the background color
-    //void erase(sf::RenderWindow& window, sf::Vector2f position, sf::Color backgroundColor) const;
 };
 
 #endif // HAND_H

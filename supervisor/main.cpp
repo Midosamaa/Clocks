@@ -18,7 +18,7 @@ void printHelp() {
     std::cout << "    - 'words'   : Temporary word display before showing time (transitionDetail = word to display). If you are using the 5th direction, you will be limited to 4 letters per word. Make sure to write all in capital.\n\n";
 
     std::cout << "Examples:\n";
-    std::cout << "  ./clock_project 1 pacman NULL       # Pac-Man transition right to left\n";
+    std::cout << "  ./clock_display 1 pacman NULL       # Pac-Man transition right to left\n";
     std::cout << "  ./clock_project 2 wave 5            # Wave effect with 5 waves left to right\n";
     std::cout << "  ./clock_project 3 stars 10          # Display 10 stars from bottom to top\n";
     std::cout << "  ./clock_project 1 words HELLO       # Show 'HELLO' before displaying time\n";
@@ -46,8 +46,6 @@ int main(int argc, char* argv[]) {
     int direction = std::stoi(argv[1]);
     std::string transitionType = argv[2];
     std::string transitionDetail = argv[3];
-
-    //sf::RenderWindow window(sf::VideoMode(1000, 400), "Clock Transition", sf::Style::Close);
 
     // Create the 3×8 grid of clocks
     std::vector<std::vector<Clock>> clocks(3, std::vector<Clock>(8, Clock(0, 0))); 
@@ -77,14 +75,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Initial draw
-    // window.clear(sf::Color::White);
-    // for (const auto& rowVec : clocks) {
-    //     for (const auto& clock : rowVec) {
-    //         clock.draw(window);
-    //     }
-    // }
-    // window.display();
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     // Animate to the current time (clock hands move to position)
@@ -105,7 +95,6 @@ int main(int argc, char* argv[]) {
     for (int s = 0; s <= steps; ++s) {
         float t = static_cast<float>(s) / steps;
 
-        //window.clear(sf::Color::White);
 
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 8; ++col) {
@@ -120,12 +109,10 @@ int main(int argc, char* argv[]) {
                             motion.minuteAngle = normalize(m);
                             sendClockMotionToReceptor(motion);
                     }
-                    //clocks[row][col].draw(window);
                 }
             }
         }
 
-        //window.display();
         std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
     }
 
@@ -136,11 +123,6 @@ int main(int argc, char* argv[]) {
 
     // Main loop: waits for minute change and triggers animation
     while (1) {
-        // sf::Event event;
-        // while (window.pollEvent(event)) {
-        //     if (event.type == sf::Event::Closed)
-        //         window.close();
-        // }
 
         now = time(0);
         localTime = localtime(&now);

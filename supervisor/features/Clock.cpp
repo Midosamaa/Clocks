@@ -1,17 +1,6 @@
 #include "Clock.h"
 #include <math.h>
 
-// Clock::Clock(float x, float y) : hand_1(45, sf::Color::Black), hand_2(45, sf::Color::Black) {
-
-//     //GRAPHIC
-//     dial.setRadius(58.8); 
-//     dial.setFillColor(sf::Color::White);  
-//     dial.setOutlineThickness(2);  
-//     dial.setOutlineColor(sf::Color::Black); 
-//     dial.setOrigin(60, 60);                // Center origin for proper rotation
-//     dial.setPosition(x, y);                // Position on screen
-// }
-
 Clock::Clock(float x, float y) :hand_1(45), hand_2(45){}
 
 // Calculates smooth interpolation between two angles, using shortest arc
@@ -20,41 +9,6 @@ float interpolateAngle(float start, float end, float t) {
     return start + delta * t;
 }
 
-
-// GRAPHIC
-// void Clock::update(float targetAngle1, float targetAngle2, sf::RenderWindow& window) {
-//     float startAngle1 = hand_1.getAngle();
-//     float startAngle2 = hand_2.getAngle();
-//     // Same smart angle swap as in update()
-//     float originalCost = std::abs(targetAngle1 - startAngle1) + std::abs(targetAngle2 - startAngle2);
-//     float swappedCost = std::abs(targetAngle2 - startAngle1) + std::abs(targetAngle1 - startAngle2);
-//     if (swappedCost < originalCost) {
-//         std::swap(targetAngle1, targetAngle2);
-//     }
-//     float diff1 = angularDistance(targetAngle1, startAngle1);
-//     float diff2 = angularDistance(targetAngle2, startAngle2);
-//     float maxDiff = std::max(diff1, diff2);
-//     int steps = std::max(1, static_cast<int>(maxDiff * (MAXSTEP-1.5)));
-//     for (int i = 0; i <= steps; ++i) {
-//         float t = static_cast<float>(i) / steps;
-//         float interpolated1 = interpolateAngle(startAngle1, targetAngle1, t);
-//         float interpolated2 = interpolateAngle(startAngle2, targetAngle2, t);
-//         this->eraseHands(window, sf::Color::White);
-//         hand_1.setAngle(interpolated1);
-//         hand_2.setAngle(interpolated2);
-//         this->drawHands(window);
-//         window.display();
-//         // Prevent window freezing during animation
-//         sf::Clock delayTimer;
-//         while (delayTimer.getElapsedTime().asMilliseconds() < 8) {
-//             sf::Event event;
-//             while (window.pollEvent(event)) {
-//                 if (event.type == sf::Event::Closed)
-//                     window.close();
-//             }
-//         }
-//     }
-// }
 
 void Clock::update(float targetAngle1, float targetAngle2) {
     float startAngle1 = hand_1.getAngle();
@@ -98,48 +52,6 @@ float angularDistance(float a, float b) {
 }
 
 
-// // GRAPHIC sends it by socket
-// void Clock::update_with_send(float targetAngle1, float targetAngle2, sf::RenderWindow& window) {
-//     float startAngle1 = hand_1.getAngle();
-//     float startAngle2 = hand_2.getAngle();
-//     // Same smart angle swap as in update()
-//     float originalCost = std::abs(targetAngle1 - startAngle1) + std::abs(targetAngle2 - startAngle2);
-//     float swappedCost = std::abs(targetAngle2 - startAngle1) + std::abs(targetAngle1 - startAngle2);
-//     if (swappedCost < originalCost) {
-//         std::swap(targetAngle1, targetAngle2);
-//     }
-//     float diff1 = angularDistance(targetAngle1, startAngle1);
-//     float diff2 = angularDistance(targetAngle2, startAngle2);
-//     float maxDiff = std::max(diff1, diff2);
-//     int steps = std::max(1, static_cast<int>(maxDiff * (MAXSTEP-1.5)));
-//     for (int i = 0; i <= steps; ++i) {
-//         float t = static_cast<float>(i) / steps;
-//         float interpolated1 = interpolateAngle(startAngle1, targetAngle1, t);
-//         float interpolated2 = interpolateAngle(startAngle2, targetAngle2, t);
-//         // Send current interpolated angles to receptor
-//         ClockMotion motion;
-//         motion.hourAngle = normalize(interpolated1);
-//         motion.minuteAngle = normalize(interpolated2);
-//         sendClockMotionToReceptor(motion);
-//         // Animate hand movement
-//         this->eraseHands(window, sf::Color::White);
-//         hand_1.setAngle(interpolated1);
-//         hand_2.setAngle(interpolated2);
-//         this->drawHands(window);
-//         window.display();
-//         // Keep UI responsive during animation
-//         sf::Clock delayTimer;
-//         while (delayTimer.getElapsedTime().asMilliseconds() < 8) {
-//             sf::Event event;
-//             while (window.pollEvent(event)) {
-//                 if (event.type == sf::Event::Closed)
-//                     window.close();
-//             }
-//         }
-//     }
-// }
-
-
 // GRAPHIC sends it by socket
 void Clock::update_with_send(float targetAngle1, float targetAngle2) {
     float startAngle1 = hand_1.getAngle();
@@ -175,27 +87,6 @@ void Clock::update_with_send(float targetAngle1, float targetAngle2) {
         hand_2.setAngle(interpolated2);
     }
 }
-
-//GRAPHIC
-// void Clock::eraseHands(sf::RenderWindow& window, sf::Color backgroundColor) const {
-//     sf::Vector2f pos = dial.getPosition();
-//     hand_1.erase(window, pos, backgroundColor);
-//     hand_2.erase(window, pos, backgroundColor);
-// }
-
-//GRAPHIC
-// void Clock::draw(sf::RenderWindow& window) const {
-//     window.draw(dial);
-//     hand_1.draw(window, dial.getPosition());
-//     hand_2.draw(window, dial.getPosition());
-// }
-
-//GRAPHIC
-// void Clock::drawHands(sf::RenderWindow& window) const {
-//     sf::Vector2f pos = dial.getPosition();
-//     hand_1.draw(window, pos);
-//     hand_2.draw(window, pos);
-// }
 
 //interesting
 void Clock::setInstant(float angle1, float angle2) {
