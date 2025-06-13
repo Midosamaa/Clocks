@@ -19,10 +19,10 @@ void printHelp() {
 
     std::cout << "Examples:\n";
     std::cout << "  ./clock_display 1 pacman NULL       # Pac-Man transition right to left\n";
-    std::cout << "  ./clock_project 2 wave 5            # Wave effect with 5 waves left to right\n";
-    std::cout << "  ./clock_project 3 stars 10          # Display 10 stars from bottom to top\n";
-    std::cout << "  ./clock_project 1 words HELLO       # Show 'HELLO' before displaying time\n";
-    std::cout << "  ./clock_project 5 words YOYO       # Show 'YOYO' after displaying time at once\n";
+    std::cout << "  ./clock_display 2 wave 5            # Wave effect with 5 waves left to right\n";
+    std::cout << "  ./clock_display 3 stars 10          # Display 10 stars from bottom to top\n";
+    std::cout << "  ./clock_display 1 words HELLO       # Show 'HELLO' before displaying time\n";
+    std::cout << "  ./clock_display 5 words YOYO       # Show 'YOYO' after displaying time at once\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -77,44 +77,44 @@ int main(int argc, char* argv[]) {
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    //Animate to the current time (clock hands move to position)
-    float globalMaxDiff = 0.0f;
-    for (int row = 0; row < 3; ++row) {
-        for (int col = 0; col < 8; ++col) {
-        if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
-                float diffH = angularDistance(270.0f, startAngles[col][row].first);
-                float diffM = angularDistance(270.0f, startAngles[col][row].second);
-                globalMaxDiff = std::max(globalMaxDiff, std::max(diffH, diffM));
-            }
-        }
-    }
+    // Animate to the current time (clock hands move to position)
+    // float globalMaxDiff = 0.0f;
+    // for (int row = 0; row < 3; ++row) {
+    //     for (int col = 0; col < 8; ++col) {
+    //     if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
+    //             float diffH = angularDistance(270.0f, startAngles[col][row].first);
+    //             float diffM = angularDistance(270.0f, startAngles[col][row].second);
+    //             globalMaxDiff = std::max(globalMaxDiff, std::max(diffH, diffM));
+    //         }
+    //     }
+    // }
 
-    int steps = std::max(1, static_cast<int>(globalMaxDiff * MAXSTEP));
-    const int delayMs = 5;
+    // int steps = std::max(1, static_cast<int>(globalMaxDiff * MAXSTEP));
+    // const int delayMs = 5;
 
-    for (int s = 0; s <= steps; ++s) {
-        float t = static_cast<float>(s) / steps;
+    // for (int s = 0; s <= steps; ++s) {
+    //     float t = static_cast<float>(s) / steps;
 
 
-        for (int row = 0; row < 3; ++row) {
-            for (int col = 0; col < 8; ++col) {
-                if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
-                    float h = interpolateAngle(270.0f, startAngles[col][row].first, t);
-                    float m = interpolateAngle(270.0f, startAngles[col][row].second, t);
+    //     for (int row = 0; row < 3; ++row) {
+    //         for (int col = 0; col < 8; ++col) {
+    //             if (col < static_cast<int>(startAngles.size()) && row < static_cast<int>(startAngles[col].size())){
+    //                 float h = interpolateAngle(270.0f, startAngles[col][row].first, t);
+    //                 float m = interpolateAngle(270.0f, startAngles[col][row].second, t);
 
-                    clocks[row][col].setInstant(h, m);
-                    if (row == targetRow && col == targetCol) {
-                            ClockMotion motion;
-                            motion.hourAngle = normalize(h);
-                            motion.minuteAngle = normalize(m);
-                            sendClockMotionToReceptor(motion);
-                    }
-                }
-            }
-        }
+    //                 clocks[row][col].setInstant(h, m);
+    //                 if (row == targetRow && col == targetCol) {
+    //                         ClockMotion motion;
+    //                         motion.hourAngle = normalize(h);
+    //                         motion.minuteAngle = normalize(m);
+    //                         sendClockMotionToReceptor(motion);
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
-    }
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
+    // }
 
     int clock_id=0;
     for (int row = 0; row < 3; ++row) {
@@ -130,7 +130,8 @@ int main(int argc, char* argv[]) {
                         motion.hourAngle = normalize(h);
                         motion.minuteAngle = normalize(m);
                         motion.clock_id=clock_id;
-                        motion.dir=1;
+                        motion.minDir=-1;
+                        motion.hourDir=-1;
                         sendClockMotionToReceptor(motion);
                 }
             }

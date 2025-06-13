@@ -54,8 +54,8 @@ float angularDistance(float a, float b) {
 
 // GRAPHIC sends it by socket
 void Clock::update_with_send(float targetAngle1, float targetAngle2,int clock_id) {
-    // float startAngle1 = hand_1.getAngle();
-    // float startAngle2 = hand_2.getAngle();
+    float startAngle1 = hand_1.getAngle();
+    float startAngle2 = hand_2.getAngle();
 
     // Same smart angle swap as in update()
     // float originalCost = std::abs(targetAngle1 - startAngle1) + std::abs(targetAngle2 - startAngle2);
@@ -87,11 +87,19 @@ void Clock::update_with_send(float targetAngle1, float targetAngle2,int clock_id
     //     hand_2.setAngle(interpolated2);
     // }
 
+    float hourdiff = fmod((targetAngle1 - startAngle1 + 360.0f), 360.0f);
+    float minutediff = fmod((targetAngle2 - startAngle2 + 360.0f), 360.0f);
+    
+    int hourDir = (hourdiff <= 180.0f) ? 0 : 1;  // 0 = counter clockwise, 1 =  clockwise
+    int minDir = (minutediff <= 180.0f) ? 0 : 1;  // 0 = counter clockwise, 1 =  clockwise
+
     ClockMotion motion;
     motion.hourAngle = normalize(targetAngle1);
     motion.minuteAngle = normalize(targetAngle2);
     motion.clock_id=clock_id;
-    motion.dir=1;
+    motion.minDir=minDir;
+    motion.hourDir=hourDir;
+    
     sendClockMotionToReceptor(motion);
 
     // Animate hand movement
