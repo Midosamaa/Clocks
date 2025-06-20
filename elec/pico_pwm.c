@@ -1,28 +1,69 @@
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
+#include "hardware/sync.h"
+
+#define CLKDIV 100.0f
+#define PWM_FREQ 200
+#define PERIOD_US 5000
+
+void setup_pwm(uint gpio, uint16_t level, uint16_t top) {
+    gpio_set_function(gpio, GPIO_FUNC_PWM);
+    uint slice = pwm_gpio_to_slice_num(gpio);
+    uint channel = pwm_gpio_to_channel(gpio);
+
+    pwm_set_phase_correct(slice, false);
+    pwm_set_clkdiv(slice, CLKDIV);
+    pwm_set_wrap(slice, top);
+    pwm_set_chan_level(slice, channel, level);
+    pwm_set_enabled(slice, true);
+}
 
 int main() {
+    stdio_init_all();
 
-    //on allume la led pour montrerque ca tourne
+    // LED témoin
     gpio_init(PICO_DEFAULT_LED_PIN);
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
     gpio_put(PICO_DEFAULT_LED_PIN, true);
 
-    const uint pwm_pin = 0;
+    // GPIO 4 à l'état haut
+    gpio_init(2);
+    gpio_set_dir(2, GPIO_OUT);
+    gpio_put(2, true);
 
-    gpio_set_function(pwm_pin, GPIO_FUNC_PWM); // configurer GP0 en PWM
-    uint slice = pwm_gpio_to_slice_num(pwm_pin);
-    uint channel = pwm_gpio_to_channel(pwm_pin);
+    uint16_t top = 7499;              // Pour 200 Hz avec clkdiv=100
+    uint16_t level = top / 2;         // 50% duty cycle
 
-    pwm_set_phase_correct(slice, false); // mode normal (non phase-correct)
-    
-    pwm_set_clkdiv(slice, 100.0f); // diviseur de fréquence
-    pwm_set_wrap(slice, 6249);     // wrap pour atteindre 200 Hz
-    pwm_set_chan_level(slice, channel, 625); // 50% duty cycle (50% de 6250)
+    // Setup PWM outputs
+    setup_pwm(0, level, top); // GPIO 0
+    sleep_us(2500);
+    setup_pwm(1, level, top); // GPIO 1
+    // sleep_us(1250);
+    // setup_pwm(2, level, top); // GPIO 2
+    // sleep_us(1250);
+    // setup_pwm(3, level, top); // GPIO 3
 
-    pwm_set_enabled(slice, true); // activer le PWM
+    // Get slices for control later
+    uint slice0 = pwm_gpio_to_slice_num(0);
+    uint slice1 = pwm_gpio_to_slice_num(1);
+    // uint slice2 = pwm_gpio_to_slice_num(2);
+    // uint slice3 = pwm_gpio_to_slice_num(3);
 
     while (true) {
-        tight_loop_contents(); // boucle vide
+        // Disable all PWM outputs
+        pwm_set_enabled(slice0, false);
+        pwm_set_enabled(slice1, false);
+        // pwm_set_enabled(slice2, false);
+        // pwm_set_enabled(slice3, false);
+
+        sleep_ms(500);  // PWM off duration
+
+        // Enable all PWM outputs
+        pwm_set_enabled(slice0, true);
+        pwm_set_enabled(slice1, true);
+        // pwm_set_enabled(slice2, true);
+        // pwm_set_enabled(slice3, true);
+
+        sleep_ms(500);  // PWM on duration
     }
 }
