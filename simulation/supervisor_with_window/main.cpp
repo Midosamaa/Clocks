@@ -1,5 +1,7 @@
 #include "type_transitions/type_transitions.h"
 
+// #define graph
+
 // Display help instructions
 void printHelp() {
     std::cout << "Usage: ./clock_project <direction (1-4)> <transitionType> <transitionDetail>\n\n";
@@ -47,7 +49,9 @@ int main(int argc, char* argv[]) {
     std::string transitionType = argv[2];
     std::string transitionDetail = argv[3];
 
-    sf::RenderWindow window(sf::VideoMode(1000, 400), "Clock Transition", sf::Style::Close);
+    #ifdef graph
+        sf::RenderWindow window(sf::VideoMode(1000, 400), "Clock Transition", sf::Style::Close);
+    #endif
 
     // Create the 3×8 grid of clocks
     std::vector<std::vector<Clock>> clocks(3, std::vector<Clock>(8, Clock(0, 0))); 
@@ -77,14 +81,17 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Initial draw
-    window.clear(sf::Color::White);
-    for (const auto& rowVec : clocks) {
-        for (const auto& clock : rowVec) {
-            clock.draw(window);
+    #ifdef graph
+        // Initial draw
+        window.clear(sf::Color::White);
+        for (const auto& rowVec : clocks) {
+            for (const auto& clock : rowVec) {
+                clock.draw(window);
+            }
         }
-    }
-    window.display();
+        window.display();
+    #endif
+    
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     // Animate to the current time (clock hands move to position)
