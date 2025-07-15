@@ -60,6 +60,7 @@ void remplirTrame(void) {
     }
     
     frame.delta_t = (float) 5.0;
+    printFrame();
 }
 
 
@@ -102,9 +103,22 @@ static void run_master() {
         memcpy(&buf[offset], &frame.delta_t, sizeof(float));
         offset += sizeof(float);
 
+        // Vérifier/assurer que le buffer fait bien 32 octets
+        printf("Taille du buffer rempli: %d octets\n", offset);
+        while (offset < 32) {
+            buf[offset++] = 0;  // Compléter avec des zéros si nécessaire
+        }
+
         int count = i2c_write_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, offset, false);
-        
-        
+
+        #ifdef DEBUG
+            printf("\nBuffer POst envoi\n");
+            for (int i = 0; i < 32; i++) {
+                printf("%d ", buf[i]);  // %3d pour aligner les nombres jusqu'à 255
+                if ((i + 1) % 8 == 0) 
+                    printf("\n");
+            }
+        #endif
 
     # else // try and add __attribute__((packed)) in the structs declaration -> avoid automatic padding
         
@@ -115,6 +129,8 @@ static void run_master() {
         printf("count négatif\n");
         puts("Couldn't write to slave, please check your wiring!");
         return;
+    }else{
+        printf("count positif\n");
     }
     hard_assert(count == offset);
 
@@ -122,6 +138,7 @@ static void run_master() {
     sleep_ms(2000);
 
 }
+
 
 int main() {
     stdio_init_all();
@@ -132,6 +149,7 @@ int main() {
 
     remplirTrame();
     run_master();
+    printf("fin programme\n");
 }
 
 
@@ -141,25 +159,25 @@ int main() {
 
 
 
-        // char msg[32];
-        // snprintf(msg, sizeof(msg), "Hello, I2C slave! - 0x%02X", mem_address);
-        // uint8_t msg_len = strlen(msg);
+// char msg[32];
+// snprintf(msg, sizeof(msg), "Hello, I2C slave! - 0x%02X", mem_address);
+// uint8_t msg_len = strlen(msg);
 
 
-        // request info from the slave
-        // // seek to mem_address
-        // count = i2c_write_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, 1, true);
-        // hard_assert(count == 1);
-        // // partial read
-        // uint8_t split = 5;
-        // count = i2c_read_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, split, true);
-        // hard_assert(count == split);
-        // buf[count] = '\0';
-        // printf("Read  at 0x%02X: '%s'\n", mem_address, buf);
-        // hard_assert(memcmp(buf, msg, split) == 0);
-        // // read the remaining bytes, continuing from last address
-        // count = i2c_read_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, msg_len - split, false);
-        // hard_assert(count == msg_len - split);
-        // buf[count] = '\0';
-        // printf("Read  at 0x%02X: '%s'\n", mem_address + split, buf);
-        // hard_assert(memcmp(buf, msg + split, msg_len - split) == 0);
+// request info from the slave
+// // seek to mem_address
+// count = i2c_write_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, 1, true);
+// hard_assert(count == 1);
+// // partial read
+// uint8_t split = 5;
+// count = i2c_read_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, split, true);
+// hard_assert(count == split);
+// buf[count] = '\0';
+// printf("Read  at 0x%02X: '%s'\n", mem_address, buf);
+// hard_assert(memcmp(buf, msg, split) == 0);
+// // read the remaining bytes, continuing from last address
+// count = i2c_read_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, msg_len - split, false);
+// hard_assert(count == msg_len - split);
+// buf[count] = '\0';
+// printf("Read  at 0x%02X: '%s'\n", mem_address + split, buf);
+// hard_assert(memcmp(buf, msg + split, msg_len - split) == 0);

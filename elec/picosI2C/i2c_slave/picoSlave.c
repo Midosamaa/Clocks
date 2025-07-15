@@ -15,6 +15,7 @@ static const uint I2C_SLAVE_SCL_PIN = PICO_DEFAULT_I2C_SCL_PIN; // 5
 // variables
 uint8_t buf[32];
 int n = 0; // nième bit received from master (0 à 31)
+bool receivedTrame = false;
 
 
 // Structure representing the rotation angles of a clock - 7 bytes
@@ -56,10 +57,8 @@ static void i2c_slave_handler(i2c_inst_t *i2c, i2c_slave_event_t event) {
     switch (event) {
 
     case I2C_SLAVE_RECEIVE: // master has written some data
-        if (n < sizeof(buf)){
+        while (i2c_get_read_available(i2c) && n < sizeof(buf)) {
             buf[n++] = i2c_read_byte(i2c);
-        }else{
-            printf("n>sizeof(buf)\n");
         }
         break;
 
@@ -85,9 +84,7 @@ static void i2c_slave_handler(i2c_inst_t *i2c, i2c_slave_event_t event) {
             // copy last 4 bytes from buf to delta_t
             memcpy(&frame.delta_t, &buf[offset], sizeof(float));
 
-            # ifdef DEBBUG
-                printFrame();
-            # endif
+            receivedTrame = true;
 
         } else {
             printf("Trame non complète, à redemander au master\n");
@@ -129,5 +126,10 @@ int main() {
 
     while(1) {
         sleep_ms(1000);
+        if (receivedTrame) {
+            receivedTrame = false;
+            printFrame();
+        }
     }
 }
+
