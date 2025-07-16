@@ -1,7 +1,0 @@
-.vscode/
-.*/
-token.txt
-.gitignore
-elec/picosI2C/i2c_master/pico_sdk_import.cmake
-elec/picosI2C/i2c_slave/pico_sdk_import.cmake
-
