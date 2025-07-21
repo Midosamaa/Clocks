@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 
     if (argc < 4) {
         std::cerr << "Invalid usage! Use -help to see available options.\n";
-        return 1;
+        return 1;gpio pinout
     }
 
     // Parse arguments

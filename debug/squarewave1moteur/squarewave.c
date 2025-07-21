@@ -14,15 +14,11 @@
 // #define vid6606
 
 // A square wave, period of around 1748us by using a clock div of 65535
-#define CLOCK_DIVISOR 60000
-
-#define N_PAS 360 // N_PULSES = N_PAS*2
+#define CLOCK_DIVISOR 62500
 
 
 
 int main() {
-
-    sleep_ms(3000);
 
     #ifdef vid6606
         // Reset pin vid6606 to 0 for 1 ms
@@ -37,7 +33,6 @@ int main() {
     gpio_init(GPIO_DIR_A);
     gpio_set_dir(GPIO_DIR_A, GPIO_OUT);
     gpio_put(GPIO_DIR_A, 1);  // CW
-
 
     PIO pio[4];
     uint sm[4];
@@ -62,33 +57,15 @@ int main() {
     hard_assert(success);
     assert(pio[3] == pio_get_instance(NUM_PIOS - 1)); 
 
-    
-
-    // Send N_pulses to each state machine
-    for (int i = 0; i < 4; i++) {
-        pio_sm_put_blocking(pio[i], sm[i], N_PAS);
-    }
-
-    printf("State machines configurés\n");
+    // cf restart programm
+    // pio_clkdiv_restart_sm_multi_mask(pio[0], 1 << sm[2], (1 << sm[0]) | (1 << sm[1]), 0);
 
     // enable ALL state machines with the divisors all in sync
     pio_enable_sm_multi_mask_in_sync(pio[0], 0, (1 << sm[0]) | (1 << sm[1]) | (1 << sm[2]) | (1 << sm[3]), 0);
 
-    // Wait for all state machines to finish
-    bool done = false;
-    while (!done) {
-        done = true;
-        for (int i = 0; i < 4; i++) {
-            if (pio_sm_is_tx_fifo_empty(pio[i], sm[i]) && !pio_sm_get(pio[i], sm[i])) { // Check sm empty fifo and not stalled
-            } else {
-                done = false;
-                break;
-            }
-        }
-        sleep_ms(10); 
-    }
+    // run the programs for x ms
+    sleep_ms(1000000);
 
-    printf("sortie boucle\n");
     // stop all state machines
     pio_set_sm_multi_mask_enabled(pio[0], 0, (1 << sm[0]) | (1 << sm[1]) | (1 << sm[2]) | (1 << sm[3]), 0, false);
 

@@ -103,10 +103,10 @@ static void run_master() {
         memcpy(&buf[offset], &frame.delta_t, sizeof(float));
         offset += sizeof(float);
 
-        // Vérifier/assurer que le buffer fait bien 32 octets
+        // Vérificaiton buffer 32 octets
         printf("Taille du buffer rempli: %d octets\n", offset);
         while (offset < 32) {
-            buf[offset++] = 0;  // Compléter avec des zéros si nécessaire
+            buf[offset++] = 0;  // Padding with zeros
         }
 
         int count = i2c_write_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, offset, false);
