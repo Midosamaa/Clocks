@@ -1,0 +1,5 @@
+/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/pioasm-install/pioasm/pioasm
+/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/pioasm-install/pioasm/pioasmTargets.cmake
+/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/pioasm-install/pioasm/pioasmTargets-release.cmake
+/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/pioasm-install/pioasm/pioasmConfig.cmake
+/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/pioasm-install/pioasm/pioasmConfigVersion.cmake
