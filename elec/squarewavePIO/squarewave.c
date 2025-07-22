@@ -71,30 +71,35 @@ int main() {
     gpio_set_dir(GPIO_DIR_A, GPIO_OUT);
     gpio_put(GPIO_DIR_A, 0);  // CCW - Essayer l'autre direction
 
-
     PIO pio[4];
     uint sm[4];
     uint offset[4];
     bool success;
 
-    // Load the program onto the first pio
-    success = setup_pio(&squarewave_program, &pio[0], &sm[0], &offset[0], GPIO_PIN0, CLOCK_DIVISOR, 0, pio_irq_handler0);
-    hard_assert(success);
-    assert(pio[0] == pio_get_instance(NUM_PIOS - 1)); 
+    irq_handler_t handlers[4] = {pio_irq_handler0, pio_irq_handler1, pio_irq_handler2, pio_irq_handler3};
 
-    // Load the program onto the next state machine
-    success = setup_pio(&squarewave_program, &pio[1], &sm[1], &offset[1], GPIO_PIN1, CLOCK_DIVISOR, 1, pio_irq_handler1 );
-    hard_assert(success);
-    assert(pio[1] == pio_get_instance(NUM_PIOS - 1)); 
+    for(int i = 0; i < 4; i++) {
+        uint pin = 0;
+        switch (i){
+            case 0: 
+                pin = GPIO_PIN0; 
+                break;
+            case 1: 
+                pin = GPIO_PIN1; 
+                break;
+            case 2: 
+                pin = GPIO_PIN2; 
+                break;
+            case 3: 
+                pin = GPIO_PIN3; 
+                break;
+        }
 
-    success = setup_pio(&squarewave_program, &pio[2], &sm[2], &offset[2], GPIO_PIN2, CLOCK_DIVISOR, 2, pio_irq_handler2);
-    hard_assert(success);
-    assert(pio[2] == pio_get_instance(NUM_PIOS - 1)); 
-
-    success = setup_pio(&squarewave_program, &pio[3], &sm[3], &offset[3], GPIO_PIN3, CLOCK_DIVISOR, 3, pio_irq_handler3);
-    hard_assert(success);
-    assert(pio[3] == pio_get_instance(NUM_PIOS - 1)); 
-
+        // Load the program onto the first pio
+        success = setup_pio(&squarewave_program, &pio[i], &sm[i], &offset[i], GPIO_PIN0, CLOCK_DIVISOR, i, pio_irq_handler0);
+        hard_assert(success);
+        assert(pio[0] == pio_get_instance(NUM_PIOS - 1)); 
+    }
     
 
     // Send N_pulses to each state machine
@@ -108,7 +113,7 @@ int main() {
     pio_enable_sm_multi_mask_in_sync(pio[0], 0, (1 << sm[0]) | (1 << sm[1]) | (1 << sm[2]) | (1 << sm[3]), 0);
 
 
-    sleep_ms(10000); // Attendre un peu pour laisser le temps aux SM de démarrer
+    sleep_ms(1000); // wait sart sm
 
     while (sm_completed != 0x0F) {  // 0x0F = 0b1111
        
@@ -123,18 +128,11 @@ int main() {
     // free resources and unload the program
     assert(pio[0] == pio[1] && pio[1] == pio[2] && pio[2] == pio[3]);
     
-    pio_set_irq0_source_enabled(pio[0], pis_sm0_rx_fifo_not_empty + sm[0], false); // deactivate IRQ for SM0
-    pio_remove_program_and_unclaim_sm(&squarewave_program, pio[0], sm[0], offset[0]);
-
-    pio_set_irq0_source_enabled(pio[1], pis_sm0_rx_fifo_not_empty + sm[1], false);
-    pio_remove_program_and_unclaim_sm(&squarewave_program, pio[1], sm[1], offset[1]);
-
-    pio_set_irq0_source_enabled(pio[2], pis_sm0_rx_fifo_not_empty + sm[2], false);
-    pio_remove_program_and_unclaim_sm(&squarewave_program, pio[2], sm[2], offset[2]);
-
-    pio_set_irq0_source_enabled(pio[3], pis_sm0_rx_fifo_not_empty + sm[3], false);
-    pio_remove_program_and_unclaim_sm(&squarewave_program, pio[3], sm[3], offset[3]);
-
+    for (int i = 0; i < 4; i++) {
+        pio_set_irq0_source_enabled(pio[i], pis_sm0_rx_fifo_not_empty + sm[i], false); // deactivate IRQ from SMi
+        pio_remove_program_and_unclaim_sm(&squarewave_program, pio[i], sm[i], offset[i]);
+    }
+    
     return 0;
 
 }
