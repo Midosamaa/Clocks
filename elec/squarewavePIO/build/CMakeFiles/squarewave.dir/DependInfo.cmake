@@ -146,6 +146,7 @@ set(CMAKE_ASM_TARGET_INCLUDE_PATH
   "/home/grakoto/pico/pico-sdk/src/rp2350/boot_stage2/include"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/include"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/include"
+  "/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/include"
   )
 
 # The set of dependency files which are needed:
@@ -184,6 +185,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_divider/divider.c" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_divider/divider.c.o" "gcc" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_divider/divider.c.o.d"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_flash/flash.c" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_flash/flash.c.o" "gcc" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_flash/flash.c.o.d"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_gpio/gpio.c" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o" "gcc" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o.d"
+  "/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o" "gcc" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o.d"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_irq/irq.c" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_irq/irq.c.o" "gcc" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_irq/irq.c.o.d"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.o" "gcc" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.o.d"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pll/pll.c" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pll/pll.c.o" "gcc" "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pll/pll.c.o.d"

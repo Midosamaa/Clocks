@@ -1,0 +1,62 @@
+.program squarewave_irq
+    set pindirs, 1   ; Set pin to output
+    pull block       ; Pull value from FIFO to OSR 
+    mov x, osr       ; OSR to X register 
+
+.wrap_target
+
+loop:
+    jmp !x done      ; If X = 0, jump to done
+    set pins, 1 [9]  ; Set main pin high and delay
+    set pins, 0 [9]  ; Set main pin low and delay
+    jmp x-- loop     ; Decrement X and loop
+
+done:
+    irq 0 rel        ; Set IRQ 0 + state machine ID (0-3)
+    jmp done         ; Stay here until reset
+
+.wrap                
+
+
+
+
+% c-sdk {
+    // Cette fonction configure un IRQ pour détecter quand le PIO a terminé
+    static bool setup_pio_irq(const pio_program_t *program, PIO *pio, uint *sm, uint *offset, 
+                             uint pin, uint16_t divisor, uint irq_num, irq_handler_t handler) {
+
+        // look for a free pio and state machine
+        if (!pio_claim_free_sm_and_add_program(program, pio, sm, offset)) { 
+            return false;
+        }
+
+        // Set this pin's GPIO function (connect PIO to the pad)
+        pio_gpio_init(*pio, pin);
+
+        // Set the pin direction to output with the PIO
+        pio_sm_set_consecutive_pindirs(*pio, *sm, pin, 1, true);
+
+        pio_sm_config c = squarewave_irq_program_get_default_config(*offset);
+        sm_config_set_set_pins(&c, pin, 1);
+        
+        // Configure the FIFOs - uses joined rx tx only for tx (send data from main to pio)
+        sm_config_set_out_shift(&c, true, false, 32); // Enable autopull
+        sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX); // Join TX/RX FIFOs for more TX depth
+
+        // Load our configuration, and jump to the start of the program
+        pio_sm_init(*pio, *sm, *offset, &c);
+
+        // set the pio divisor
+        pio_sm_set_clkdiv(*pio, *sm, divisor);
+
+        // Configure l'IRQ PIO
+        // Chaque state machine utilise sa propre IRQ (0+sm_id)
+        irq_set_exclusive_handler(PIO0_IRQ_0 + irq_num, handler); // associate each interrupt number to the corresponding handler in main
+        irq_set_enabled(PIO0_IRQ_0 + irq_num, true);
+
+        // Enable IRQ 0-3 pour ce PIO (chaque SM utilisera son propre numéro d'IRQ)
+        pio_set_irq0_source_enabled(*pio, pis_sm0_rx_fifo_not_empty + *sm, true);
+        
+        return true;
+    }
+%}

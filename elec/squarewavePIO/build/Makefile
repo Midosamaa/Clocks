@@ -1023,6 +1023,30 @@ home/grakoto/pico/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/squarewave.dir/build.make CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.s
 .PHONY : home/grakoto/pico/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.s
 
+home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.o: home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o
+.PHONY : home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.o
+
+# target to build an object file
+home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/squarewave.dir/build.make CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o
+.PHONY : home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o
+
+home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.i: home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.i
+.PHONY : home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.i
+
+# target to preprocess a source file
+home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/squarewave.dir/build.make CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.i
+.PHONY : home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.i
+
+home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.s: home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.s
+.PHONY : home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.s
+
+# target to generate assembly for a file
+home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/squarewave.dir/build.make CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.s
+.PHONY : home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.s
+
 home/grakoto/pico/pico-sdk/src/rp2_common/hardware_irq/irq.o: home/grakoto/pico/pico-sdk/src/rp2_common/hardware_irq/irq.c.o
 .PHONY : home/grakoto/pico/pico-sdk/src/rp2_common/hardware_irq/irq.o
 
@@ -2108,6 +2132,9 @@ help:
 	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/hardware_gpio/gpio.o"
 	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/hardware_gpio/gpio.i"
 	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/hardware_gpio/gpio.s"
+	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.o"
+	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.i"
+	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.s"
 	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/hardware_irq/irq.o"
 	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/hardware_irq/irq.i"
 	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/hardware_irq/irq.s"

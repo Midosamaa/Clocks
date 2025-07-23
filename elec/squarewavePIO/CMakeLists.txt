@@ -20,7 +20,7 @@ target_sources(squarewave PRIVATE
     squarewave.c
     )
 target_link_libraries(squarewave PRIVATE
-    pico_stdlib hardware_pio hardware_irq
+    pico_stdlib hardware_pio hardware_irq hardware_i2c
 )
 
 # Enable USB output, disable UART output

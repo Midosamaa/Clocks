@@ -2372,12 +2372,12 @@ CMakeFiles/squarewave.dir/all: CMakeFiles/squarewave_squarewave_pio_h.dir/all
 CMakeFiles/squarewave.dir/all: pico-sdk/src/rp2350/boot_stage2/CMakeFiles/bs2_default_library.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/squarewave.dir/build.make CMakeFiles/squarewave.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/squarewave.dir/build.make CMakeFiles/squarewave.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97 "Built target squarewave"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98 "Built target squarewave"
 .PHONY : CMakeFiles/squarewave.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/squarewave.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles 96
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles 97
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/squarewave.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles 0
 .PHONY : CMakeFiles/squarewave.dir/rule
@@ -2389,7 +2389,7 @@ squarewave: CMakeFiles/squarewave.dir/rule
 # codegen rule for target.
 CMakeFiles/squarewave.dir/codegen: CMakeFiles/squarewave_squarewave_pio_h.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/squarewave.dir/build.make CMakeFiles/squarewave.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97 "Finished codegen for target squarewave"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98 "Finished codegen for target squarewave"
 .PHONY : CMakeFiles/squarewave.dir/codegen
 
 # clean rule for target.
@@ -2404,7 +2404,7 @@ CMakeFiles/squarewave.dir/clean:
 CMakeFiles/squarewave_squarewave_pio_h.dir/all: pico-sdk/src/rp2_common/pico_cyw43_driver/CMakeFiles/pioasmBuild.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/squarewave_squarewave_pio_h.dir/build.make CMakeFiles/squarewave_squarewave_pio_h.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/squarewave_squarewave_pio_h.dir/build.make CMakeFiles/squarewave_squarewave_pio_h.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=98 "Built target squarewave_squarewave_pio_h"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=99 "Built target squarewave_squarewave_pio_h"
 .PHONY : CMakeFiles/squarewave_squarewave_pio_h.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2421,7 +2421,7 @@ squarewave_squarewave_pio_h: CMakeFiles/squarewave_squarewave_pio_h.dir/rule
 # codegen rule for target.
 CMakeFiles/squarewave_squarewave_pio_h.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/squarewave_squarewave_pio_h.dir/build.make CMakeFiles/squarewave_squarewave_pio_h.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=98 "Finished codegen for target squarewave_squarewave_pio_h"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=99 "Finished codegen for target squarewave_squarewave_pio_h"
 .PHONY : CMakeFiles/squarewave_squarewave_pio_h.dir/codegen
 
 # clean rule for target.

@@ -8,15 +8,15 @@
 #include "hardware/pio.h"
 #endif
 
-// ---------- //
-// squarewave //
-// ---------- //
+// -------------- //
+// squarewave_irq //
+// -------------- //
 
-#define squarewave_wrap_target 3
-#define squarewave_wrap 8
-#define squarewave_pio_version 1
+#define squarewave_irq_wrap_target 3
+#define squarewave_irq_wrap 8
+#define squarewave_irq_pio_version 1
 
-static const uint16_t squarewave_program_instructions[] = {
+static const uint16_t squarewave_irq_program_instructions[] = {
     0xe081, //  0: set    pindirs, 1
     0x80a0, //  1: pull   block
     0xa027, //  2: mov    x, osr
@@ -25,53 +25,55 @@ static const uint16_t squarewave_program_instructions[] = {
     0xe901, //  4: set    pins, 1                [9]
     0xe900, //  5: set    pins, 0                [9]
     0x0043, //  6: jmp    x--, 3
-    0xc030, //  7: irq    wait 0 rel
-    0x0008, //  8: jmp    8
+    0xc010, //  7: irq    nowait 0 rel
+    0x0007, //  8: jmp    7
             //     .wrap
 };
 
 #if !PICO_NO_HARDWARE
-static const struct pio_program squarewave_program = {
-    .instructions = squarewave_program_instructions,
+static const struct pio_program squarewave_irq_program = {
+    .instructions = squarewave_irq_program_instructions,
     .length = 9,
     .origin = -1,
-    .pio_version = squarewave_pio_version,
+    .pio_version = squarewave_irq_pio_version,
 #if PICO_PIO_VERSION > 0
     .used_gpio_ranges = 0x0
 #endif
 };
 
-static inline pio_sm_config squarewave_program_get_default_config(uint offset) {
+static inline pio_sm_config squarewave_irq_program_get_default_config(uint offset) {
     pio_sm_config c = pio_get_default_sm_config();
-    sm_config_set_wrap(&c, offset + squarewave_wrap_target, offset + squarewave_wrap);
+    sm_config_set_wrap(&c, offset + squarewave_irq_wrap_target, offset + squarewave_irq_wrap);
     return c;
 }
 
-    static bool setup_pio(const pio_program_t *program, PIO *pio, uint *sm, uint *offset, uint pin, uint16_t divisor, uint irq_num, irq_handler_t handler) {
-    // look for a free pio and state machine on pio0. If not pio1, etc.
-    if (!pio_claim_free_sm_and_add_program(program, pio, sm, offset)) { 
-        return false;
-    }
-    // Set this pin's GPIO function (connect PIO to the pad)
-    pio_gpio_init(*pio, pin);
-    // Set the pin direction to output with the PIO
-    pio_sm_set_consecutive_pindirs(*pio, *sm, pin, 1, true);
-    pio_sm_config c = squarewave_program_get_default_config(*offset);
-    sm_config_set_set_pins(&c, pin, 1);
-    // Configure the FIFOs - optimisé pour l'envoi de données
-    sm_config_set_out_shift(&c, true, false, 32); // Enable autopull
-    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX); // Join TX/RX FIFOs for more TX depth
-    // Load our configuration, and jump to the start of the program
-    pio_sm_init(*pio, *sm, *offset, &c);
-    // set the pio divisor
-    pio_sm_set_clkdiv(*pio, *sm, divisor);
-    // Configure l'IRQ PIO
-    // each SM uses its IRQ 0+sm_id
-    irq_set_exclusive_handler(PIO0_IRQ_0 + irq_num, handler);
-    irq_set_enabled(PIO0_IRQ_0 + irq_num, true);
-    // Enable IRQ 0-3 for this PIO 
-    pio_set_irq0_source_enabled(*pio, pis_sm0_rx_fifo_not_empty + *sm, true);
-    return true;
+    // Cette fonction configure un IRQ pour détecter quand le PIO a terminé
+    static bool setup_pio(const pio_program_t *program, PIO *pio, uint *sm, uint *offset, 
+                             uint pin, uint16_t divisor, uint irq_num, irq_handler_t handler) {
+        // look for a free pio and state machine
+        if (!pio_claim_free_sm_and_add_program(program, pio, sm, offset)) { 
+            return false;
+        }
+        // Set this pin's GPIO function (connect PIO to the pad)
+        pio_gpio_init(*pio, pin);
+        // Set the pin direction to output with the PIO
+        pio_sm_set_consecutive_pindirs(*pio, *sm, pin, 1, true);
+        pio_sm_config c = squarewave_irq_program_get_default_config(*offset);
+        sm_config_set_set_pins(&c, pin, 1);
+        // Configure the FIFOs - uses joined rx tx only for tx (send data from main to pio)
+        sm_config_set_out_shift(&c, true, false, 32); // Enable autopull
+        sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX); // Join TX/RX FIFOs for more TX depth
+        // Load our configuration, and jump to the start of the program
+        pio_sm_init(*pio, *sm, *offset, &c);
+        // set the pio divisor
+        pio_sm_set_clkdiv(*pio, *sm, divisor);
+        // Configure l'IRQ PIO
+        // Chaque state machine utilise sa propre IRQ (0+sm_id)
+        irq_set_exclusive_handler(PIO0_IRQ_0 + irq_num, handler); // associate each interrupt number to the corresponding handler in main
+        irq_set_enabled(PIO0_IRQ_0 + irq_num, true);
+        // Enable IRQ 0-3 pour ce PIO (chaque SM utilisera son propre numéro d'IRQ)
+        pio_set_irq0_source_enabled(*pio, pis_sm0_rx_fifo_not_empty + *sm, true);
+        return true;
     }
 
 #endif

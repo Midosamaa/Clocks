@@ -96,7 +96,7 @@ int main() {
         }
 
         // Load the program onto the first pio
-        success = setup_pio(&squarewave_program, &pio[i], &sm[i], &offset[i], GPIO_PIN0, CLOCK_DIVISOR, i, pio_irq_handler0);
+        success = setup_pio(&squarewave_irq_program, &pio[i], &sm[i], &offset[i], GPIO_PIN0, CLOCK_DIVISOR, i, handlers[i]);
         hard_assert(success);
         assert(pio[0] == pio_get_instance(NUM_PIOS - 1)); 
     }
@@ -130,7 +130,7 @@ int main() {
     
     for (int i = 0; i < 4; i++) {
         pio_set_irq0_source_enabled(pio[i], pis_sm0_rx_fifo_not_empty + sm[i], false); // deactivate IRQ from SMi
-        pio_remove_program_and_unclaim_sm(&squarewave_program, pio[i], sm[i], offset[i]);
+        pio_remove_program_and_unclaim_sm(&squarewave_irq_program, pio[i], sm[i], offset[i]);
     }
     
     return 0;

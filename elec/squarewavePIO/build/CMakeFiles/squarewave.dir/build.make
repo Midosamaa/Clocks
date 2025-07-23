@@ -1196,6 +1196,20 @@ CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.s"
 	/home/grakoto/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c -o CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.s
 
+CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o: CMakeFiles/squarewave.dir/flags.make
+CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o: /home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c
+CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o: CMakeFiles/squarewave.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_82) "Building C object CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o"
+	/home/grakoto/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o -MF CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o.d -o CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o -c /home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c
+
+CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.i"
+	/home/grakoto/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c > CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.i
+
+CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.s"
+	/home/grakoto/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c -o CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.s
+
 # Object files for target squarewave
 squarewave_OBJECTS = \
 "CMakeFiles/squarewave.dir/squarewave.c.o" \
@@ -1278,7 +1292,8 @@ squarewave_OBJECTS = \
 "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/lib/tinyusb/src/tusb.c.o" \
 "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o" \
 "CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o" \
-"CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.o"
+"CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.o" \
+"CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o"
 
 # External object files for target squarewave
 squarewave_EXTERNAL_OBJECTS =
@@ -1364,11 +1379,12 @@ squarewave.elf: CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/lib/tinyusb
 squarewave.elf: CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o
 squarewave.elf: CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
 squarewave.elf: CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
+squarewave.elf: CMakeFiles/squarewave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o
 squarewave.elf: CMakeFiles/squarewave.dir/build.make
 squarewave.elf: pico-sdk/src/rp2350/boot_stage2/CMakeFiles/bs2_default_library.dir/bs2_default_padded_checksummed.S.o
 squarewave.elf: /home/grakoto/pico/pico-sdk/src/rp2_common/pico_crt0/rp2350/memmap_default.ld
 squarewave.elf: CMakeFiles/squarewave.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_82) "Linking CXX executable squarewave.elf"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_83) "Linking CXX executable squarewave.elf"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/squarewave.dir/link.txt --verbose=$(VERBOSE)
 	/home/grakoto/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-objdump -h /home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/squarewave.elf > squarewave.dis
 	/home/grakoto/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-objdump -d /home/grakoto/Documents/stage/Clocks/elec/squarewavePIO/build/squarewave.elf >> squarewave.dis
