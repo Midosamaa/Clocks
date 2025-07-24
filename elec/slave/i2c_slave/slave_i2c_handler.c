@@ -11,6 +11,7 @@ static const uint I2C_BAUDRATE = 100000; // 100 kHz
 static const uint I2C_SLAVE_SDA_PIN = PICO_DEFAULT_I2C_SDA_PIN; // 4
 static const uint I2C_SLAVE_SCL_PIN = PICO_DEFAULT_I2C_SCL_PIN; // 5
 
+
 // variables
 uint8_t buf[32];
 int n = 0; // nième bit received from master (0 à 31)
@@ -97,3 +98,5 @@ void setup_slaveI2C(void) {
     // configure I2C0 for slave mode
     i2c_slave_init(i2c0, I2C_SLAVE_ADDRESS, &i2c_slave_handler);
 }
+
+

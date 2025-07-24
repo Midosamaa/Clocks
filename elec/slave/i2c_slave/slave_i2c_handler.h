@@ -19,14 +19,15 @@ struct i2c_frame {
     float delta_t; // time to reach the positions entered in clocksPosition
 };
 
+extern struct i2c_frame frame;
+
 // Extern declaration of the flag indicating frame reception
 extern volatile bool receivedTrame;
-
-// Extern declaration of the frame to access it from main
-extern struct i2c_frame frame;
 
 // Functions exported by the I2C module
 void setup_slaveI2C(void);
 void printFrame(void);
+
+
 
 #endif // SLAVE_I2C_HANDLER_H

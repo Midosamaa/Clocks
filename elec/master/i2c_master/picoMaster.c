@@ -13,6 +13,7 @@ static const uint I2C_MASTER_SDA_PIN = 6;
 static const uint I2C_MASTER_SCL_PIN = 7;
 
 
+
 // Structure representing the rotation angles of a clock - 7 bytes
 static struct ClockMotion {
     uint8_t clock_id;       // 0 <= x <= 23
@@ -156,28 +157,3 @@ int main() {
 
 
 
-
-
-
-// char msg[32];
-// snprintf(msg, sizeof(msg), "Hello, I2C slave! - 0x%02X", mem_address);
-// uint8_t msg_len = strlen(msg);
-
-
-// request info from the slave
-// // seek to mem_address
-// count = i2c_write_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, 1, true);
-// hard_assert(count == 1);
-// // partial read
-// uint8_t split = 5;
-// count = i2c_read_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, split, true);
-// hard_assert(count == split);
-// buf[count] = '\0';
-// printf("Read  at 0x%02X: '%s'\n", mem_address, buf);
-// hard_assert(memcmp(buf, msg, split) == 0);
-// // read the remaining bytes, continuing from last address
-// count = i2c_read_blocking(i2c1, I2C_SLAVE_ADDRESS, buf, msg_len - split, false);
-// hard_assert(count == msg_len - split);
-// buf[count] = '\0';
-// printf("Read  at 0x%02X: '%s'\n", mem_address + split, buf);
-// hard_assert(memcmp(buf, msg + split, msg_len - split) == 0);

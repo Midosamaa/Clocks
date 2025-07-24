@@ -69,8 +69,9 @@ static inline pio_sm_config squarewave_irq_program_get_default_config(uint offse
         pio_sm_set_clkdiv(*pio, *sm, divisor);
         // Configure l'IRQ PIO
         // Chaque state machine utilise sa propre IRQ (0+sm_id)
-        irq_set_exclusive_handler(PIO0_IRQ_0 + irq_num, handler); // associate each interrupt number to the corresponding handler in main
-        irq_set_enabled(PIO0_IRQ_0 + irq_num, true);
+        uint irq_index = (*pio == pio0) ? PIO0_IRQ_0 + irq_num : PIO1_IRQ_0 + irq_num;
+        irq_set_exclusive_handler(irq_index, handler); // associate each interrupt number to the corresponding handler in main
+        irq_set_enabled(irq_index, true);
         // Enable IRQ 0-3 pour ce PIO (chaque SM utilisera son propre numéro d'IRQ)
         pio_set_irq0_source_enabled(*pio, pis_sm0_rx_fifo_not_empty + *sm, true);
         return true;
