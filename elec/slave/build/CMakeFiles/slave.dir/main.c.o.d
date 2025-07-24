@@ -66,4 +66,9 @@ CMakeFiles/slave.dir/main.c.o: \
  /home/grakoto/pico/pico-sdk/src/rp2350/hardware_structs/include/hardware/structs/pio.h \
  /home/grakoto/pico/pico-sdk/src/rp2350/hardware_regs/include/hardware/regs/pio.h \
  /home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/include/hardware/pio_instructions.h \
- /home/grakoto/Documents/stage/Clocks/elec/slave/./squarewavePIO/squarewave.h
+ /home/grakoto/Documents/stage/Clocks/elec/slave/./squarewavePIO/squarewave.h \
+ /home/grakoto/Documents/stage/Clocks/elec/slave/./i2c_slave/slave_i2c_handler.h \
+ /home/grakoto/Documents/stage/Clocks/elec/slave/i2c_slave/include/i2c_slave.h \
+ /home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/include/hardware/i2c.h \
+ /home/grakoto/pico/pico-sdk/src/rp2350/hardware_structs/include/hardware/structs/i2c.h \
+ /home/grakoto/pico/pico-sdk/src/rp2350/hardware_regs/include/hardware/regs/i2c.h

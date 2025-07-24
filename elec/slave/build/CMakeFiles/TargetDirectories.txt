@@ -209,3 +209,6 @@
 /home/grakoto/Documents/stage/Clocks/elec/slave/build/squarewavePIO/CMakeFiles/squarewave_lib_squarewave_pio_h.dir
 /home/grakoto/Documents/stage/Clocks/elec/slave/build/squarewavePIO/CMakeFiles/edit_cache.dir
 /home/grakoto/Documents/stage/Clocks/elec/slave/build/squarewavePIO/CMakeFiles/rebuild_cache.dir
+/home/grakoto/Documents/stage/Clocks/elec/slave/build/i2c_slave/CMakeFiles/i2c_slave_handler.dir
+/home/grakoto/Documents/stage/Clocks/elec/slave/build/i2c_slave/CMakeFiles/edit_cache.dir
+/home/grakoto/Documents/stage/Clocks/elec/slave/build/i2c_slave/CMakeFiles/rebuild_cache.dir

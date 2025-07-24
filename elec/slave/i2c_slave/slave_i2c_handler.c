@@ -1,10 +1,9 @@
 #include <i2c_fifo.h>
-#include <i2c_slave.h>
 #include <pico/stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "slave_i2c_handler.h"
 
-# define DEBBUG
 
 static const uint I2C_SLAVE_ADDRESS = 0x17;
 static const uint I2C_BAUDRATE = 100000; // 100 kHz
@@ -15,24 +14,10 @@ static const uint I2C_SLAVE_SCL_PIN = PICO_DEFAULT_I2C_SCL_PIN; // 5
 // variables
 uint8_t buf[32];
 int n = 0; // nième bit received from master (0 à 31)
-bool receivedTrame = false;
+volatile bool receivedTrame = false;
 
-
-// Structure representing the rotation angles of a clock - 7 bytes
-static struct ClockMotion {
-    uint8_t clock_id;       // 0 <= x <= 23
-    uint16_t hourAngle;     // Angle for the hour hand - 0<=X<=359
-    uint16_t minAngle;   // Angle for the minute hand - 0<=X<=359
-    bool hourDir;        // 0, 1 
-    bool minDir;      // 0, 1 
-}ClockMotion;
-
-
-// frame i2c to inform slaves of their next positions - 28 bytes -> 29 with written
-static struct frame {
-    struct ClockMotion clocksPosition[4];
-    float delta_t; // time to reach the positions entered in clocksPosition
-} frame; 
+// Export the frame structure
+struct i2c_frame frame;
 
 
 void printFrame(void) {
@@ -52,7 +37,7 @@ void printFrame(void) {
 }
 
 
-// Handler called from the I2C ISR. Blocking calls may interfere with interrupt handling
+// Handler called from the I2C ISR
 static void i2c_slave_handler(i2c_inst_t *i2c, i2c_slave_event_t event) {
     switch (event) {
 
@@ -99,7 +84,7 @@ static void i2c_slave_handler(i2c_inst_t *i2c, i2c_slave_event_t event) {
 }
 
 
-static void setup_slave() {
+void setup_slaveI2C(void) { 
     gpio_init(I2C_SLAVE_SDA_PIN);
     gpio_set_function(I2C_SLAVE_SDA_PIN, GPIO_FUNC_I2C);
     gpio_pull_up(I2C_SLAVE_SDA_PIN);
@@ -112,24 +97,3 @@ static void setup_slave() {
     // configure I2C0 for slave mode
     i2c_slave_init(i2c0, I2C_SLAVE_ADDRESS, &i2c_slave_handler);
 }
-
-
-
-int main() {
-    stdio_init_all();
-    puts("\nI2C slave");
-
-    sleep_ms(5000);
-    printf("Starting I2C slave...\n");
-
-    setup_slave();
-
-    while(1) {
-        sleep_ms(1000);
-        if (receivedTrame) {
-            receivedTrame = false;
-            printFrame();
-        }
-    }
-}
-

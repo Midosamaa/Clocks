@@ -90,6 +90,9 @@ set(CMAKE_ASM_TARGET_INCLUDE_PATH
   "/home/grakoto/pico/pico-sdk/lib/tinyusb/src"
   "squarewavePIO"
   "/home/grakoto/Documents/stage/Clocks/elec/slave/squarewavePIO"
+  "/home/grakoto/Documents/stage/Clocks/elec/slave/i2c_slave"
+  "/home/grakoto/Documents/stage/Clocks/elec/slave/i2c_slave/include"
+  "/home/grakoto/Documents/stage/Clocks/elec/slave/i2c_slave/./include"
   "/home/grakoto/pico/pico-sdk/src/common/pico_stdlib_headers/include"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_gpio/include"
   "/home/grakoto/pico/pico-sdk/src/common/pico_base_headers/include"
@@ -222,6 +225,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/grakoto/pico/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c" "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o" "gcc" "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o.d"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c" "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o" "gcc" "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o.d"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c" "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o" "gcc" "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o.d"
+  "/home/grakoto/Documents/stage/Clocks/elec/slave/i2c_slave/i2c_slave.c" "CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o" "gcc" "CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o.d"
   "/home/grakoto/Documents/stage/Clocks/elec/slave/main.c" "CMakeFiles/slave.dir/main.c.o" "gcc" "CMakeFiles/slave.dir/main.c.o.d"
   "/home/grakoto/pico/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp" "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o" "gcc" "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o.d"
   )

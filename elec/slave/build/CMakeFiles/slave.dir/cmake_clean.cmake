@@ -151,6 +151,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o.d"
   "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o"
   "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o.d"
+  "CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o"
+  "CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o.d"
   "CMakeFiles/slave.dir/main.c.o"
   "CMakeFiles/slave.dir/main.c.o.d"
   "slave.elf"

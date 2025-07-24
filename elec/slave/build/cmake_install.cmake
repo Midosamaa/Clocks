@@ -12,7 +12,7 @@ if(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
     string(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
            CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
   else()
-    set(CMAKE_INSTALL_CONFIG_NAME "Release")
+    set(CMAKE_INSTALL_CONFIG_NAME "Debug")
   endif()
   message(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
 endif()
@@ -41,6 +41,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/grakoto/Documents/stage/Clocks/elec/slave/build/pico-sdk/cmake_install.cmake")
   include("/home/grakoto/Documents/stage/Clocks/elec/slave/build/squarewavePIO/cmake_install.cmake")
+  include("/home/grakoto/Documents/stage/Clocks/elec/slave/build/i2c_slave/cmake_install.cmake")
 
 endif()
 

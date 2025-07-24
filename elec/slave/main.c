@@ -3,6 +3,7 @@
 #include "pico/stdlib.h"
 #include "hardware/pio.h"
 #include "./squarewavePIO/squarewave.h"
+#include "./i2c_slave/slave_i2c_handler.h"
 
 
 
@@ -10,15 +11,12 @@
 int main() {
 
     stdio_init_all();
-    sleep_ms(1000);  
+    sleep_ms(5000);  
     
     printf("Démarrage du programme\n");
-    sleep_ms(2000);
     
     // initialize sm_completed
     sm_completed = 0;
-
-
 
     PIO pio[4];
     uint sm[4];
@@ -26,6 +24,21 @@ int main() {
 
     uint nb_pas = 720;
 
+    // initilisation I2C
+    setup_slaveI2C();
+
+    // wait for a complete frame
+    while (true) {  
+        if (receivedTrame) {
+            receivedTrame = false;
+            printFrame();
+            
+            break;
+        }
+        sleep_ms(100);    
+    }
+    
+    // motors configuration
     setup_pin_direction14();
 
     setup_sm_programm(pio ,sm , offset);

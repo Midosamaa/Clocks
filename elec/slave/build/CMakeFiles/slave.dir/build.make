@@ -1207,6 +1207,20 @@ CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.s"
 	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c -o CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.s
 
+CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o: CMakeFiles/slave.dir/flags.make
+CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o: /home/grakoto/Documents/stage/Clocks/elec/slave/i2c_slave/i2c_slave.c
+CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o: CMakeFiles/slave.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/slave/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_83) "Building C object CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o"
+	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o -MF CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o.d -o CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o -c /home/grakoto/Documents/stage/Clocks/elec/slave/i2c_slave/i2c_slave.c
+
+CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.i"
+	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/grakoto/Documents/stage/Clocks/elec/slave/i2c_slave/i2c_slave.c > CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.i
+
+CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.s"
+	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/grakoto/Documents/stage/Clocks/elec/slave/i2c_slave/i2c_slave.c -o CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.s
+
 # Object files for target slave
 slave_OBJECTS = \
 "CMakeFiles/slave.dir/main.c.o" \
@@ -1290,7 +1304,8 @@ slave_OBJECTS = \
 "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o" \
 "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o" \
 "CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o" \
-"CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.o"
+"CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.o" \
+"CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o"
 
 # External object files for target slave
 slave_EXTERNAL_OBJECTS =
@@ -1377,12 +1392,14 @@ slave.elf: CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/lib/tinyusb/src/commo
 slave.elf: CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
 slave.elf: CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o
 slave.elf: CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
+slave.elf: CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o
 slave.elf: CMakeFiles/slave.dir/build.make
 slave.elf: pico-sdk/src/rp2350/boot_stage2/CMakeFiles/bs2_default_library.dir/bs2_default_padded_checksummed.S.o
 slave.elf: squarewavePIO/libsquarewave_lib.a
+slave.elf: i2c_slave/libi2c_slave_handler.a
 slave.elf: /home/grakoto/pico/pico-sdk/src/rp2_common/pico_crt0/rp2350/memmap_default.ld
 slave.elf: CMakeFiles/slave.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/slave/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_83) "Linking CXX executable slave.elf"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/grakoto/Documents/stage/Clocks/elec/slave/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_84) "Linking CXX executable slave.elf"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/slave.dir/link.txt --verbose=$(VERBOSE)
 	/usr/bin/arm-none-eabi-objdump -h /home/grakoto/Documents/stage/Clocks/elec/slave/build/slave.elf > slave.dis
 	/usr/bin/arm-none-eabi-objdump -d /home/grakoto/Documents/stage/Clocks/elec/slave/build/slave.elf >> slave.dis

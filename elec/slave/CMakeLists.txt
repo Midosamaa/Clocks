@@ -19,6 +19,7 @@ target_link_libraries(slave PRIVATE
     hardware_irq 
     hardware_i2c
     squarewave_lib
+    i2c_slave_handler
 )
 
 # Enable USB output, disable UART output
@@ -28,4 +29,4 @@ pico_enable_stdio_uart(slave 0)
 pico_add_extra_outputs(slave)
 
 add_subdirectory(./squarewavePIO)
-#add_subdirectory(./i2c_slave)
+add_subdirectory(./i2c_slave)

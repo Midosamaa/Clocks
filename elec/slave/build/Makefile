@@ -169,6 +169,19 @@ bs2_default_library/fast:
 .PHONY : bs2_default_library/fast
 
 #=============================================================================
+# Target rules for targets named pioasmBuild
+
+# Build rule for target.
+pioasmBuild: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 pioasmBuild
+.PHONY : pioasmBuild
+
+# fast build rule for target.
+pioasmBuild/fast:
+	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2_common/pico_cyw43_driver/CMakeFiles/pioasmBuild.dir/build.make pico-sdk/src/rp2_common/pico_cyw43_driver/CMakeFiles/pioasmBuild.dir/build
+.PHONY : pioasmBuild/fast
+
+#=============================================================================
 # Target rules for targets named cyw43_driver_picow_cyw43_bus_pio_spi_pio_h
 
 # Build rule for target.
@@ -206,6 +219,19 @@ squarewave_lib_squarewave_pio_h: cmake_check_build_system
 squarewave_lib_squarewave_pio_h/fast:
 	$(MAKE) $(MAKESILENT) -f squarewavePIO/CMakeFiles/squarewave_lib_squarewave_pio_h.dir/build.make squarewavePIO/CMakeFiles/squarewave_lib_squarewave_pio_h.dir/build
 .PHONY : squarewave_lib_squarewave_pio_h/fast
+
+#=============================================================================
+# Target rules for targets named i2c_slave_handler
+
+# Build rule for target.
+i2c_slave_handler: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 i2c_slave_handler
+.PHONY : i2c_slave_handler
+
+# fast build rule for target.
+i2c_slave_handler/fast:
+	$(MAKE) $(MAKESILENT) -f i2c_slave/CMakeFiles/i2c_slave_handler.dir/build.make i2c_slave/CMakeFiles/i2c_slave_handler.dir/build
+.PHONY : i2c_slave_handler/fast
 
 home/grakoto/pico/pico-sdk/lib/tinyusb/src/class/audio/audio_device.o: home/grakoto/pico/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
 .PHONY : home/grakoto/pico/pico-sdk/lib/tinyusb/src/class/audio/audio_device.o
@@ -1991,6 +2017,30 @@ home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/slave.dir/build.make CMakeFiles/slave.dir/home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.s
 .PHONY : home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.s
 
+i2c_slave/i2c_slave.o: i2c_slave/i2c_slave.c.o
+.PHONY : i2c_slave/i2c_slave.o
+
+# target to build an object file
+i2c_slave/i2c_slave.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/slave.dir/build.make CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.o
+.PHONY : i2c_slave/i2c_slave.c.o
+
+i2c_slave/i2c_slave.i: i2c_slave/i2c_slave.c.i
+.PHONY : i2c_slave/i2c_slave.i
+
+# target to preprocess a source file
+i2c_slave/i2c_slave.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/slave.dir/build.make CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.i
+.PHONY : i2c_slave/i2c_slave.c.i
+
+i2c_slave/i2c_slave.s: i2c_slave/i2c_slave.c.s
+.PHONY : i2c_slave/i2c_slave.s
+
+# target to generate assembly for a file
+i2c_slave/i2c_slave.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/slave.dir/build.make CMakeFiles/slave.dir/i2c_slave/i2c_slave.c.s
+.PHONY : i2c_slave/i2c_slave.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -2025,9 +2075,11 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... bs2_default_bin"
 	@echo "... cyw43_driver_picow_cyw43_bus_pio_spi_pio_h"
+	@echo "... pioasmBuild"
 	@echo "... squarewave_lib_squarewave_pio_h"
 	@echo "... bs2_default"
 	@echo "... bs2_default_library"
+	@echo "... i2c_slave_handler"
 	@echo "... slave"
 	@echo "... squarewave_lib"
 	@echo "... home/grakoto/pico/pico-sdk/lib/tinyusb/src/class/audio/audio_device.o"
@@ -2253,6 +2305,9 @@ help:
 	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.o"
 	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.i"
 	@echo "... home/grakoto/pico/pico-sdk/src/rp2_common/pico_unique_id/unique_id.s"
+	@echo "... i2c_slave/i2c_slave.o"
+	@echo "... i2c_slave/i2c_slave.i"
+	@echo "... i2c_slave/i2c_slave.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
