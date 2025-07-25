@@ -14,7 +14,7 @@ target_link_libraries(i2c_slave
     hardware_i2c
 )
 
-# Créer une bibliothèque pour le module I2C handler
+# library I2C handler
 add_library(i2c_slave_handler STATIC slave_i2c_handler.c)
 
 target_include_directories(i2c_slave_handler PUBLIC

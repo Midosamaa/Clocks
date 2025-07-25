@@ -10,7 +10,7 @@ target_link_libraries(squarewave_lib PUBLIC
     hardware_irq
 )
 
-# Exposer le répertoire include
+# Expose include directory
 target_include_directories(squarewave_lib PUBLIC
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}

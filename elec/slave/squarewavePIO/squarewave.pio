@@ -1,19 +1,20 @@
 .program squarewave_irq
     set pindirs, 1   ; Set pin to output
     pull block       ; Pull value from FIFO to OSR 
-    mov x, osr       ; OSR to X register 
+    mov x, osr       
 
 .wrap_target
 
 loop:
-    jmp !x done      ; If X = 0, jump to done
-    set pins, 1 [9]  ; Set main pin high and delay
-    set pins, 0 [9]  ; Set main pin low and delay
-    jmp x-- loop     ; Decrement X and loop
+    ; equivalent for delayed [10] then [10] instructions, for timing estimation
+    jmp !x done      
+    set pins, 1 [9]  ; pin high and delay
+    set pins, 0 [9]  ; pin low and delay
+    jmp x-- loop     
 
 done:
     irq 0 rel        ; Set IRQ 0 + state machine ID (0-3)
-    jmp done         ; Stay here until reset
+    jmp done         
 
 .wrap                
 

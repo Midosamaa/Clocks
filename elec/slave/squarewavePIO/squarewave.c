@@ -1,7 +1,7 @@
 #include "squarewave.pio.h" // header from pico_generate_pio_header in cmakelists.txt
 #include "squarewave.h"
 
-// Définition des pins GPIO pour les signaux STEP
+// STEP signales
 #define GPIO_STEP0 6
 #define GPIO_STEP1 8
 #define GPIO_STEP2 10
@@ -11,7 +11,7 @@
 #define GPIO_STEP6 19 
 #define GPIO_STEP7 21
 
-// Définition des pins GPIO pour les signaux DIR
+// DIRECTION signals
 #define GPIO_DIR0 7
 #define GPIO_DIR1 9
 #define GPIO_DIR2 11
@@ -25,8 +25,6 @@
 
 volatile uint16_t sm_completed;
 
-
-/*TODO : send direcions and different clock divisor too*/
 
 
 //Handlers for irq pio0
@@ -77,9 +75,25 @@ irq_handler_t handlers[4] = {pio_irq_handler0, pio_irq_handler1, pio_irq_handler
 irq_handler_t pio1_handlers[4] = {pio1_irq_handler0, pio1_irq_handler1, pio1_irq_handler2, pio1_irq_handler3};
 
 
+/*direction functions*/
+void setup_pin_direction(){
+    // direction GPIO14
+    for (int i = 0; i < 7; i++) {
+        gpio_init(GPIO_DIR0 + i);
+        gpio_set_dir(GPIO_DIR0 + i, GPIO_OUT);
+    }
+}
+
+void send_direction(bool (*dir)[2]) {
+    // Set the direction for each clock hand
+    for (int i = 0; i < 8; i++) {
+        gpio_put(GPIO_DIR0 + i, dir[i/2][i%2]); // Set direction based on the value in dir array
+    }
+}
+
 
 /*sm functions*/
-void setup_sm_programm(PIO *pio, uint *sm, uint *offset, uint16_t **divf){
+void setup_sm_programm(PIO *pio, uint *sm, uint *offset, uint16_t (*divf)[2]){
     bool success;
 
     for(int i = 0; i < 8; i++) {
@@ -106,35 +120,20 @@ void setup_sm_programm(PIO *pio, uint *sm, uint *offset, uint16_t **divf){
         // Select right handler depending on pio1 or pio0
         irq_handler_t* handler_array = (pio_to_use == pio0) ? handlers : pio1_handlers;
 
-        // Load the program onto the appropriate pio
-        success = setup_pio(&squarewave_irq_program, &pio[i], &sm[i], &offset[i], pin, divf[i][i%2], sm_index, handler_array[sm_index]); //sm_index = irq_num -> 0-3 on each pio
+        // Load the program on the correct pio
+        success = setup_pio(&squarewave_irq_program, &pio[i], &sm[i], &offset[i], pin, divf[i/2][i%2], sm_index, handler_array[sm_index]); //sm_index = irq_num -> 0-3 on each pio
         hard_assert(success);
     }
 
-    // Vérifier que les 4 premiers SM utilisent pio0 et les 4 suivants pio1
+    // check pio0 for the 4 first SM and pio1 for the 4 last SM
     assert(pio[0] == pio[1] && pio[1] == pio[2] && pio[2] == pio[3] && pio[0] == pio0);
     assert(pio[4] == pio[5] && pio[5] == pio[6] && pio[6] == pio[7] && pio[4] == pio1);
 }
 
-void setup_pin_direction(){
-    // direction GPIO14
-    for (int i = 0; i < 7; i++) {
-        gpio_init(GPIO_DIR0 + i);
-        gpio_set_dir(GPIO_DIR0 + i, GPIO_OUT);
-    }
-}
-
-void send_direction(bool **dir) {
-    // Set the direction for each clock hand
-    for (int i = 0; i < 8; i++) {
-        gpio_put(GPIO_DIR0 + i, dir[i][i%2]); // Set direction based on the value in dir array
-    }
-}
-
-void send_pulses(PIO *pio, uint *sm, uint **nb_pas) {
+void send_pulses(PIO *pio, uint *sm, uint16_t (*nb_pas)[2]) {
     // Send N_pulses to each state machine
     for (int i = 0; i < 8; i++) {
-        pio_sm_put_blocking(pio[i], sm[i], nb_pas[i][i%2]);
+        pio_sm_put_blocking(pio[i], sm[i], nb_pas[i/2][i%2]);
     }
 }
 
@@ -152,18 +151,17 @@ void stop_all_sm(PIO *pio, uint *sm) {
 void unload_program(PIO *pio, uint *sm, uint *offset) {
     // free resources and unload the program
     for (int i = 0; i < 8; i++) {
-        // Utiliser l'index relatif pour désactiver l'IRQ
         pio_set_irq0_source_enabled(pio[i], pis_sm0_rx_fifo_not_empty + sm[i], false); // deactivate IRQ from SMi
         pio_remove_program_and_unclaim_sm(&squarewave_irq_program, pio[i], sm[i], offset[i]);
     }
 }
 
-uint16_t calculate_nbPas(const uint16_t *angleTarget, const uint16_t *currentAngle) {
-    return 12 * (&angleTarget - &currentAngle); //calculate for micro step cf 1/12° /* See with full step irl*/
+uint16_t calculate_nbPas(const uint16_t angleTarget, const uint16_t currentAngle) {
+    return 12 * (angleTarget - currentAngle); //calculate for micro step cf 1/12° /* TODO : See with full step irl*/
 }
 
 uint16_t calculate_divf(const uint16_t nb_pas, const float delta_t) {
     // Calculate the frequency divisor to send a pio sm in order to reach the target angle in the specified time
     uint16_t f_pwm = (uint16_t) nb_pas/delta_t;
-    return (uint16_t) (FCLK)/(2*10*f_pwm); // 10 is the number of machine cycle per instruction (up/down) /* Do we miss a + or -1 somewhere? */
+    return (uint16_t) (FCLK)/(2*10*f_pwm); // 10 is the number of machine cycle per instruction (up/down) /* TODO : Do we miss a + or -1 somewhere? */
 }

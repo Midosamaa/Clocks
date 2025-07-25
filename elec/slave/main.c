@@ -69,7 +69,7 @@ int main() {
             case 2 : 
                     // Send received data to motors
                     send_pulses(pio, sm, nb_pas);
-                    send_direction(direction); /*TODO : ajouter direction via pio*/
+                    send_direction(direction); /*TODO : add direction via pio*/
                     printf("State machines configured\n");
                     state = 3;
                 break;
